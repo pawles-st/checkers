@@ -15,6 +15,7 @@ public class server {
             while(true) {   // this has to be in while(true) because it has to be in loop, so it accepts all users
                 socket = serverSocket.accept();
                 System.out.println("New client connected successfully");
+                new serverThread(socket).start();
             }
 
         } catch (IOException ex) {
