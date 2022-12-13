@@ -53,7 +53,7 @@ public final class CheckersClient {
         return true;
     }
 
-    public static void Main(final String... args) {
+    public static void main(final String... args) {
         if (!connect() || !joinGame()) {
             System.err.println(cantConnectErrorMessage);
         }
