@@ -9,14 +9,14 @@ import java.util.Scanner;
 
 public final class CheckersClient {
 
-    private CheckersClient() { }
-
     // fields for communication with the server
 
     private static final int PORT = 1234;
     private static Socket socket;
     private static Scanner socketIn;
     private static Writer socketOut;
+
+    private CheckersClient() { }
 
     private static void connect() throws IOException {
 
@@ -33,7 +33,7 @@ public final class CheckersClient {
         }
     }
 
-    private static void joinGame() throws IOException, RuntimeException {
+    private static void joinGame() throws IOException { // TODO: replace RuntimeException
         try {
 
             // ask the server to join the game
