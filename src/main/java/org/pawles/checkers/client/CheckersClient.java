@@ -4,15 +4,12 @@ import java.io.IOException;
 import java.io.Writer;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public final class CheckersClient {
 
     private CheckersClient() { }
-
-    // error messages
-
-    private static final String cantConnectErrorMessage = "Can't connect to the server.";
 
     // fields for communication with the server
 
@@ -21,7 +18,7 @@ public final class CheckersClient {
     private static Scanner socketIn;
     private static Writer socketOut;
 
-    private static boolean connect() { // TODO: change type to void and throw appropriate exceptions
+    private static void connect() throws IOException {
 
         // set socket and IO fields for communication
 
@@ -29,13 +26,14 @@ public final class CheckersClient {
             socket = new Socket("localhost", PORT);
             socketIn = new Scanner(socket.getInputStream());
             socketOut = new PrintWriter(socket.getOutputStream(), true);
-        } catch (Exception e) {
-            return false;
+        } catch (UnknownHostException e) {
+            throw new UnknownHostException("Couldn't find host");
+        } catch (IOException e) {
+            throw new IOException("Couldn't establish a connection with the server");
         }
-        return true;
     }
 
-    private static boolean joinGame() { // TODO: change type to void and throw appropriate exceptions
+    private static void joinGame() throws IOException, RuntimeException {
         try {
 
             // ask the server to join the game
@@ -45,17 +43,19 @@ public final class CheckersClient {
             // confirm the server agreed
 
             if (!socketIn.nextBoolean()) {
-                return false;
+                throw new RuntimeException("Couldn't join the game");
             }
         } catch (IOException e) {
-            return false;
+            throw new IOException("Couldn't ask the server to join the game");
         }
-        return true;
     }
 
     public static void main(final String... args) {
-        if (!connect() || !joinGame()) {
-            System.err.println(cantConnectErrorMessage);
+        try {
+            connect();
+            joinGame();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
     }
 }
