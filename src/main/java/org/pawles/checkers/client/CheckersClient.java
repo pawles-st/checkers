@@ -50,10 +50,24 @@ public final class CheckersClient {
         }
     }
 
+    private static void await() { // TODO: replace RuntimeException
+        System.out.println("Waiting for the game to begin...");
+        if (!socketIn.nextBoolean()) {
+            throw new RuntimeException("Game couldn't be started");
+        } else {
+            startGame();
+        }
+    }
+
+    private static void startGame() {
+        // TODO: implement game interaction
+    }
+
     public static void main(final String... args) {
         try {
             connect();
             joinGame();
+            await();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
