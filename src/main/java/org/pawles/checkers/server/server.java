@@ -11,6 +11,9 @@ public class server {
             System.out.println("Server is running 0000");
 
             Socket socket;
+            Game game = new Game();
+
+            game.returnBoard();
 
             while(true) {   // this has to be in while(true) because it has to be in loop, so it accepts all users
                 socket = serverSocket.accept();
