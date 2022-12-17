@@ -14,6 +14,7 @@ public class BoardDirector {
     }
 
     public void buildBoard() {
+        builder.createNewBoard();
         builder.buildGrid();
         builder.buildPieces();
     }
