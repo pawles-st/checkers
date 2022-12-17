@@ -1,9 +1,12 @@
 package org.pawles.checkers.server;
 
+import org.pawles.checkers.objects.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game implements Runnable {
@@ -13,6 +16,8 @@ public class Game implements Runnable {
     Socket blackPlayer;
     Scanner inputB;
     PrintWriter outputB;
+
+    Board board;
 
     int turn = 1;
     Game(Socket firstPlayer, Socket secondPlayer) {
@@ -27,6 +32,7 @@ public class Game implements Runnable {
             setupBlack();
 
             String line;
+
             while(!gameLost()) {
                 if(turn==1) {
                     // reading what move to do from whitePlayer
@@ -64,13 +70,30 @@ public class Game implements Runnable {
     }
 
     private boolean MoveIsCorrect(String move) {
-        //TODO check if the move is possible to do
 
+        // assuming that move will loke like A2:B3 (which piece:where to move)
+        //TODO Pawn = pawnAt(move.charAt(0), move.charAt(1))
+        Square square = new Square(0,0);
+        Piece pawn = new Man(square, Colour.WHITE);
+
+        if(turn==1) { // it means, that the white pawn will move
+            int pawnX = pawn.getSquare().getX();
+            int pawnY = pawn.getSquare().getY();
+
+            char newYchar = move.charAt(4); // get 5th character of "move"
+            int newY = Integer.parseInt(String.valueOf(newYchar)); // convert this char to int
+
+            char newXchar = move.charAt(3); // get 5th character of "move"
+            int newX = Integer.parseInt(String.valueOf(newXchar)); // convert this char to int
+
+
+
+        }
         return true;
     }
 
     private void movePawns(String move) {
-        //TODO all the movement of pawns after the move
+        //TODO move the pawn, and delete dead ones
     }
 
     private void setupWhite() throws IOException {
