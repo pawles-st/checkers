@@ -6,6 +6,16 @@ import java.io.Writer;
 import java.net.Socket;
 import java.util.Scanner;
 
+
+/*
+@deprecated
+ */
+
+
+
+
+
+
 public class GameBoard {
     private int[][] board = new int[8][8];     //declare board
     Player currentPlayer;
