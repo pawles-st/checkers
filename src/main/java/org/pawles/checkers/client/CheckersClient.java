@@ -1,7 +1,6 @@
 package org.pawles.checkers.client;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -14,7 +13,7 @@ public final class CheckersClient {
     private static final int PORT = 1234;
     private static Socket socket;
     private static Scanner socketIn;
-    private static Writer socketOut;
+    private static PrintWriter socketOut;
 
     private CheckersClient() { }
 
@@ -33,20 +32,15 @@ public final class CheckersClient {
         }
     }
 
-    private static void joinGame() throws IOException { // TODO: replace RuntimeException
-        try {
+    private static void joinGame() { // TODO: replace RuntimeException
+        // ask the server to join the game
 
-            // ask the server to join the game
+        socketOut.println("join");
 
-            socketOut.write("join");
+        // confirm the server agreed
 
-            // confirm the server agreed
-
-            if (!socketIn.nextBoolean()) {
-                throw new RuntimeException("Couldn't join the game");
-            }
-        } catch (IOException e) {
-            throw new IOException("Couldn't ask the server to join the game");
+        if (!socketIn.nextBoolean()) {
+            throw new RuntimeException("Couldn't join the game");
         }
     }
 
