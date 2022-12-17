@@ -27,6 +27,8 @@ public class server {
                 Game g = new Game(firstClient, secondClient); //create new game
                 Thread gTh = new Thread(g);
                 gTh.start(); // start new game
+
+
             }
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
