@@ -5,10 +5,6 @@ import java.util.ArrayList;
 public class Board {
     private ArrayList<ArrayList<Piece>> coordinates;
 
-    public Board() {
-
-    }
-
     public ArrayList<ArrayList<Piece>> getCoordinates() {
         return coordinates;
     }
