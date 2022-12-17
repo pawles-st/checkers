@@ -86,6 +86,9 @@ public class Game implements Runnable {
             char newXchar = move.charAt(3); // get 5th character of "move"
             int newX = Integer.parseInt(String.valueOf(newXchar)); // convert this char to int
 
+            if(board.getCoordinates().get(newX).get(newY)==null){
+                return true;
+            }
 
 
         }
