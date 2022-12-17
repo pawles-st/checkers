@@ -8,8 +8,14 @@ import java.util.Scanner;
 
 public class GameBoard {
     private int[][] board = new int[8][8];     //declare board
-    GameBoard.Player currentPlayer;
+    Player currentPlayer;
+    Socket whitePlayer;
+    Socket blackPlayer;
 
+    GameBoard(Socket firstPlayer, Socket secondPlayer) {
+        whitePlayer = firstPlayer;
+        blackPlayer = secondPlayer;
+    }
     public boolean enemyLost() {
         return (currentPlayer.opponent.pawns==0);
     }
@@ -26,7 +32,7 @@ public class GameBoard {
 
     class Player extends Thread {
         public int pawns;
-        GameBoard.Player opponent;
+        Player opponent;
         Socket socket;
         Scanner input;
         Writer output;

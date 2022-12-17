@@ -65,22 +65,17 @@ public final class testCheckerClient {
         // TODO: implement game interaction
     }
 
-    public static void main(final String... args) {
+    private static void receiveColorFromServer(){
+        String line;
+        line = socketIn.nextLine();
+        System.out.println(line);
+    }
+
+    public static void main(String[] args) {
         try {
-            String message = "siemano";
-            //message = socketIn.nextLine();
-            System.out.println(message);
-
             connect();
-
-            message = socketIn.nextLine();
-            System.out.println(message);
-
+            receiveColorFromServer();
             joinGame();
-
-            message = socketIn.nextLine();
-            System.out.println(message);
-
             await();
         } catch (IOException e) {
             System.err.println(e.getMessage());
