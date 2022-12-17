@@ -17,6 +17,10 @@ public class Board {
         this.coordinates = coordinates;
     }
 
+    public void setCoordinate(Square square, Piece piece) {
+        coordinates.get(square.getY()).set(square.getX(), piece);
+    }
+
     public void movePiece(Square curr, Square dest) {
         Piece piece = coordinates.get(curr.getY()).get(curr.getX());
         coordinates.get(curr.getY()).set(curr.getX(), null);
