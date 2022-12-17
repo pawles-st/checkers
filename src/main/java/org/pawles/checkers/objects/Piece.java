@@ -10,4 +10,8 @@ public abstract class Piece {
     }
 
     public abstract void move(Square curr, Square dest);
+
+    public Square getSquare() {
+        return square;
+    }
 }
