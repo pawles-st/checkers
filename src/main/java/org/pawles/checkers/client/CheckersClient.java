@@ -1,5 +1,7 @@
 package org.pawles.checkers.client;
 
+import org.pawles.checkers.objects.Colour;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -14,6 +16,8 @@ public final class CheckersClient {
     private static Socket socket;
     private static Scanner socketIn;
     private static PrintWriter socketOut;
+    private static GameCommunicator gameCommunicator;
+    private static Colour colour;
 
     private CheckersClient() { }
 
@@ -46,15 +50,19 @@ public final class CheckersClient {
 
     private static void await() { // TODO: replace RuntimeException
         System.out.println("Waiting for the game to begin...");
-        if (!socketIn.nextBoolean()) {
-            throw new RuntimeException("Game couldn't be started");
+        String col = socketIn.nextLine();
+        if ("White".equals(col)) {
+            colour = Colour.WHITE;
+        } else if ("Black".equals(col)) {
+            colour = Colour.BLACK;
         } else {
-            startGame();
+            throw new RuntimeException("Game couldn't be started");
         }
     }
 
-    private static void startGame() {
-        // TODO: implement game interaction
+    private static void startGame(Colour colour) {
+        gameCommunicator = new GameCommunicator(colour, socketIn, socketOut);
+        gameCommunicator.start();
     }
 
     public static void main(final String... args) {
@@ -62,6 +70,7 @@ public final class CheckersClient {
             connect();
             joinGame();
             await();
+            startGame(colour);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
