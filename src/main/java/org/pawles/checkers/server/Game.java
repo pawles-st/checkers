@@ -1,6 +1,8 @@
 package org.pawles.checkers.server;
 
 import org.pawles.checkers.objects.*;
+import org.pawles.checkers.utils.BoardDirector;
+import org.pawles.checkers.utils.BrazilianBoardBuilder;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,6 +24,13 @@ public class Game implements Runnable {
     Game(Socket firstPlayer, Socket secondPlayer) {
         this.whitePlayer = firstPlayer;
         this.blackPlayer = secondPlayer;
+
+        //TODO fix Index 0 out of bounds, BrazilianBoardBuilder
+        BoardDirector director = new BoardDirector();
+        director.setBoardBuilder(new BrazilianBoardBuilder());
+        director.buildBoard();
+        board = director.getBoard();
+
     }
 
     @Override
