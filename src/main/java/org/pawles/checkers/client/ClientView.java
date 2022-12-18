@@ -9,11 +9,11 @@ import java.util.ArrayList;
 public class ClientView { // TODO: implement different view based on the colour of the player
     
     private char convertTileToChar(Piece piece) {
-        if (piece == null) {
+        if (piece == null) { // if tile is empty, return whitespace
             return ' ';
-        } else if (piece.getColour() == Colour.WHITE) {
+        } else if (piece.getColour() == Colour.WHITE) { // if white piece, return 'O'
             return 'O';
-        } else {
+        } else { // if black piece, return 'X'
             return 'X';
         }
     }

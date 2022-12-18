@@ -49,7 +49,13 @@ public final class CheckersClient {
     }
 
     private static void await() { // TODO: replace RuntimeException
+
+        // print the waiting message
+
         System.out.println("Waiting for the game to begin...");
+
+        // when server returns the colour, finish waiting
+
         String col = socketIn.nextLine();
         if ("White".equals(col)) {
             colour = Colour.WHITE;
@@ -61,6 +67,9 @@ public final class CheckersClient {
     }
 
     private static void startGame(Colour colour) {
+
+        // start the GameCommunicator class which handles the game from client side
+
         gameCommunicator = new GameCommunicator(colour, socketIn, socketOut);
         gameCommunicator.start();
     }
