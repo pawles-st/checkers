@@ -14,4 +14,8 @@ public abstract class Piece {
     public Square getSquare() {
         return square;
     }
+
+    public Colour getColour() {
+        return colour;
+    }
 }
