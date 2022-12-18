@@ -11,10 +11,9 @@ import java.util.Scanner;
 @deprecated
  */
 
+// DO NOT USE IT
 
-
-
-
+// FORGET ABOUT IT
 
 public class GameBoard {
     private int[][] board = new int[8][8];     //declare board
