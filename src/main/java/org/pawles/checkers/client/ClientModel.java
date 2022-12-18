@@ -36,4 +36,8 @@ public class ClientModel {
     public void setCoordinate(Square square, Piece piece) {
         board.setCoordinate(square, piece);
     }
+
+    public void movePiece(Square curr, Square dest) {
+        board.movePiece(curr, dest);
+    }
 }
