@@ -26,7 +26,7 @@ public class ClientView { // TODO: implement different view based on the colour 
 
         System.out.println(hWall);
 
-        for (int y = 0; y < 8; ++y) {
+        for (int y = 7; y >= 0; --y) {
 
             for (int x = 0; x < 8; ++x) {
 
