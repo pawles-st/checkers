@@ -20,11 +20,18 @@ public class BrazilianBoardBuilder extends BoardBuilder {
             for (int y = 0; y < 3; ++y) {
                 if ((x + y) % 2 == 0) {
                     board.getCoordinates().get(y).add(new Man(new Square(x, y), Colour.WHITE));
+                } else {
+                    board.getCoordinates().get(y).add(null);
                 }
+            }
+            for (int y = 3; y < 5; ++y) {
+                board.getCoordinates().get(y).add(null);
             }
             for (int y = 5; y < 8; ++y) {
                 if ((x + y) % 2 == 0) {
                     board.getCoordinates().get(y).add(new Man(new Square(x, y), Colour.BLACK));
+                } else {
+                    board.getCoordinates().get(y).add(null);
                 }
             }
         }
