@@ -127,11 +127,11 @@ public class Game implements Runnable {
     private void setupWhite() throws IOException {
         inputW = new Scanner(whitePlayer.getInputStream());
         outputW = new PrintWriter(whitePlayer.getOutputStream(), true);
-        outputW.println("You are white player");
+        outputW.println("White");
     }
     private void setupBlack() throws IOException {
         inputB = new Scanner(blackPlayer.getInputStream());
         outputB = new PrintWriter(blackPlayer.getOutputStream(), true);
-        outputB.println("You are black player");
+        outputB.println("Black");
     }
 }
