@@ -34,7 +34,7 @@ public class GameCommunicator {
         clientController.updateView();
         do {
             final String msg = socketIn.nextLine();
-            if ("it's your turn".equals(msg)) {
+            if ("your turn".equals(msg)) {
                 myTurn = true;
             }
             String verification;
