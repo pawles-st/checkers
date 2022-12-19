@@ -28,14 +28,14 @@ public class ClientView { // TODO: implement different view based on the colour 
 
         for (int y = 0; y < 8; ++y) {
 
-            System.out.println('|');
-
             for (int x = 0; x < 8; ++x) {
 
-                System.out.print(convertTileToChar(coordinates.get(y).get(x)));
                 System.out.print('|');
+                System.out.print(convertTileToChar(coordinates.get(y).get(x)));
 
             }
+
+            System.out.println('|');
 
             System.out.println(hWall);
         }
