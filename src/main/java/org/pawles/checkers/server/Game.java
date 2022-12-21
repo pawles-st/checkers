@@ -48,34 +48,36 @@ public class Game implements Runnable {
 
             while(!gameLost()) {
                 if(turn==1) {
-                    System.out.println("Waiting for whitePlayer input");
                     outputW.println("your turn");
-                    // reading what move to do from whitePlayer
-                    line = inputW.nextLine();
-                    System.out.println("White input: "+line);
+                    do {
+                        System.out.println("Waiting for whitePlayer input");
+                        // reading what move to do from whitePlayer
+                        line = inputW.nextLine();
+                        System.out.println("White input: "+line);
 
-                    if(MoveIsCorrect(line)) {  // check if the move can be done
-                        movePawns(line);       // do it
-                        turn = 2;              // switch turn to the second player
-                    } else {
-                        outputW.println("incorrect");
-                        continue;
-                    }
+                        if(MoveIsCorrect(line)) {  // check if the move can be done
+                            movePawns(line);       // do it
+                            turn = 2;              // switch turn to the second player
+                        } else {
+                            outputW.println("incorrect");
+                        }
+                    } while (turn == 1);
                     outputW.println("correct");
                 } else if (turn==2) {
-                    System.out.println("Waiting for blackPlayer input");
                     outputB.println("your turn");
-                    // reading what move to do from blackPlayer
-                    line = inputB.nextLine();
-                    System.out.println("Black input: "+line);
+                    do {
+                        System.out.println("Waiting for blackPlayer input");
+                        // reading what move to do from blackPlayer
+                        line = inputB.nextLine();
+                        System.out.println("Black input: " + line);
 
-                    if(MoveIsCorrect(line)) {  // check if the move can be done
-                        movePawns(line);       // do it
-                        turn = 1;              // switch turn to the first player
-                    } else {
-                        outputB.println("incorrect");
-                        continue;
-                    }
+                        if (MoveIsCorrect(line)) {  // check if the move can be done
+                            movePawns(line);       // do it
+                            turn = 1;              // switch turn to the first player
+                        } else {
+                            outputB.println("incorrect");
+                        }
+                    } while (turn == 2);
                     outputB.println("correct");
                 }
                 cView.drawBoard(board);
