@@ -28,6 +28,7 @@ public class Board {
 
     public void movePiece(Square curr, Square dest) {
         Piece piece = coordinates.get(curr.getY()).get(curr.getX());
+        piece.move(dest);
         coordinates.get(curr.getY()).set(curr.getX(), null);
         coordinates.get(dest.getY()).set(dest.getX(), piece);
     }
