@@ -61,7 +61,7 @@ public class Game implements Runnable {
                         outputW.println("incorrect");
                         continue;
                     }
-                    outputW.println("correct, opponent turn");
+                    outputW.println("correct");
                 } else if (turn==2) {
                     System.out.println("Waiting for blackPlayer input");
                     outputB.println("your turn");
@@ -76,7 +76,7 @@ public class Game implements Runnable {
                         outputB.println("incorrect");
                         continue;
                     }
-                    outputB.println("correct, opponent turn");
+                    outputB.println("correct");
                 }
                 cView.drawBoard(board);
             }
