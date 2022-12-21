@@ -53,6 +53,7 @@ public class Game implements Runnable {
                         System.out.println("Waiting for whitePlayer input");
                         // reading what move to do from whitePlayer
                         line = inputW.nextLine();
+                        // outputing it on server
                         System.out.println("White input: "+line);
 
                         if(MoveIsCorrect(line)) {  // check if the move can be done
@@ -60,16 +61,17 @@ public class Game implements Runnable {
                             turn = 2;              // switch turn to the second player
                             outputB.println(line); // send the move to the second player
                         } else {
-                            outputW.println("incorrect");
+                            outputW.println("incorrect"); // send info to client, that his move cannot be done
                         }
                     } while (turn == 1);
-                    outputW.println("correct");
+                    outputW.println("correct"); // send info to client, that the move is correct and will be done
                 } else if (turn==2) {
                     outputB.println("your turn");
                     do {
                         System.out.println("Waiting for blackPlayer input");
                         // reading what move to do from blackPlayer
                         line = inputB.nextLine();
+                        // outputing it on server
                         System.out.println("Black input: " + line);
 
                         if (MoveIsCorrect(line)) {  // check if the move can be done
@@ -77,12 +79,12 @@ public class Game implements Runnable {
                             turn = 1;              // switch turn to the first player
                             outputW.println(line); // send the move to the second player
                         } else {
-                            outputB.println("incorrect");
+                            outputB.println("incorrect"); // send info to client, that his move cannot be done
                         }
                     } while (turn == 2);
-                    outputB.println("correct");
+                    outputB.println("correct"); // send info to client, that the move is correct and will be done
                 }
-                cView.drawBoard(board);
+                cView.drawBoard(board); // after every move draw current board status on server terminal
             }
         } catch (IOException e) {
             System.out.println("IOException");
@@ -121,22 +123,21 @@ public class Game implements Runnable {
     }
 
     private void movePawns(String move) {
-        // ArrayList<ArrayList<Piece>> coordinates = board.getCoordinates();   // get current board status
-        // assuming that move will look like 02:13 (which piece:where to move)
-        // read all data about user move
+        // read all the values from string
         int startX = Integer.parseInt(String.valueOf(move.charAt(0)));
         int startY = Integer.parseInt(String.valueOf(move.charAt(1)));
         int newX = Integer.parseInt(String.valueOf(move.charAt(3)));
         int newY = Integer.parseInt(String.valueOf(move.charAt(4)));
 
+        // convert int to squares
         Square start = new Square (startX, startY);
         Square newSquare = new Square (newX, newY);
 
-        //coordinates.get(startY).get(startX).move(start, newSquare);
+        // move piece from one square to another
         board.movePiece(start, newSquare);
-
     }
 
+    // setup functions are setting up input and outputs from users, they also send info to client which color they play
     private void setupWhite() throws IOException {
         inputW = new Scanner(whitePlayer.getInputStream());
         outputW = new PrintWriter(whitePlayer.getOutputStream(), true);
