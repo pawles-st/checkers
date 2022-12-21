@@ -1,5 +1,6 @@
 package org.pawles.checkers.client;
 
+import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.Piece;
 import org.pawles.checkers.objects.Square;
 
@@ -26,5 +27,9 @@ public class ClientController {
 
     public void updateView() {
         view.drawBoard(model.getBoard());
+    }
+
+    public Colour getColour() {
+        return model.getColour();
     }
 }
