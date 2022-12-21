@@ -6,13 +6,18 @@ public class Man extends Piece {
     }
 
     @Override
-    public void move(Square curr, Square dest) {
-        int diff_x = Math.abs(curr.getX() - dest.getX());
-        if (diff_x != Math.abs(curr.getY() - dest.getY()) || diff_x > 2) {
-            // illegal move, throw exception
-        } else {
+    public boolean verifyMove(Square dest) {
+        int diff_x = Math.abs(square.getX() - dest.getX());
+        return diff_x == Math.abs(square.getY() - dest.getY()) && diff_x <= 2;
+    }
+
+    @Override
+    public void move(Square dest) {
+        if(verifyMove(dest)) {
             square.setX(dest.getX());
             square.setY(dest.getY());
+        } else {
+            throw new RuntimeException("Incorrect move");
         }
     }
 }

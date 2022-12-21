@@ -9,7 +9,9 @@ public abstract class Piece {
         this.colour = colour;
     }
 
-    public abstract void move(Square curr, Square dest);
+    public abstract boolean verifyMove(Square dest);
+
+    public abstract void move(Square dest);
 
     public Square getSquare() {
         return square;
