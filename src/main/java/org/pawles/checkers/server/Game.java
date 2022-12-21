@@ -58,6 +58,7 @@ public class Game implements Runnable {
                         if(MoveIsCorrect(line)) {  // check if the move can be done
                             movePawns(line);       // do it
                             turn = 2;              // switch turn to the second player
+                            outputB.println(line); // send the move to the second player
                         } else {
                             outputW.println("incorrect");
                         }
@@ -74,6 +75,7 @@ public class Game implements Runnable {
                         if (MoveIsCorrect(line)) {  // check if the move can be done
                             movePawns(line);       // do it
                             turn = 1;              // switch turn to the first player
+                            outputW.println(line); // send the move to the second player
                         } else {
                             outputB.println("incorrect");
                         }
