@@ -37,6 +37,10 @@ public class ClientModel {
         board.setCoordinate(square, piece);
     }
 
+    public boolean verifyMove(Square curr, Square dest) {
+        return board.verifyMove(curr, dest);
+    }
+
     public void movePiece(Square curr, Square dest) {
         board.movePiece(curr, dest);
     }

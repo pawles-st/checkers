@@ -16,6 +16,10 @@ public class ClientController {
         model.setCoordinate(square, piece);
     }
 
+    public boolean verifyMove(Square curr, Square dest) {
+        return model.verifyMove(curr, dest);
+    }
+
     public void movePiece(Square curr, Square dest) {
         model.movePiece(curr, dest);
     }

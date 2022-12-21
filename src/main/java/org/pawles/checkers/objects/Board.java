@@ -17,6 +17,15 @@ public class Board {
         coordinates.get(square.getY()).set(square.getX(), piece);
     }
 
+    public boolean verifyMove(Square curr, Square dest) {
+        Piece piece = coordinates.get(curr.getY()).get(curr.getX());
+        if (piece == null) {
+            return false;
+        } else {
+            return piece.verifyMove(dest);
+        }
+    }
+
     public void movePiece(Square curr, Square dest) {
         Piece piece = coordinates.get(curr.getY()).get(curr.getX());
         coordinates.get(curr.getY()).set(curr.getX(), null);
