@@ -32,8 +32,39 @@ public class GameCommunicator {
     }
 
     public void start() {
+
+        Square curr;
+        Square dest;
+        int curr_x;
+        int curr_y;
+        int dest_x;
+        int dest_y;
+        int turnCount = 1;
+
+        // show board for the player
+
         clientController.updateView();
+
+        // take turns while the game is in progress
+
         do {
+
+            if (clientController.getColour() == Colour.BLACK || turnCount != 1) {
+                // wait and read opponent's move
+
+                System.out.println("Waiting for the opposing player...");
+                final String opponentMove = socketIn.nextLine();
+                curr_x = Integer.parseInt(String.valueOf(opponentMove.charAt(0)));
+                curr_y = Integer.parseInt(String.valueOf(opponentMove.charAt(1)));
+                curr = new Square(curr_x, curr_y);
+                dest_x = Integer.parseInt(String.valueOf(opponentMove.charAt(3)));
+                dest_y = Integer.parseInt(String.valueOf(opponentMove.charAt(4)));
+                dest = new Square(dest_x, dest_y);
+                clientController.movePiece(curr, dest);
+            }
+
+            // wait for player's turn
+
             final String msg = socketIn.nextLine();
             if ("your turn".equals(msg)) {
                 myTurn = true;
@@ -48,8 +79,6 @@ public class GameCommunicator {
             // single turn (can be composed of multiple moves)
 
             String verification = "";
-            Square curr;
-            Square dest;
             do {
 
                 if ("incorrect".equals(verification)) {
@@ -65,11 +94,11 @@ public class GameCommunicator {
 
                 // convert move to Squares
 
-                int curr_x = Integer.parseInt(String.valueOf(from.charAt(0)));
-                int curr_y = Integer.parseInt(String.valueOf(from.charAt(1)));
+                curr_x = Integer.parseInt(String.valueOf(from.charAt(0)));
+                curr_y = Integer.parseInt(String.valueOf(from.charAt(1)));
                 curr = new Square(curr_x, curr_y); // store squares somewhere to avoid constant creation???
-                int dest_x = Integer.parseInt(String.valueOf(to.charAt(0)));
-                int dest_y = Integer.parseInt(String.valueOf(to.charAt(1)));
+                dest_x = Integer.parseInt(String.valueOf(to.charAt(0)));
+                dest_y = Integer.parseInt(String.valueOf(to.charAt(1)));
                 dest = new Square(dest_x, dest_y);
 
                 // check
@@ -87,6 +116,13 @@ public class GameCommunicator {
                 verification = socketIn.nextLine();
                 clientController.updateView();
             } while (!"correct".equals(verification));
+
+            // update the board
+
+            clientController.movePiece(curr, dest);
+            clientController.updateView();
+            ++turnCount;
+
         } while (true); // while the game is in progress
     }
 }
