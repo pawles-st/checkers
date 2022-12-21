@@ -43,9 +43,9 @@ public final class testCheckerClient {
 
         // confirm the server agreed
 
-        //if (!socketIn.nextBoolean()) {
-        //    throw new RuntimeException("Couldn't join the game");
-        //}
+        if (!socketIn.nextBoolean()) {
+            throw new RuntimeException("Couldn't join the game");
+        }
     }
 
     private static void await() { // TODO: replace RuntimeException
@@ -77,7 +77,7 @@ public final class testCheckerClient {
     public static void main(final String... args) {
         try {
             connect();
-            joinGame();
+            //joinGame();
             await();
             startGame(colour);
         } catch (IOException e) {

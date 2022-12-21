@@ -1,5 +1,6 @@
 package org.pawles.checkers.server;
 
+import org.pawles.checkers.client.ClientView;
 import org.pawles.checkers.objects.*;
 import org.pawles.checkers.utils.BoardDirector;
 import org.pawles.checkers.utils.BrazilianBoardBuilder;
@@ -20,6 +21,8 @@ public class Game implements Runnable {
 
     Board board;
 
+    ClientView cView;
+
     int turn = 1;
     Game(Socket firstPlayer, Socket secondPlayer) {
         this.whitePlayer = firstPlayer;
@@ -30,6 +33,8 @@ public class Game implements Runnable {
         director.setBoardBuilder(new BrazilianBoardBuilder());
         director.buildBoard();
         board = director.getBoard();
+
+        cView = new ClientView();
 
     }
 
@@ -47,6 +52,7 @@ public class Game implements Runnable {
                     outputW.println("your turn");
                     // reading what move to do from whitePlayer
                     line = inputW.nextLine();
+                    System.out.println("White input: "+line);
 
                     if(MoveIsCorrect(line)) {  // check if the move can be done
                         movePawns(line);       // do it
@@ -61,6 +67,7 @@ public class Game implements Runnable {
                     outputB.println("your turn");
                     // reading what move to do from blackPlayer
                     line = inputB.nextLine();
+                    System.out.println("Black input: "+line);
 
                     if(MoveIsCorrect(line)) {  // check if the move can be done
                         movePawns(line);       // do it
@@ -71,6 +78,7 @@ public class Game implements Runnable {
                     }
                     outputB.println("correct, opponent turn");
                 }
+                cView.drawBoard(board);
             }
         } catch (IOException e) {
             System.out.println("IOException");
@@ -109,7 +117,7 @@ public class Game implements Runnable {
     }
 
     private void movePawns(String move) {
-        ArrayList<ArrayList<Piece>> coordinates = board.getCoordinates();   // get current board status
+        // ArrayList<ArrayList<Piece>> coordinates = board.getCoordinates();   // get current board status
         // assuming that move will look like 02:13 (which piece:where to move)
         // read all data about user move
         int startX = Integer.parseInt(String.valueOf(move.charAt(0)));
@@ -120,7 +128,8 @@ public class Game implements Runnable {
         Square start = new Square (startX, startY);
         Square newSquare = new Square (newX, newY);
 
-        coordinates.get(startY).get(startX).move(start, newSquare);
+        //coordinates.get(startY).get(startX).move(start, newSquare);
+        board.movePiece(start, newSquare);
 
     }
 
