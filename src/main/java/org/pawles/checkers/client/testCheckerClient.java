@@ -39,7 +39,7 @@ public final class testCheckerClient {
     private static void joinGame() { // TODO: replace RuntimeException
         // ask the server to join the game
 
-        socketOut.println("join");
+        //socketOut.println("join");
 
         // confirm the server agreed
 
