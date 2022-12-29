@@ -102,8 +102,8 @@ public class Game implements Runnable {
         // assuming that move will look like A2:B3 (which piece:where to move)
         // read all data about user move
 
-        //int startX = Integer.parseInt(String.valueOf(move.charAt(0)));
-        //int startY = Integer.parseInt(String.valueOf(move.charAt(1)));
+        int startX = Integer.parseInt(String.valueOf(move.charAt(0)));
+        int startY = Integer.parseInt(String.valueOf(move.charAt(1)));
 
         int newX = Integer.parseInt(String.valueOf(move.charAt(3)));
         int newY = Integer.parseInt(String.valueOf(move.charAt(4)));
@@ -111,6 +111,17 @@ public class Game implements Runnable {
         if(checkIfThereIsPawn(coordinates.get(newY).get(newX))) {
             return false;
         }
+
+        if(moveLength(startX, startY, newX, newY) == 2) { // when the pawn is moving 2 squares it must capture opponents pawn
+            int middleX = (newX + startX) / 2;            // xPosition which moving pawn is jumping over
+            int middleY = (newY + startY) / 2;            // yPosition which moving pawn is jumping over
+            if(!checkIfThereIsPawn(coordinates.get(middleY).get(middleX))) {  // check if there isn't any pawn
+                return false; // immediately return false
+            } else if(coordinates.get(middleY).get(middleX).getColour()==coordinates.get(startY).get(startX).getColour()) {// check if pawns are the same color
+                    return false; // if there is pawn, but it's the same color, also return false
+            }
+        }
+
         return true;
     }
 
@@ -120,6 +131,19 @@ public class Game implements Runnable {
         } else {           // if there is piece of any color
             return true;
         }
+    }
+
+    private int moveLength(int startX, int startY, int endX, int endY) {
+        int deltaX = Math.abs(startX - endX);
+        int deltaY = Math.abs(startY - endY);
+        double distance = Math.sqrt(Math.pow(deltaX, 2)+Math.pow(deltaY, 2));
+        if (distance < 2) {
+            return 1;
+        }
+        if (distance > 2) {
+            return 2;
+        }
+        return 0;
     }
 
     private void movePawns(String move) {
