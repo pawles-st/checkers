@@ -56,13 +56,54 @@ public class Game implements Runnable {
                         // outputing it on server
                         System.out.println("White input: "+line);
 
-                        if(MoveIsCorrect(line)) {  // check if the move can be done
+                        MoveResult result = tryMove(line);
+
+                        switch (result.getType()) {
+                            case NONE:
+                                System.out.println("Move type is NONE");
+                                outputW.println("incorrect"); // send info to client, that his move cannot be done
+                                break;
+                            case NORMAL:
+                                System.out.println("Move type is NORMAL");
+                                movePawns(line);       // do it
+                                turn = 2;              // switch turn to the second player
+                                outputB.println(line); // send the move to the second player
+                                break;
+                            case KILL:
+                                System.out.println("Move type is KILL");
+                                movePawns(line);       // do it
+                                turn = 2;              // switch turn to the second player
+                                outputB.println(line); // send the move to the second player
+                                break;
+                        }
+
+                        /*if(tryMove(line).equals(MoveType.NONE)) {
+                            System.out.println("Move type is NONE");
+                            outputW.println("incorrect"); // send info to client, that his move cannot be done
+                        }
+
+                        if(tryMove(line).equals(MoveType.NORMAL)) {
+                            System.out.println("Move type is NORMAL");
+                            movePawns(line);       // do it
+                            turn = 2;              // switch turn to the second player
+                            outputB.println(line); // send the move to the second player
+                        }
+
+                        if(tryMove(line).equals(MoveType.KILL)) {
+                            System.out.println("Move type is KILL");
+                            movePawns(line);       // do it
+                            turn = 2;              // switch turn to the second player
+                            outputB.println(line); // send the move to the second player
+                        }*/
+
+                        /*if(MoveIsCorrect(line)) {  // check if the move can be done
                             movePawns(line);       // do it
                             turn = 2;              // switch turn to the second player
                             outputB.println(line); // send the move to the second player
                         } else {
                             outputW.println("incorrect"); // send info to client, that his move cannot be done
-                        }
+                        }*/
+
                     } while (turn == 1);
                     outputW.println("correct"); // send info to client, that the move is correct and will be done
                 } else if (turn==2) {
@@ -74,13 +115,34 @@ public class Game implements Runnable {
                         // outputing it on server
                         System.out.println("Black input: " + line);
 
-                        if (MoveIsCorrect(line)) {  // check if the move can be done
+                        MoveResult result = tryMove(line);
+
+                        switch (result.getType()) {
+                            case NONE:
+                                System.out.println("Move type is NONE");
+                                outputB.println("incorrect"); // send info to client, that his move cannot be done
+                                break;
+                            case NORMAL:
+                                System.out.println("Move type is NORMAL");
+                                movePawns(line);       // do it
+                                turn = 1;              // switch turn to the second player
+                                outputW.println(line); // send the move to the second player
+                                break;
+                            case KILL:
+                                System.out.println("Move type is KILL");
+                                movePawns(line);       // do it
+                                turn = 1;              // switch turn to the second player
+                                outputW.println(line); // send the move to the second player
+                                break;
+                        }
+
+                        /*if (MoveIsCorrect(line)) {  // check if the move can be done
                             movePawns(line);       // do it
                             turn = 1;              // switch turn to the first player
                             outputW.println(line); // send the move to the second player
                         } else {
                             outputB.println("incorrect"); // send info to client, that his move cannot be done
-                        }
+                        }*/
                     } while (turn == 2);
                     outputB.println("correct"); // send info to client, that the move is correct and will be done
                 }
@@ -95,6 +157,36 @@ public class Game implements Runnable {
         //TODO something like whitePlayer.pawns==0 || blackPlayer.pawns==0
 
         return false;
+    }
+
+    private MoveResult tryMove(String move) {
+        ArrayList<ArrayList<Piece>> coordinates = board.getCoordinates();
+        // assuming that move will look like A2:B3 (which piece:where to move)
+        // read all data about user move
+
+        int startX = Integer.parseInt(String.valueOf(move.charAt(0)));
+        int startY = Integer.parseInt(String.valueOf(move.charAt(1)));
+
+        int newX = Integer.parseInt(String.valueOf(move.charAt(3)));
+        int newY = Integer.parseInt(String.valueOf(move.charAt(4)));
+
+        if(checkIfThereIsPawn(coordinates.get(newY).get(newX))) { // if there is pawn at new coordinates
+            return new MoveResult(MoveType.NONE); // move cannot be done
+        }
+
+        if(Math.abs(newX-startX) == 1 && Math.abs(newY-startY) == 1) { // if pawn is moving 1 square
+            return new MoveResult(MoveType.NORMAL); // move will be normal
+        }
+
+        if(Math.abs(newX-startX) == 2 && Math.abs(newY-startY) == 2) { // if pawn is moving 2 squares
+            int middleX = (newX + startX) / 2;            // xPosition which moving pawn is jumping over
+            int middleY = (newY + startY) / 2;            // yPosition which moving pawn is jumping over
+            if(coordinates.get(middleY).get(middleX).getColour() != coordinates.get(startY).get(startX).getColour()) { // if pawn in between is different color return kill move
+                return  new MoveResult(MoveType.KILL);
+            }
+        }
+
+        return new MoveResult(MoveType.NONE); // if none requirements were met, return none
     }
 
     private boolean MoveIsCorrect(String move) {
