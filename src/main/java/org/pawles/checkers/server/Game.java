@@ -66,13 +66,14 @@ public class Game implements Runnable {
                                 break;
                             case NORMAL:
                                 System.out.println("Move type is NORMAL");
-                                movePawns(line);       // do it
+                                movePawns(data);       // do it
                                 turn = 2;              // switch turn to the second player
                                 outputB.println(line); // send the move to the second player
                                 break;
                             case KILL:
                                 System.out.println("Move type is KILL");
-                                movePawns(line);       // do it
+                                movePawns(data);       // do it
+                                killPawn(data);
                                 turn = 2;              // switch turn to the second player
                                 outputB.println(line); // send the move to the second player
                                 break;
@@ -98,13 +99,14 @@ public class Game implements Runnable {
                                 break;
                             case NORMAL:
                                 System.out.println("Move type is NORMAL");
-                                movePawns(line);       // do it
+                                movePawns(data);       // do it
                                 turn = 1;              // switch turn to the second player
                                 outputW.println(line); // send the move to the second player
                                 break;
                             case KILL:
                                 System.out.println("Move type is KILL");
-                                movePawns(line);       // do it
+                                movePawns(data);       // do it
+                                killPawn(data);
                                 turn = 1;              // switch turn to the second player
                                 outputW.println(line); // send the move to the second player
                                 break;
@@ -155,19 +157,20 @@ public class Game implements Runnable {
         }
     }
 
-    private void movePawns(String move) {
-        // read all the values from string
-        int startX = Integer.parseInt(String.valueOf(move.charAt(0)));
-        int startY = Integer.parseInt(String.valueOf(move.charAt(1)));
-        int newX = Integer.parseInt(String.valueOf(move.charAt(3)));
-        int newY = Integer.parseInt(String.valueOf(move.charAt(4)));
-
+    private void movePawns(MoveData data) {
         // convert int to squares
-        Square start = new Square (startX, startY);
-        Square newSquare = new Square (newX, newY);
+        Square start = new Square (data.getStartX(), data.getStartY());
+        Square newSquare = new Square (data.getNewX(), data.getNewY());
 
         // move piece from one square to another
         board.movePiece(start, newSquare);
+    }
+
+    private void killPawn(MoveData data) {
+        int middleX = (data.getNewX() + data.getStartX()) / 2;
+        int middleY = (data.getNewY() + data.getStartY()) / 2;
+        Square middleSquare = new Square(middleX, middleY);
+        board.deletePiece(middleSquare);
     }
 
     // setup functions are setting up input and outputs from users, they also send info to client which color they play

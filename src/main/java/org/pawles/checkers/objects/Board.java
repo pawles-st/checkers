@@ -32,4 +32,8 @@ public class Board {
         coordinates.get(curr.getY()).set(curr.getX(), null);
         coordinates.get(dest.getY()).set(dest.getX(), piece);
     }
+
+    public void deletePiece(Square square) {
+        coordinates.get(square.getY()).set(square.getX(), null);
+    }
 }
