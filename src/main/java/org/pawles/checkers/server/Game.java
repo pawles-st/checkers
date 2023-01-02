@@ -56,7 +56,8 @@ public class Game implements Runnable {
                         // outputing it on server
                         System.out.println("White input: "+line);
 
-                        MoveResult result = tryMove(line);
+                        MoveData data = new MoveData(line);
+                        MoveResult result = tryMove(data);
 
                         switch (result.getType()) {
                             case NONE:
@@ -76,34 +77,6 @@ public class Game implements Runnable {
                                 outputB.println(line); // send the move to the second player
                                 break;
                         }
-
-                        /*if(tryMove(line).equals(MoveType.NONE)) {
-                            System.out.println("Move type is NONE");
-                            outputW.println("incorrect"); // send info to client, that his move cannot be done
-                        }
-
-                        if(tryMove(line).equals(MoveType.NORMAL)) {
-                            System.out.println("Move type is NORMAL");
-                            movePawns(line);       // do it
-                            turn = 2;              // switch turn to the second player
-                            outputB.println(line); // send the move to the second player
-                        }
-
-                        if(tryMove(line).equals(MoveType.KILL)) {
-                            System.out.println("Move type is KILL");
-                            movePawns(line);       // do it
-                            turn = 2;              // switch turn to the second player
-                            outputB.println(line); // send the move to the second player
-                        }*/
-
-                        /*if(MoveIsCorrect(line)) {  // check if the move can be done
-                            movePawns(line);       // do it
-                            turn = 2;              // switch turn to the second player
-                            outputB.println(line); // send the move to the second player
-                        } else {
-                            outputW.println("incorrect"); // send info to client, that his move cannot be done
-                        }*/
-
                     } while (turn == 1);
                     outputW.println("correct"); // send info to client, that the move is correct and will be done
                 } else if (turn==2) {
@@ -115,7 +88,8 @@ public class Game implements Runnable {
                         // outputing it on server
                         System.out.println("Black input: " + line);
 
-                        MoveResult result = tryMove(line);
+                        MoveData data = new MoveData(line);
+                        MoveResult result = tryMove(data);
 
                         switch (result.getType()) {
                             case NONE:
@@ -135,14 +109,6 @@ public class Game implements Runnable {
                                 outputW.println(line); // send the move to the second player
                                 break;
                         }
-
-                        /*if (MoveIsCorrect(line)) {  // check if the move can be done
-                            movePawns(line);       // do it
-                            turn = 1;              // switch turn to the first player
-                            outputW.println(line); // send the move to the second player
-                        } else {
-                            outputB.println("incorrect"); // send info to client, that his move cannot be done
-                        }*/
                     } while (turn == 2);
                     outputB.println("correct"); // send info to client, that the move is correct and will be done
                 }
@@ -159,62 +125,26 @@ public class Game implements Runnable {
         return false;
     }
 
-    private MoveResult tryMove(String move) {
+    private MoveResult tryMove(MoveData data) {
         ArrayList<ArrayList<Piece>> coordinates = board.getCoordinates();
-        // assuming that move will look like A2:B3 (which piece:where to move)
-        // read all data about user move
 
-        int startX = Integer.parseInt(String.valueOf(move.charAt(0)));
-        int startY = Integer.parseInt(String.valueOf(move.charAt(1)));
-
-        int newX = Integer.parseInt(String.valueOf(move.charAt(3)));
-        int newY = Integer.parseInt(String.valueOf(move.charAt(4)));
-
-        if(checkIfThereIsPawn(coordinates.get(newY).get(newX))) { // if there is pawn at new coordinates
+        if(checkIfThereIsPawn(coordinates.get(data.getNewY()).get(data.getNewX()))) { // if there is pawn at new coordinates
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
 
-        if(Math.abs(newX-startX) == 1 && Math.abs(newY-startY) == 1) { // if pawn is moving 1 square
+        if(Math.abs(data.getNewX() - data.getStartX()) == 1 && Math.abs(data.getNewY() - data.getStartY()) == 1) { // if pawn is moving 1 square
             return new MoveResult(MoveType.NORMAL); // move will be normal
         }
 
-        if(Math.abs(newX-startX) == 2 && Math.abs(newY-startY) == 2) { // if pawn is moving 2 squares
-            int middleX = (newX + startX) / 2;            // xPosition which moving pawn is jumping over
-            int middleY = (newY + startY) / 2;            // yPosition which moving pawn is jumping over
-            if(coordinates.get(middleY).get(middleX).getColour() != coordinates.get(startY).get(startX).getColour()) { // if pawn in between is different color return kill move
+        if(Math.abs(data.getNewX() - data.getStartX()) == 2 && Math.abs(data.getNewY() - data.getStartY()) == 2) { // if pawn is moving 2 squares
+            int middleX = (data.getNewX() + data.getStartX()) / 2;            // xPosition which moving pawn is jumping over
+            int middleY = (data.getNewY() + data.getStartY()) / 2;            // yPosition which moving pawn is jumping over
+            if(coordinates.get(middleY).get(middleX).getColour() != coordinates.get(data.getStartY()).get(data.getStartX()).getColour()) { // if pawn in between is different color return kill move
                 return  new MoveResult(MoveType.KILL);
             }
         }
 
         return new MoveResult(MoveType.NONE); // if none requirements were met, return none
-    }
-
-    private boolean MoveIsCorrect(String move) {
-        ArrayList<ArrayList<Piece>> coordinates = board.getCoordinates();       // get current board status
-        // assuming that move will look like A2:B3 (which piece:where to move)
-        // read all data about user move
-
-        int startX = Integer.parseInt(String.valueOf(move.charAt(0)));
-        int startY = Integer.parseInt(String.valueOf(move.charAt(1)));
-
-        int newX = Integer.parseInt(String.valueOf(move.charAt(3)));
-        int newY = Integer.parseInt(String.valueOf(move.charAt(4)));
-
-        if(checkIfThereIsPawn(coordinates.get(newY).get(newX))) {
-            return false;
-        }
-
-        if(moveLength(startX, startY, newX, newY) == 2) { // when the pawn is moving 2 squares it must capture opponents pawn
-            int middleX = (newX + startX) / 2;            // xPosition which moving pawn is jumping over
-            int middleY = (newY + startY) / 2;            // yPosition which moving pawn is jumping over
-            if(!checkIfThereIsPawn(coordinates.get(middleY).get(middleX))) {  // check if there isn't any pawn
-                return false; // immediately return false
-            } else if(coordinates.get(middleY).get(middleX).getColour()==coordinates.get(startY).get(startX).getColour()) {// check if pawns are the same color
-                    return false; // if there is pawn, but it's the same color, also return false
-            }
-        }
-
-        return true;
     }
 
     private boolean checkIfThereIsPawn(Piece piece) {
@@ -223,19 +153,6 @@ public class Game implements Runnable {
         } else {           // if there is piece of any color
             return true;
         }
-    }
-
-    private int moveLength(int startX, int startY, int endX, int endY) {
-        int deltaX = Math.abs(startX - endX);
-        int deltaY = Math.abs(startY - endY);
-        double distance = Math.sqrt(Math.pow(deltaX, 2)+Math.pow(deltaY, 2));
-        if (distance < 2) {
-            return 1;
-        }
-        if (distance > 2) {
-            return 2;
-        }
-        return 0;
     }
 
     private void movePawns(String move) {
