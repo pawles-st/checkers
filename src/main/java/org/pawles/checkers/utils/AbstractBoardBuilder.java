@@ -2,7 +2,7 @@ package org.pawles.checkers.utils;
 
 import org.pawles.checkers.objects.Board;
 
-public abstract class BoardBuilder {
+public abstract class AbstractBoardBuilder { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
     protected Board board;
 
     public void createNewBoard() {

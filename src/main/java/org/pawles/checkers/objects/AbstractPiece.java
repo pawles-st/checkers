@@ -1,10 +1,10 @@
 package org.pawles.checkers.objects;
 
-public abstract class Piece {
+public abstract class AbstractPiece {
     protected Square square;
     protected Colour colour;
 
-    protected Piece(Square square, Colour colour) {
+    protected AbstractPiece(final Square square, final Colour colour) {
         this.square = square;
         this.colour = colour;
     }

@@ -1,10 +1,10 @@
 package org.pawles.checkers.objects;
 
 public class Square {
-    private int x;
-    private int y;
+    private int x; //NOPMD - suppressed ShortVariable - x is a standard axis name
+    private int y; //NOPMD - suppressed ShortVariable - y is a standard axis name
 
-    public Square(int x, int y) {
+    public Square(final int x, final int y) { //NOPMD - suppressed ShortVariable - same as above
         this.x = x;
         this.y = y;
     }
@@ -17,11 +17,11 @@ public class Square {
         return y;
     }
 
-    public void setX(int x) {
+    public void setX(final int x) { //NOPMD - suppressed ShortVariable - same as above
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(final int y) { //NOPMD - suppressed ShortVariable - same as above
         this.y = y;
     }
 }

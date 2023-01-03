@@ -2,10 +2,10 @@ package org.pawles.checkers.utils;
 
 import org.pawles.checkers.objects.Board;
 
-public class BoardDirector {
-    private BoardBuilder builder;
+public class BoardDirector { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
+    private AbstractBoardBuilder builder;
 
-    public void setBoardBuilder(BoardBuilder builder) {
+    public void setBoardBuilder(final AbstractBoardBuilder builder) {
         this.builder = builder;
     }
 

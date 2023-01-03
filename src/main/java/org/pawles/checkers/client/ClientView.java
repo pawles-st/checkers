@@ -2,27 +2,29 @@ package org.pawles.checkers.client;
 
 import org.pawles.checkers.objects.Board;
 import org.pawles.checkers.objects.Colour;
-import org.pawles.checkers.objects.Piece;
+import org.pawles.checkers.objects.AbstractPiece;
 
 import java.util.List;
 
-public class ClientView { // TODO: implement different view based on the colour of the player
-    
-    private char convertTileToChar(Piece piece) {
+// TODO: implement different view based on the colour of the player
+public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
+    private char convertTileToChar(final AbstractPiece piece) {
+        char tileChar;
         if (piece == null) { // if tile is empty, return whitespace
-            return ' ';
+            tileChar = ' ';
         } else if (piece.getColour() == Colour.WHITE) { // if white piece, return 'O'
-            return 'O';
+            tileChar = 'O';
         } else { // if black piece, return 'X'
-            return 'X';
+            tileChar = 'X';
         }
+        return tileChar;
     }
     
-    public void drawBoard(Board board) {
+    public void drawBoard(final Board board) {
 
-        final String hWall = "+-+-+-+-+-+-+-+-+";
+        final String hWall = "+-+-+-+-+-+-+-+-+"; //NOPMD - suppressed AvoidFinalLocalVariable - conflicting PMD warnings
 
-        List<List<Piece>> coordinates = board.getCoordinates();
+        final List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
         System.out.println(hWall);
 

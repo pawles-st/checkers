@@ -128,7 +128,7 @@ public class Game implements Runnable {
     }
 
     private MoveResult tryMove(MoveData data) {
-        List<List<Piece>> coordinates = board.getCoordinates();
+        List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
         if(checkIfThereIsPawn(coordinates.get(data.getNewY()).get(data.getNewX()))) { // if there is pawn at new coordinates
             return new MoveResult(MoveType.NONE); // move cannot be done
@@ -149,7 +149,7 @@ public class Game implements Runnable {
         return new MoveResult(MoveType.NONE); // if none requirements were met, return none
     }
 
-    private boolean checkIfThereIsPawn(Piece piece) {
+    private boolean checkIfThereIsPawn(AbstractPiece piece) {
         if (piece==null) { // if there is no piece
             return false;
         } else {           // if there is piece of any color

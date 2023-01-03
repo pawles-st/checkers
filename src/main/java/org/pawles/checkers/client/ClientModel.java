@@ -2,7 +2,7 @@ package org.pawles.checkers.client;
 
 import org.pawles.checkers.objects.Board;
 import org.pawles.checkers.objects.Colour;
-import org.pawles.checkers.objects.Piece;
+import org.pawles.checkers.objects.AbstractPiece;
 import org.pawles.checkers.objects.Square;
 import org.pawles.checkers.utils.BoardDirector;
 import org.pawles.checkers.utils.BrazilianBoardBuilder;
@@ -11,11 +11,11 @@ public class ClientModel {
     final private Board board;
     final private Colour colour;
 
-    public ClientModel(Colour colour) {
+    public ClientModel(final Colour colour) {
 
         // build board
 
-        BoardDirector director = new BoardDirector();
+        final BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
         director.buildBoard();
         board = director.getBoard();
@@ -33,15 +33,15 @@ public class ClientModel {
         return colour;
     }
 
-    public void setCoordinate(Square square, Piece piece) {
+    public void setCoordinate(final Square square, final AbstractPiece piece) {
         board.setCoordinate(square, piece);
     }
 
-    public boolean verifyMove(Square curr, Square dest) {
+    public boolean verifyMove(final Square curr, final Square dest) {
         return board.verifyMove(curr, dest);
     }
 
-    public void movePiece(Square curr, Square dest) {
+    public void movePiece(final Square curr, final Square dest) {
         board.movePiece(curr, dest);
     }
 }

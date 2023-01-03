@@ -30,9 +30,11 @@ public final class CheckersClient {
             socketIn = new Scanner(socket.getInputStream());
             socketOut = new PrintWriter(socket.getOutputStream(), true);
         } catch (UnknownHostException e) {
-            throw new UnknownHostException("Couldn't find host");
+            throw (UnknownHostException) new UnknownHostException().initCause(e);
+            //throw new UnknownHostException("Couldn't find host");
         } catch (IOException e) {
-            throw new IOException("Couldn't establish a connection with the server");
+            throw (IOException) new IOException().initCause(e);
+            //throw new IOException("Couldn't establish a connection with the server");
         }
     }
 
@@ -56,7 +58,7 @@ public final class CheckersClient {
 
         // when server returns the colour, finish waiting
 
-        String col = socketIn.nextLine();
+        final String col = socketIn.nextLine();
         if ("White".equals(col)) {
             colour = Colour.WHITE;
         } else if ("Black".equals(col)) {
@@ -66,7 +68,7 @@ public final class CheckersClient {
         }
     }
 
-    private static void startGame(Colour colour) {
+    private static void startGame(final Colour colour) {
 
         // start the GameCommunicator class which handles the game from client side
 

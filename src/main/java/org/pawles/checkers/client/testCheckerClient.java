@@ -30,12 +30,13 @@ public final class testCheckerClient {
             socketIn = new Scanner(socket.getInputStream());
             socketOut = new PrintWriter(socket.getOutputStream(), true);
         } catch (UnknownHostException e) {
-            throw new UnknownHostException("Couldn't find host");
+            throw (UnknownHostException) new UnknownHostException().initCause(e);
         } catch (IOException e) {
-            throw new IOException("Couldn't establish a connection with the server");
+            throw (IOException) new IOException().initCause(e);
         }
     }
 
+    /*
     private static void joinGame() { // TODO: replace RuntimeException
         // ask the server to join the game
 
@@ -47,6 +48,7 @@ public final class testCheckerClient {
             throw new RuntimeException("Couldn't join the game");
         }
     }
+    */
 
     private static void await() { // TODO: replace RuntimeException
 
@@ -56,7 +58,7 @@ public final class testCheckerClient {
 
         // when server returns the colour, finish waiting
 
-        String col = socketIn.nextLine();
+        final String col = socketIn.nextLine();
         if ("White".equals(col)) {
             colour = Colour.WHITE;
         } else if ("Black".equals(col)) {
@@ -66,7 +68,7 @@ public final class testCheckerClient {
         }
     }
 
-    private static void startGame(Colour colour) {
+    private static void startGame(final Colour colour) {
 
         // start the GameCommunicator class which handles the game from client side
 

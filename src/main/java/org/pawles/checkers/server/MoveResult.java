@@ -1,16 +1,16 @@
 package org.pawles.checkers.server;
 
-import org.pawles.checkers.objects.Piece;
+import org.pawles.checkers.objects.AbstractPiece;
 
 public class MoveResult {
     private MoveType type;
-    private Piece piece;
+    private AbstractPiece piece;
 
     public MoveType getType() {
         return type;
     }
 
-    public MoveResult(MoveType type, Piece piece) {
+    public MoveResult(MoveType type, AbstractPiece piece) {
         this.type = type;
         this.piece = piece;
     }

@@ -13,12 +13,12 @@ public class GameCommunicator {
     private final Scanner clientIn;
     private boolean myTurn = false;
 
-    public GameCommunicator(Colour colour, Scanner socketIn, PrintWriter socketOut) {
+    public GameCommunicator(final Colour colour, final Scanner socketIn, final PrintWriter socketOut) {
 
         // create ClientController object
 
-        ClientModel clientModel = new ClientModel(colour);
-        ClientView clientView = new ClientView();
+        final ClientModel clientModel = new ClientModel(colour);
+        final ClientView clientView = new ClientView();
         clientController = new ClientController(clientModel, clientView);
 
         // set sockets for communication with server
@@ -35,10 +35,10 @@ public class GameCommunicator {
 
         Square curr;
         Square dest;
-        int curr_x;
-        int curr_y;
-        int dest_x;
-        int dest_y;
+        int currX;
+        int currY;
+        int destX;
+        int destY;
         int turnCount = 1;
 
         // show board for the player
@@ -54,12 +54,12 @@ public class GameCommunicator {
 
                 System.out.println("Waiting for the opposing player...");
                 final String opponentMove = socketIn.nextLine();
-                curr_x = Integer.parseInt(String.valueOf(opponentMove.charAt(0)));
-                curr_y = Integer.parseInt(String.valueOf(opponentMove.charAt(1)));
-                curr = new Square(curr_x, curr_y);
-                dest_x = Integer.parseInt(String.valueOf(opponentMove.charAt(3)));
-                dest_y = Integer.parseInt(String.valueOf(opponentMove.charAt(4)));
-                dest = new Square(dest_x, dest_y);
+                currX = Integer.parseInt(String.valueOf(opponentMove.charAt(0)));
+                currY = Integer.parseInt(String.valueOf(opponentMove.charAt(1)));
+                curr = new Square(currX, currY);
+                destX = Integer.parseInt(String.valueOf(opponentMove.charAt(3)));
+                destY = Integer.parseInt(String.valueOf(opponentMove.charAt(4)));
+                dest = new Square(destX, destY);
                 clientController.movePiece(curr, dest);
             }
 
@@ -90,16 +90,16 @@ public class GameCommunicator {
                 System.out.print("Move from: ");
                 final String from = clientIn.nextLine();
                 System.out.print("Move to: ");
-                final String to = clientIn.nextLine();
+                final String to = clientIn.nextLine(); //NOPMD - suppressed ShortVariable - name consistent with 'from'
 
                 // convert move to Squares
 
-                curr_x = Integer.parseInt(String.valueOf(from.charAt(0)));
-                curr_y = Integer.parseInt(String.valueOf(from.charAt(1)));
-                curr = new Square(curr_x, curr_y); // store squares somewhere to avoid constant creation???
-                dest_x = Integer.parseInt(String.valueOf(to.charAt(0)));
-                dest_y = Integer.parseInt(String.valueOf(to.charAt(1)));
-                dest = new Square(dest_x, dest_y);
+                currX = Integer.parseInt(String.valueOf(from.charAt(0)));
+                currY = Integer.parseInt(String.valueOf(from.charAt(1)));
+                curr = new Square(currX, currY); // store squares somewhere to avoid constant creation???
+                destX = Integer.parseInt(String.valueOf(to.charAt(0)));
+                destY = Integer.parseInt(String.valueOf(to.charAt(1)));
+                dest = new Square(destX, destY);
 
                 // check
 
