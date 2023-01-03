@@ -3,11 +3,12 @@ package org.pawles.checkers.utils;
 import org.pawles.checkers.objects.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BrazilianBoardBuilder extends BoardBuilder {
     @Override
     public void buildGrid() {
-        ArrayList<ArrayList<Piece>> coordinates = new ArrayList<>();
+        List<List<Piece>> coordinates = new ArrayList<>();
         for (int i = 0; i < 8; ++i) {
             coordinates.add(new ArrayList<>());
         }

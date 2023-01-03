@@ -8,7 +8,7 @@ import org.pawles.checkers.utils.BrazilianBoardBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Game implements Runnable {
@@ -128,7 +128,7 @@ public class Game implements Runnable {
     }
 
     private MoveResult tryMove(MoveData data) {
-        ArrayList<ArrayList<Piece>> coordinates = board.getCoordinates();
+        List<List<Piece>> coordinates = board.getCoordinates();
 
         if(checkIfThereIsPawn(coordinates.get(data.getNewY()).get(data.getNewX()))) { // if there is pawn at new coordinates
             return new MoveResult(MoveType.NONE); // move cannot be done

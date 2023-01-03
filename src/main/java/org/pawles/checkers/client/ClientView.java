@@ -4,7 +4,7 @@ import org.pawles.checkers.objects.Board;
 import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.Piece;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ClientView { // TODO: implement different view based on the colour of the player
     
@@ -22,7 +22,7 @@ public class ClientView { // TODO: implement different view based on the colour 
 
         final String hWall = "+-+-+-+-+-+-+-+-+";
 
-        ArrayList<ArrayList<Piece>> coordinates = board.getCoordinates();
+        List<List<Piece>> coordinates = board.getCoordinates();
 
         System.out.println(hWall);
 

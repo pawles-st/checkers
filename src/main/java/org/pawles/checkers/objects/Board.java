@@ -1,15 +1,15 @@
 package org.pawles.checkers.objects;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
-    private ArrayList<ArrayList<Piece>> coordinates;
+    private List<List<Piece>> coordinates;
 
-    public ArrayList<ArrayList<Piece>> getCoordinates() {
+    public List<List<Piece>> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(ArrayList<ArrayList<Piece>> coordinates) {
+    public void setCoordinates(List<List<Piece>> coordinates) {
         this.coordinates = coordinates;
     }
 
