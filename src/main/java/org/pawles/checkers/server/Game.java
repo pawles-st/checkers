@@ -13,22 +13,18 @@ import java.util.Scanner;
 
 public class Game implements Runnable {
     Socket whitePlayer;
-    Scanner inputW;
-    PrintWriter outputW;
     Socket blackPlayer;
-    Scanner inputB;
-    PrintWriter outputB;
-
+    Scanner scanner;
+    PrintWriter writer;
+    PrintWriter writerOpponent;
     Board board;
-
     ClientView cView;
 
-    int turn = 1;
+    Boolean whiteTurn = true;
     Game(Socket firstPlayer, Socket secondPlayer) {
         this.whitePlayer = firstPlayer;
         this.blackPlayer = secondPlayer;
 
-        //TODO fix Index 0 out of bounds, BrazilianBoardBuilder
         BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
         director.buildBoard();
@@ -41,84 +37,64 @@ public class Game implements Runnable {
     @Override
     public void run() {
         try {
-            setupWhite();
-            setupBlack();
-
-            String line;
-
+            setup();
             while(!gameLost()) {
-                if(turn==1) {
-                    outputW.println("your turn");
-                    do {
-                        System.out.println("Waiting for whitePlayer input");
-                        // reading what move to do from whitePlayer
-                        line = inputW.nextLine();
-                        // outputing it on server
-                        System.out.println("White input: "+line);
-
-                        MoveData data = new MoveData(line);
-                        MoveResult result = tryMove(data);
-
-                        switch (result.getType()) {
-                            case NONE:
-                                System.out.println("Move type is NONE");
-                                outputW.println("incorrect"); // send info to client, that his move cannot be done
-                                break;
-                            case NORMAL:
-                                System.out.println("Move type is NORMAL");
-                                movePawns(data);       // do it
-                                turn = 2;              // switch turn to the second player
-                                outputB.println(line); // send the move to the second player
-                                break;
-                            case KILL:
-                                System.out.println("Move type is KILL");
-                                movePawns(data);       // do it
-                                killPawn(data);
-                                turn = 2;              // switch turn to the second player
-                                outputB.println(line); // send the move to the second player
-                                break;
-                        }
-                    } while (turn == 1);
-                    outputW.println("correct"); // send info to client, that the move is correct and will be done
-                } else if (turn==2) {
-                    outputB.println("your turn");
-                    do {
-                        System.out.println("Waiting for blackPlayer input");
-                        // reading what move to do from blackPlayer
-                        line = inputB.nextLine();
-                        // outputing it on server
-                        System.out.println("Black input: " + line);
-
-                        MoveData data = new MoveData(line);
-                        MoveResult result = tryMove(data);
-
-                        switch (result.getType()) {
-                            case NONE:
-                                System.out.println("Move type is NONE");
-                                outputB.println("incorrect"); // send info to client, that his move cannot be done
-                                break;
-                            case NORMAL:
-                                System.out.println("Move type is NORMAL");
-                                movePawns(data);       // do it
-                                turn = 1;              // switch turn to the second player
-                                outputW.println(line); // send the move to the second player
-                                break;
-                            case KILL:
-                                System.out.println("Move type is KILL");
-                                movePawns(data);       // do it
-                                killPawn(data);
-                                turn = 1;              // switch turn to the second player
-                                outputW.println(line); // send the move to the second player
-                                break;
-                        }
-                    } while (turn == 2);
-                    outputB.println("correct"); // send info to client, that the move is correct and will be done
+                if(whiteTurn) {
+                    Turn(whitePlayer, blackPlayer); // it's whitePlayer turn, and blackPlayer is opponent
+                } else {
+                    Turn(blackPlayer, whitePlayer); // it's blackPlayer turn, and whitePlayer is opponent
                 }
                 cView.drawBoard(board); // after every move draw current board status on server terminal
             }
         } catch (IOException e) {
             System.out.println("IOException");
         }
+    }
+
+    private void Turn(Socket player, Socket opponent) throws IOException {
+        scanner = new Scanner(player.getInputStream());
+        writer = new PrintWriter(player.getOutputStream(), true);
+        writerOpponent = new PrintWriter(opponent.getOutputStream(), true);
+
+        String line;
+        Boolean start = whiteTurn;
+
+        writer.println("your turn");
+        do {
+            if(whiteTurn) {
+                System.out.println("Waiting for whitePlayer input");
+            }else{
+                System.out.println("Waiting for blackPlayer input");
+            }
+            // reading what move to do from whitePlayer
+            line = scanner.nextLine();
+            // outputing it on server
+            System.out.println("White input: "+line);
+
+            MoveData data = new MoveData(line);
+            MoveResult result = tryMove(data);
+
+            switch (result.getType()) {
+                case NONE:
+                    System.out.println("Move type is NONE");
+                    writer.println("incorrect"); // send info to client, that his move cannot be done
+                    break;
+                case NORMAL:
+                    System.out.println("Move type is NORMAL");
+                    movePawns(data);       // do it
+                    whiteTurn = !whiteTurn;              // switch turn to the second player
+                    writerOpponent.println(line); // send the move to the second player
+                    break;
+                case KILL:
+                    System.out.println("Move type is KILL");
+                    movePawns(data);       // do it
+                    killPawn(data);
+                    whiteTurn = !whiteTurn;              // switch turn to the second player
+                    writerOpponent.println(line); // send the move to the second player
+                    break;
+            }
+        } while (start == whiteTurn);
+        writer.println("correct"); // send info to client, that the move is correct and will be done
     }
 
     private boolean gameLost() {
@@ -172,16 +148,14 @@ public class Game implements Runnable {
         Square middleSquare = new Square(middleX, middleY);
         board.deletePiece(middleSquare);
     }
+    //setup sends to client what colors they're playing
+    private void setup() throws IOException {
+        PrintWriter firstOuput;
+        firstOuput = new PrintWriter(whitePlayer.getOutputStream(), true);
+        firstOuput.println("White");
 
-    // setup functions are setting up input and outputs from users, they also send info to client which color they play
-    private void setupWhite() throws IOException {
-        inputW = new Scanner(whitePlayer.getInputStream());
-        outputW = new PrintWriter(whitePlayer.getOutputStream(), true);
-        outputW.println("White");
-    }
-    private void setupBlack() throws IOException {
-        inputB = new Scanner(blackPlayer.getInputStream());
-        outputB = new PrintWriter(blackPlayer.getOutputStream(), true);
-        outputB.println("Black");
+        PrintWriter secondOutput;
+        secondOutput = new PrintWriter(blackPlayer.getOutputStream(), true);
+        secondOutput.println("Black");
     }
 }
