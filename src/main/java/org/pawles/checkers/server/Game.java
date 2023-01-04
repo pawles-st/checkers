@@ -12,18 +12,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game implements Runnable {
-    Socket whitePlayer;
-    Socket blackPlayer;
+    Player whitePlayer;
+    Player blackPlayer;
     Scanner scanner;
     PrintWriter writer;
     PrintWriter writerOpponent;
     Board board;
     ClientView cView;
-
     Boolean whiteTurn = true;
     Game(Socket firstPlayer, Socket secondPlayer) {
-        this.whitePlayer = firstPlayer;
-        this.blackPlayer = secondPlayer;
+        this.whitePlayer = new Player(firstPlayer, secondPlayer, Colour.WHITE, Colour.BLACK);
+        this.blackPlayer = new Player(secondPlayer, firstPlayer, Colour.BLACK, Colour.WHITE);
 
         BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
@@ -40,9 +39,9 @@ public class Game implements Runnable {
             setup();
             while(!gameLost()) {
                 if(whiteTurn) {
-                    Turn(whitePlayer, blackPlayer); // it's whitePlayer turn, and blackPlayer is opponent
+                    Turn(whitePlayer); // it's whitePlayer turn, and blackPlayer is opponent
                 } else {
-                    Turn(blackPlayer, whitePlayer); // it's blackPlayer turn, and whitePlayer is opponent
+                    Turn(blackPlayer); // it's blackPlayer turn, and whitePlayer is opponent
                 }
                 cView.drawBoard(board); // after every move draw current board status on server terminal
             }
@@ -51,13 +50,14 @@ public class Game implements Runnable {
         }
     }
 
-    private void Turn(Socket player, Socket opponent) throws IOException {
-        scanner = new Scanner(player.getInputStream());
-        writer = new PrintWriter(player.getOutputStream(), true);
-        writerOpponent = new PrintWriter(opponent.getOutputStream(), true);
+    private void Turn(Player player) throws IOException {
+        scanner = new Scanner(player.getSocket().getInputStream());
+        writer = new PrintWriter(player.getSocket().getOutputStream(), true);
+        writerOpponent = new PrintWriter(player.getOpponent().getOutputStream(), true);
 
         String line;
         Boolean start = whiteTurn;
+        Boolean killIsPossible = KillPossible(player);
 
         writer.println("your turn");
         do {
@@ -73,6 +73,12 @@ public class Game implements Runnable {
 
             MoveData data = new MoveData(line);
             MoveResult result = tryMove(data);
+
+            if(killIsPossible && result.getType()!=MoveType.KILL) {
+                System.out.println("Move type should be KILL");
+                writer.println("incorrect"); // send info to client, that his move cannot be done
+                continue;
+            }
 
             switch (result.getType()) {
                 case NONE:
@@ -103,6 +109,66 @@ public class Game implements Runnable {
         return false;
     }
 
+    private Boolean KillPossible(Player player) {
+        Colour playerColor = player.getColor();
+        List<List<AbstractPiece>> coordinates = board.getCoordinates();
+
+        for(int y=0; y<8; y++) {
+            for(int x=0; x<8; x++) {
+                if(coordinates.get(y).get(x) != null) {
+                    if(coordinates.get(y).get(x).getColour() == playerColor) {
+                        if(CheckKill(x, y, player)) {
+                            System.out.println("Kill is possible");
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private Boolean CheckKill(int x, int y, Player player) {
+        List<List<AbstractPiece>> coordinates = board.getCoordinates();
+        Boolean northPossible = false;
+        Boolean southPossible = false;
+        Boolean eastPossible = false;
+        Boolean westPossible = false;
+        if(y<=5) {northPossible = true;}
+        if(y>=2) {southPossible = true;}
+        if(x<=5) {eastPossible = true;}
+        if(x>=2) {westPossible = true;}
+        if(northPossible && eastPossible) {
+            if (coordinates.get(y+1).get(x+1) != null && coordinates.get(y+2).get(x+2) == null) {
+                if (coordinates.get(y+1).get(x+1).getColour() == player.getOpponentColor()) {
+                    return true;
+                }
+            }
+        }
+        if(northPossible && westPossible) {
+            if (coordinates.get(y+1).get(x-1) != null && coordinates.get(y+2).get(x-2) == null) {
+                if (coordinates.get(y+1).get(x-1).getColour() == player.getOpponentColor()) {
+                    return true;
+                }
+            }
+        }
+        if(southPossible && eastPossible) {
+            if (coordinates.get(y-1).get(x+1) != null && coordinates.get(y-2).get(x+2) == null) {
+                if (coordinates.get(y-1).get(x+1).getColour() == player.getOpponentColor()) {
+                    return true;
+                }
+            }
+        }
+        if(southPossible && westPossible) {
+            if (coordinates.get(y-1).get(x-1) != null && coordinates.get(y-2).get(x-2) == null) {
+                if (coordinates.get(y-1).get(x-1).getColour() == player.getOpponentColor()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private MoveResult tryMove(MoveData data) {
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
@@ -117,8 +183,10 @@ public class Game implements Runnable {
         if(Math.abs(data.getNewX() - data.getStartX()) == 2 && Math.abs(data.getNewY() - data.getStartY()) == 2) { // if pawn is moving 2 squares
             int middleX = (data.getNewX() + data.getStartX()) / 2;            // xPosition which moving pawn is jumping over
             int middleY = (data.getNewY() + data.getStartY()) / 2;            // yPosition which moving pawn is jumping over
-            if(coordinates.get(middleY).get(middleX).getColour() != coordinates.get(data.getStartY()).get(data.getStartX()).getColour()) { // if pawn in between is different color return kill move
-                return  new MoveResult(MoveType.KILL);
+            if(coordinates.get(middleY).get(middleX) != null) {               // check if pawn will be jumping over other pawn
+                if (coordinates.get(middleY).get(middleX).getColour() != coordinates.get(data.getStartY()).get(data.getStartX()).getColour()) { // if pawn in between is different color return kill move
+                    return new MoveResult(MoveType.KILL);
+                }
             }
         }
 
@@ -151,11 +219,11 @@ public class Game implements Runnable {
     //setup sends to client what colors they're playing
     private void setup() throws IOException {
         PrintWriter firstOuput;
-        firstOuput = new PrintWriter(whitePlayer.getOutputStream(), true);
+        firstOuput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
         firstOuput.println("White");
 
         PrintWriter secondOutput;
-        secondOutput = new PrintWriter(blackPlayer.getOutputStream(), true);
+        secondOutput = new PrintWriter(blackPlayer.getSocket().getOutputStream(), true);
         secondOutput.println("Black");
     }
 }
