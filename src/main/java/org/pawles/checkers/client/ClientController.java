@@ -63,11 +63,7 @@ public class ClientController {
         view.drawBoard(model.getBoard());
     }
 
-    /**
-     * return player's colour
-     * @return player's colour
-     */
-    public Colour getColour() {
+    public Colour getColour() { //NOPMD - suppressed CommentRequired - this is a simple getter method
         return model.getColour();
     }
 }

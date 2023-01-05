@@ -39,18 +39,10 @@ public class ClientModel {
         this.colour = colour;
     }
 
-    /**
-     * return current board state
-     * @return current board
-     */
     public Board getBoard() {
         return board;
     }
 
-    /**
-     * return player's colour
-     * @return player's colour
-     */
     public Colour getColour() {
         return colour;
     }
