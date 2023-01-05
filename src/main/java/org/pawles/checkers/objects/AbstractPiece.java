@@ -16,7 +16,7 @@ public abstract class AbstractPiece {
 
     /**
      * construct the piece
-     * @param square piece's current position
+     * @param square initial position
      * @param colour piece's colour
      */
     protected AbstractPiece(final Square square, final Colour colour) {

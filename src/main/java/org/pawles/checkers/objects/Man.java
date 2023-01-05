@@ -3,7 +3,18 @@ package org.pawles.checkers.objects;
 
 import org.pawles.checkers.exceptions.IncorrectMoveException;
 
+/**
+ * Man piece representation
+ * @author pawles
+ * @version 1.0
+ */
 public class Man extends AbstractPiece { //NOPMD - suppressed ShortClassName - class name makes the most sense
+
+    /**
+     * constructs a man piece
+     * @param square initial position
+     * @param colour piece's colour
+     */
     public Man(final Square square, final Colour colour) {
         super(square, colour);
     }
