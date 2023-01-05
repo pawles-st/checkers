@@ -18,22 +18,35 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
         board.setCoordinates(coordinates);
     }
 
+    // can law of Demeter here be fixed?
     @Override
-    public void buildPieces() {
-        for (int x = 0; x < 8; ++x) {
-            for (int y = 0; y < 3; ++y) {
+    public void buildPieces() { //NOPMD - suppressed CognitiveComplexity - method does a single job of filling the board with pieces
+        int x; //NOPMD - suppressed ShortVariable - standerd coordinate name
+        int y; //NOPMD - suppressed ShortVariable - standerd coordinate name
+        for (x = 0; x < 8; ++x) {
+            y = 0;
+
+            // place white pieces
+
+            for (; y < 3; ++y) {
                 if ((x + y) % 2 == 0) {
-                    board.getCoordinates().get(y).add(new Man(new Square(x, y), Colour.WHITE));
+                    board.getCoordinates().get(y).add(new Man(new Square(x, y), Colour.WHITE)); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - objects are created to be held
                 } else {
                     board.getCoordinates().get(y).add(null);
                 }
             }
-            for (int y = 3; y < 5; ++y) {
+
+            // empty two rows
+
+            for (; y < 5; ++y) {
                 board.getCoordinates().get(y).add(null);
             }
-            for (int y = 5; y < 8; ++y) {
+
+            // place black pieces
+
+            for (; y < 8; ++y) {
                 if ((x + y) % 2 == 0) {
-                    board.getCoordinates().get(y).add(new Man(new Square(x, y), Colour.BLACK));
+                    board.getCoordinates().get(y).add(new Man(new Square(x, y), Colour.BLACK)); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - objects are created to be held
                 } else {
                     board.getCoordinates().get(y).add(null);
                 }
