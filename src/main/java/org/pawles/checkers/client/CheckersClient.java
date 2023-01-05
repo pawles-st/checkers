@@ -38,18 +38,6 @@ public final class CheckersClient {
         }
     }
 
-    private static void joinGame() { // TODO: replace RuntimeException
-        // ask the server to join the game
-
-        socketOut.println("join");
-
-        // confirm the server agreed
-
-        if (!socketIn.nextBoolean()) {
-            throw new RuntimeException("Couldn't join the game");
-        }
-    }
-
     private static void await() { // TODO: replace RuntimeException
 
         // print the waiting message
@@ -79,7 +67,6 @@ public final class CheckersClient {
     public static void main(final String... args) {
         try {
             connect();
-            joinGame();
             await();
             startGame(colour);
         } catch (IOException e) {
