@@ -1,6 +1,9 @@
 package org.pawles.checkers.objects;
 
-public class Man extends AbstractPiece {
+
+import org.pawles.checkers.exceptions.IncorrectMoveException;
+
+public class Man extends AbstractPiece { //NOPMD - suppressed ShortClassName - class name makes the most sense
     public Man(final Square square, final Colour colour) {
         super(square, colour);
     }
@@ -17,7 +20,7 @@ public class Man extends AbstractPiece {
             square.setX(dest.getX());
             square.setY(dest.getY());
         } else {
-            throw new RuntimeException("Incorrect move");
+            throw new IncorrectMoveException("The piece doesn't have the ability to move to the provided square");
         }
     }
 }

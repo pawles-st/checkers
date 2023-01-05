@@ -1,6 +1,6 @@
 package org.pawles.checkers.objects;
 
-public class Square {
+public class Square { //NOPMD - suppressed DataClass - easier to read than providing coordinates alone
     private int x; //NOPMD - suppressed ShortVariable - x is a standard axis name
     private int y; //NOPMD - suppressed ShortVariable - y is a standard axis name
 
