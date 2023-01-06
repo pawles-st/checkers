@@ -34,7 +34,7 @@ public final class CheckersClient {
     // client message streams
 
     /** output stream for client messages */
-    private static final PrintWriter OUT = new PrintWriter(System.out);
+    private static final PrintWriter OUT = new PrintWriter(System.out, true);
 
     /** error stream for client messages */
     private static final PrintWriter ERR = new PrintWriter(System.err);
@@ -45,7 +45,8 @@ public final class CheckersClient {
 
         // set socket and IO fields for communication
 
-        try (Socket socket = new Socket("localhost", PORT)) {
+        try {
+            final Socket socket = new Socket("localhost", PORT);
             socketIn = new Scanner(socket.getInputStream());
             socketOut = new PrintWriter(socket.getOutputStream(), true);
         } catch (UnknownHostException e) {
