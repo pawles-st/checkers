@@ -6,8 +6,11 @@ import org.pawles.checkers.objects.AbstractPiece;
 
 import java.util.List;
 
+// TODO: change to javaFX
 // TODO: implement different view based on the colour of the player
-public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
+// TODO: fix PMD errors
+// TODO: document code
+public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded, conflicting PMD warnings
     private char convertTileToChar(final AbstractPiece piece) {
         char tileChar;
         if (piece == null) { // if tile is empty, return whitespace
@@ -33,7 +36,7 @@ public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unne
             for (int x = 0; x < 8; ++x) {
 
                 System.out.print('|');
-                System.out.print(convertTileToChar(coordinates.get(y).get(x)));
+                System.out.print(convertTileToChar(coordinates.get(y).get(x))); //NOPMD - suppressed LawOfDemeter - 2D arraylist
 
             }
 

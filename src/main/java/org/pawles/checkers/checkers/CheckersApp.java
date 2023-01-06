@@ -52,7 +52,6 @@ public class CheckersApp extends Application {
                 }
                 // if piece was created add it to this exact tile and pieceGroup
                 if(piece != null) {
-                    tile.setPiece(piece);
                     pieceGroup.getChildren().add(piece);
                 }
             }
