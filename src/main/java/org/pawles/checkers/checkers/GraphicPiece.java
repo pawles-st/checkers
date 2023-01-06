@@ -9,13 +9,15 @@ import static org.pawles.checkers.checkers.CheckersApp.TILE_SIZE;
 
 public class GraphicPiece extends StackPane {
     public GraphicPiece(Colour color, int x, int y) {
-        relocate(x * TILE_SIZE, y*TILE_SIZE);
+        relocate(x * TILE_SIZE, y*TILE_SIZE); //set right position
+        // set some graphical values so it looks like checkers piece
         Ellipse shape = new Ellipse(TILE_SIZE*0.3125, TILE_SIZE*0.26);
         shape.setFill(color == Colour.WHITE ? Color.valueOf("#000") : Color.valueOf("#FFF"));
         shape.setStroke(Color.GRAY);
         shape.setStrokeWidth(TILE_SIZE*0.03);
         shape.setTranslateX((TILE_SIZE - TILE_SIZE*0.3125*2)/2);
         shape.setTranslateY((TILE_SIZE - TILE_SIZE*0.26*2)/2);
+        // add this shape to list of graphicPieces
         getChildren().addAll(shape);
     }
 }
