@@ -34,7 +34,8 @@ public class CheckersApp extends Application {
         for(int y=0; y<HEIGHT; y++) {
             for(int x=0; x<WIDTH; x++) {
                 // create tile with right color (dark or light)
-                Tile tile = new Tile((x+y) % 2 == 1, x, y);
+                Colour colour = (x+y) % 2 == 1 ? Colour.BLACK : Colour.WHITE;
+                Tile tile = new Tile(colour, x, y);
                 // add created tile to tileGroup
                 tileGroup.getChildren().add(tile);
 
