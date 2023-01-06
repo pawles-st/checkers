@@ -39,9 +39,9 @@ public class CheckersApp extends Application {
 
                 if(coordinates.get(y).get(x) != null) {
                     if (coordinates.get(y).get(x).getColour() == Colour.WHITE) {
-                        piece = makeGraphPiece(Colour.WHITE, x, y);
+                        piece = new GraphicPiece(Colour.WHITE, x, y);
                     } else if (coordinates.get(y).get(x).getColour() == Colour.BLACK) {
-                        piece = makeGraphPiece(Colour.BLACK, x, y);
+                        piece = new GraphicPiece(Colour.BLACK, x, y);
                     }
                 }
 
@@ -64,11 +64,6 @@ public class CheckersApp extends Application {
         primaryStage.setTitle("Checkers");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    private GraphicPiece makeGraphPiece(Colour color, int x, int y) {
-        GraphicPiece graphPiece = new GraphicPiece(color, x, y);
-        return graphPiece;
     }
 
     public static void main(String[] args) {
