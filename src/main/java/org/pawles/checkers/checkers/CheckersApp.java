@@ -6,21 +6,22 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
-import org.pawles.checkers.objects.AbstractPiece;
-import org.pawles.checkers.objects.Board;
-import org.pawles.checkers.objects.Colour;
+import org.pawles.checkers.objects.*;
 import org.pawles.checkers.utils.BoardDirector;
 import org.pawles.checkers.utils.BrazilianBoardBuilder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CheckersApp extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
     Board board;
-    private Group tileGroup = new Group();
-    private Group pieceGroup = new Group();
+    private final Group tileGroup = new Group();
+    private final Group pieceGroup = new Group();
+    private final Map<Square, GraphicPiece> pieces = new HashMap<>();
 
     private Parent createContent() {
         // create pane and set defaults
@@ -44,11 +45,8 @@ public class CheckersApp extends Application {
                 // if square xy isn't null
                 if(coordinates.get(y).get(x) != null) {
                     //check if it contains white or black piece, then create one
-                    if (coordinates.get(y).get(x).getColour() == Colour.WHITE) {
-                        piece = new GraphicPiece(Colour.WHITE, x, y);
-                    } else if (coordinates.get(y).get(x).getColour() == Colour.BLACK) {
-                        piece = new GraphicPiece(Colour.BLACK, x, y);
-                    }
+                    piece = new GraphicPiece(coordinates.get(y).get(x).getColour(), x, y);
+                    pieces.put(new Square(x, y), piece);
                 }
                 // if piece was created add it to this exact tile and pieceGroup
                 if(piece != null) {
