@@ -48,6 +48,20 @@ public class Board { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
     }
 
     /**
+     * kills appropriate pieces for the given move (only if a kill happened)
+     * @param curr square a piece moved from
+     * @param dest square a piece moved to
+     */
+    public void killPiece(final Square curr, final Square dest) {
+        final int diff = Math.abs(curr.getX() - dest.getX());
+        for (int i = 1; i < diff; ++i) {
+            final int diffY = (dest.getY() - curr.getY()) / diff * i;
+            final int diffX = (dest.getX() - curr.getX()) / diff * i;
+            coordinates.get(curr.getY() + diffY).set(curr.getX() + diffX, null);
+        }
+    }
+
+    /**
      * moves a single piece on the board
      * @param curr square the piece is currently on
      * @param dest destination square
@@ -57,6 +71,7 @@ public class Board { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
         piece.move(dest); //NOPMD - suppressed LawOfDemeter - 2D array
         coordinates.get(curr.getY()).set(curr.getX(), null); //NOPMD - suppressed LawOfDemeter - 2D array
         coordinates.get(dest.getY()).set(dest.getX(), piece); //NOPMD - suppressed LawOfDemeter - 2D array
+        killPiece(curr, dest);
     }
 
     /**
