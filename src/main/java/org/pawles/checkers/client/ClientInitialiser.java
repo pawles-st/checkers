@@ -15,7 +15,7 @@ import java.util.Scanner;
  * @author pawles
  * @version 1.0
  */
-public final class CheckersClient {
+public final class ClientInitialiser {
 
     // fields for communication with the server
 
@@ -39,7 +39,7 @@ public final class CheckersClient {
     /** error stream for client messages */
     private static final PrintWriter ERR = new PrintWriter(System.err);
 
-    private CheckersClient() { }
+    private ClientInitialiser() { }
 
     private static void connect() throws IOException {
 
@@ -74,26 +74,17 @@ public final class CheckersClient {
         }
     }
 
-    private static void startGame(final Colour colour) {
-
-        // start the GameCommunicator class which handles the game from client side
-
-        final GameCommunicator gameCommunicator = new GameCommunicator(colour, socketIn, socketOut);
-        gameCommunicator.start();
-    }
-
     /**
      * connects to the server and initiates tho client side
-     *
-     * @param args arguments (should be left empty)
      */
-    public static void main(final String... args) {
+    public static GameCommunicator init() throws IOException {
         try {
             connect();
             await();
-            startGame(colour);
         } catch (IOException e) {
             ERR.println(e.getMessage());
+            throw new IOException(e);
         }
+        return new GameCommunicator(colour, socketIn, socketOut);
     }
 }
