@@ -172,6 +172,18 @@ public class Game implements Runnable {
     private MoveResult tryMove(MoveData data) {
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
+        if(coordinates.get(data.getStartY()).get(data.getStartX()) == null) { // if there isn't any pawn at start position
+            return new MoveResult(MoveType.NONE); // move cannot be done
+        }
+
+        if(whiteTurn && coordinates.get(data.getStartY()).get(data.getStartX()).getColour() == Colour.BLACK) { // if it's whitePlayer's turn and pawn at starting position is black
+            return new MoveResult(MoveType.NONE); // move cannot be done
+        }
+
+        if(!whiteTurn && coordinates.get(data.getStartY()).get(data.getStartX()).getColour() == Colour.WHITE) { // if it isn't whitePlayer's turn and pawn at starting position is white
+            return new MoveResult(MoveType.NONE); // move cannot be done
+        }
+
         if(checkIfThereIsPawn(coordinates.get(data.getNewY()).get(data.getNewX()))) { // if there is pawn at new coordinates
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
