@@ -8,10 +8,13 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
+import org.pawles.checkers.client.ClientInitialiser;
+import org.pawles.checkers.client.GameCommunicator;
 import org.pawles.checkers.objects.*;
 import org.pawles.checkers.utils.BoardDirector;
 import org.pawles.checkers.utils.BrazilianBoardBuilder;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,7 @@ public class CheckersApp extends Application {
     public static final int TILE_SIZE = 100;
     public static final int WIDTH = 8;
     public static final int HEIGHT = 8;
+    private static GameCommunicator gameCom;
     Board board;
     private final Group tileGroup = new Group();
     private final Group pieceGroup = new Group();
@@ -83,6 +87,11 @@ public class CheckersApp extends Application {
     }
 
     public static void main(String[] args) {
+        try {
+            gameCom = ClientInitialiser.init();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         launch(); // call start() function
     }
 }
