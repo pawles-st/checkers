@@ -6,13 +6,35 @@ import org.pawles.checkers.objects.Square;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+/**
+ * Client communicator with the server that also applies moves
+ * @author pawles
+ * @version 1.0
+ */
 public class GameCommunicator {
-    private final ClientController clientController;
-    private final Scanner socketIn;
-    private final PrintWriter socketOut;
-    private final Scanner clientIn;
-    private boolean myTurn = false;
 
+    /** MVC controller object */
+    private transient final ClientController clientController;
+
+    /** input stream for server communication */
+    private transient final Scanner socketIn;
+
+    /** output stream for server communication */
+    private transient final PrintWriter socketOut;
+
+    /** string representing the correct message passed from the server side */
+    private static final String CORRECT_MESSAGE = "correct";
+
+    public Colour getColour() { //NOPMD - suppressed CommentRequired - this is a simple getter
+        return clientController.getColour();
+    }
+
+    /**
+     * initialises the server communicator object
+     * @param colour player's colour
+     * @param socketIn input stream for server communication
+     * @param socketOut output stream for server communication
+     */
     public GameCommunicator(final Colour colour, final Scanner socketIn, final PrintWriter socketOut) {
 
         // create ClientController object
@@ -25,104 +47,38 @@ public class GameCommunicator {
 
         this.socketIn = socketIn;
         this.socketOut = socketOut;
-
-        // initialise stdin scanner
-
-        clientIn = new Scanner(System.in);
     }
 
-    public void start() {
+    /**
+     * sends the move to the server and applies if it is correct
+     * @param move move to send to the server [oldX][oldY]:[newX][newY]
+     * @return true if the move was correct; false otherwise
+     */
+    public boolean sendMove(final String move) {
 
-        Square curr;
-        Square dest;
-        int currX;
-        int currY;
-        int destX;
-        int destY;
-        int turnCount = 1;
+        // parse the move
 
-        // show board for the player
+        final int currX = Integer.parseInt(String.valueOf(move.charAt(0)));
+        final int currY = Integer.parseInt(String.valueOf(move.charAt(1)));
+        final Square curr = new Square(currX, currY);
+        final int destX = Integer.parseInt(String.valueOf(move.charAt(3)));
+        final int destY = Integer.parseInt(String.valueOf(move.charAt(4)));
+        final Square dest = new Square(destX, destY);
 
-        clientController.updateView();
+        // verify
 
-        // take turns while the game is in progress
-
-        do {
-
-            if (clientController.getColour() == Colour.BLACK || turnCount != 1) {
-                // wait and read opponent's move
-
-                System.out.println("Waiting for the opposing player...");
-                final String opponentMove = socketIn.nextLine();
-                currX = Integer.parseInt(String.valueOf(opponentMove.charAt(0)));
-                currY = Integer.parseInt(String.valueOf(opponentMove.charAt(1)));
-                curr = new Square(currX, currY);
-                destX = Integer.parseInt(String.valueOf(opponentMove.charAt(3)));
-                destY = Integer.parseInt(String.valueOf(opponentMove.charAt(4)));
-                dest = new Square(destX, destY);
+        boolean verification;
+        if (clientController.verifyMove(curr, dest)) {
+            socketOut.println(move);
+            if (CORRECT_MESSAGE.equals(socketIn.nextLine())) {
                 clientController.movePiece(curr, dest);
-            }
-
-            // wait for player's turn
-
-            final String msg = socketIn.nextLine();
-            if ("your turn".equals(msg)) {
-                myTurn = true;
+                verification = true;
             } else {
-                throw new RuntimeException("Invalid message received");
+                verification = false;
             }
-
-            // show opponent's move
-
-            clientController.updateView();
-
-            // single turn (can be composed of multiple moves)
-
-            String verification = "";
-            do {
-
-                if ("incorrect".equals(verification)) {
-                    System.out.println("Incorrect move, try again.");
-                }
-
-                // ask player for the move
-
-                System.out.print("Move from: ");
-                final String from = clientIn.nextLine();
-                System.out.print("Move to: ");
-                final String to = clientIn.nextLine(); //NOPMD - suppressed ShortVariable - name consistent with 'from'
-
-                // convert move to Squares
-
-                currX = Integer.parseInt(String.valueOf(from.charAt(0)));
-                currY = Integer.parseInt(String.valueOf(from.charAt(1)));
-                curr = new Square(currX, currY); // store squares somewhere to avoid constant creation???
-                destX = Integer.parseInt(String.valueOf(to.charAt(0)));
-                destY = Integer.parseInt(String.valueOf(to.charAt(1)));
-                dest = new Square(destX, destY);
-
-                // check
-
-                if (!clientController.verifyMove(curr, dest)) {
-                    clientController.updateView();
-                    System.out.println("Incorrect move, try again.");
-                    continue;
-                }
-
-                // sent the move to the server to verify
-
-                final String move = from + ":" + to;
-                socketOut.println(move);
-                verification = socketIn.nextLine();
-                clientController.updateView();
-            } while (!"correct".equals(verification));
-
-            // update the board
-
-            clientController.movePiece(curr, dest);
-            clientController.updateView();
-            ++turnCount;
-
-        } while (true); // while the game is in progress
+        } else {
+            verification = false;
+        }
+        return verification;
     }
 }
