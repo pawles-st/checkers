@@ -49,7 +49,6 @@ public final class ClientInitialiser {
             final Socket socket = new Socket("localhost", PORT);
             socketIn = new Scanner(socket.getInputStream());
             socketOut = new PrintWriter(socket.getOutputStream(), true);
-            OUT.println("connected");
         } catch (UnknownHostException e) {
             throw (UnknownHostException) new UnknownHostException("Server doesn't exist").initCause(e);
         } catch (IOException e) {
@@ -83,9 +82,7 @@ public final class ClientInitialiser {
     public static GameCommunicator init() throws IOException {
         try {
             connect();
-            OUT.println("connect complete");
             await();
-            OUT.println("await complete");
         } catch (IOException e) {
             ERR.println(e.getMessage());
             throw new IOException(e);
