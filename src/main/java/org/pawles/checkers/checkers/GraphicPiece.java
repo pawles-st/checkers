@@ -3,6 +3,7 @@ package org.pawles.checkers.checkers;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
+import org.pawles.checkers.client.GameCommunicator;
 import org.pawles.checkers.objects.Colour;
 
 import static org.pawles.checkers.checkers.CheckersApp.TILE_SIZE;
@@ -11,7 +12,7 @@ public class GraphicPiece extends StackPane {
     int posX, posY;
     int oldTileX, oldTileY;
     int newTileX, newTileY;
-    public GraphicPiece(Colour color, int x, int y) {
+    public GraphicPiece(Colour color, int x, int y, GameCommunicator communicator) {
         // store info on which tile the pawn is
         posX = x;
         posY = y;
@@ -40,6 +41,7 @@ public class GraphicPiece extends StackPane {
             newTileY = (int)e.getSceneY() / 100;
             System.out.println("Old position: "+oldTileX+""+oldTileY+". New position: "+newTileX+""+newTileY);
             move(newTileX, newTileY);
+            communicator.sendMove(Integer.toString(oldTileX)+Integer.toString(oldTileY)+":"+Integer.toString(newTileX)+Integer.toString(newTileY));
         });
     }
 

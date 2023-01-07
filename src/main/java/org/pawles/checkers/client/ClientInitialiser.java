@@ -49,6 +49,7 @@ public final class ClientInitialiser {
             final Socket socket = new Socket("localhost", PORT);
             socketIn = new Scanner(socket.getInputStream());
             socketOut = new PrintWriter(socket.getOutputStream(), true);
+            OUT.println("connected");
         } catch (UnknownHostException e) {
             throw (UnknownHostException) new UnknownHostException("Server doesn't exist").initCause(e);
         } catch (IOException e) {

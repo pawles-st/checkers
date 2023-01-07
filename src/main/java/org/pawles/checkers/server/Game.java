@@ -233,9 +233,11 @@ public class Game implements Runnable {
         PrintWriter firstOuput;
         firstOuput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
         firstOuput.println("White");
+        System.out.println("First Player received white color");
 
         PrintWriter secondOutput;
         secondOutput = new PrintWriter(blackPlayer.getSocket().getOutputStream(), true);
         secondOutput.println("Black");
+        System.out.println("Second Player received black color");
     }
 }

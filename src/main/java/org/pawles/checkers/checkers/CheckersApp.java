@@ -58,7 +58,7 @@ public class CheckersApp extends Application {
                 // if square xy isn't null
                 if(coordinates.get(y).get(x) != null) {
                     //check if it contains white or black piece, then create one
-                    piece = new GraphicPiece(coordinates.get(y).get(x).getColour(), x, y);
+                    piece = new GraphicPiece(coordinates.get(y).get(x).getColour(), x, y, gameCom);
                     pieces.put(new Square(x, y), piece);
                 }
                 // if piece was created add it to this exact tile and pieceGroup
