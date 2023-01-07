@@ -29,7 +29,8 @@ public class GameCommunicator {
     /** string representing the correct message passed from the server side */
     private static final String INCORRECT_MESSAGE = "incorrect";
 
-    private boolean myTurn = false;
+    /** boolean informing whether it is the current player's turn */
+    private transient boolean myTurn;
 
     public Colour getColour() { //NOPMD - suppressed CommentRequired - this is a simple getter
         return clientController.getColour();
@@ -57,24 +58,17 @@ public class GameCommunicator {
 
     /**
      * sends the move to the server and applies if it is correct
-     * @param move move to send to the server [oldX][oldY]:[newX][newY]
+     * @param curr square to move from
+     * @param dest square to move to
      * @return true if the move was correct; false otherwise
      */
-    public boolean sendMove(final String move) {
+    public boolean sendMove(final Square curr, final Square dest) {
 
-        // parse the move
-
-        final int currX = Integer.parseInt(String.valueOf(move.charAt(0)));
-        final int currY = Integer.parseInt(String.valueOf(move.charAt(1)));
-        final Square curr = new Square(currX, currY);
-        final int destX = Integer.parseInt(String.valueOf(move.charAt(3)));
-        final int destY = Integer.parseInt(String.valueOf(move.charAt(4)));
-        final Square dest = new Square(destX, destY);
-
-        // verify
+        // verify if the move is allowed
 
         boolean verification;
         if (myTurn && clientController.verifyMove(curr, dest)) {
+            final String move = Integer.toString(curr.getX()) + curr.getY() + ":" + dest.getX() + dest.getY();
             socketOut.println(move);
             final String message = socketIn.nextLine();
             if (CORRECT_MESSAGE.equals(message)) {
@@ -92,9 +86,12 @@ public class GameCommunicator {
         return verification;
     }
 
+    /**
+     * applies opponent's move to the board once it is sent from the server
+     */
     public void waitForMove() {
         final String move = socketIn.nextLine();
-        if (move.length() == 5 && move.charAt(2) == ':') {
+        if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here
             final int currX = Integer.parseInt(String.valueOf(move.charAt(0)));
             final int currY = Integer.parseInt(String.valueOf(move.charAt(1)));
             final Square curr = new Square(currX, currY);
@@ -109,6 +106,9 @@ public class GameCommunicator {
 
     }
 
+    /**
+     * sets myTurn boolean once server informs about turn change
+     */
     public void waitForTurn() {
         final String message = socketIn.nextLine();
         if ("your turn".equals(message)) {
