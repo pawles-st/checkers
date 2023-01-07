@@ -81,7 +81,7 @@ public class CheckersApp extends Application {
         // create scene using createContent function
         Scene scene = new Scene(createContent());
         // set scene title and display it
-        if(gameCom.getColour()==Colour.WHITE) {
+        if(gameCom.getColour() == Colour.WHITE) {
             primaryStage.setTitle("Checkers - White");
         } else {
             primaryStage.setTitle("Checkers - Black");
