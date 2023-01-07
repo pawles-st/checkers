@@ -1,5 +1,6 @@
 package org.pawles.checkers.client;
 
+import org.pawles.checkers.exceptions.WrongMessageException;
 import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.Square;
 
@@ -24,6 +25,11 @@ public class GameCommunicator {
 
     /** string representing the correct message passed from the server side */
     private static final String CORRECT_MESSAGE = "correct";
+
+    /** string representing the correct message passed from the server side */
+    private static final String INCORRECT_MESSAGE = "incorrect";
+
+    private boolean myTurn = false;
 
     public Colour getColour() { //NOPMD - suppressed CommentRequired - this is a simple getter
         return clientController.getColour();
@@ -68,17 +74,47 @@ public class GameCommunicator {
         // verify
 
         boolean verification;
-        if (clientController.verifyMove(curr, dest)) {
+        if (myTurn && clientController.verifyMove(curr, dest)) {
             socketOut.println(move);
-            if (CORRECT_MESSAGE.equals(socketIn.nextLine())) {
+            final String message = socketIn.nextLine();
+            if (CORRECT_MESSAGE.equals(message)) {
                 clientController.movePiece(curr, dest);
+                myTurn = false;
                 verification = true;
-            } else {
+            } else if (INCORRECT_MESSAGE.equals(message)) {
                 verification = false;
+            } else {
+                throw new WrongMessageException("unhandled message received: " + message);
             }
         } else {
             verification = false;
         }
         return verification;
+    }
+
+    public void waitForMove() {
+        final String move = socketIn.nextLine();
+        if (move.length() == 5 && move.charAt(2) == ':') {
+            final int currX = Integer.parseInt(String.valueOf(move.charAt(0)));
+            final int currY = Integer.parseInt(String.valueOf(move.charAt(1)));
+            final Square curr = new Square(currX, currY);
+            final int destX = Integer.parseInt(String.valueOf(move.charAt(3)));
+            final int destY = Integer.parseInt(String.valueOf(move.charAt(4)));
+            final Square dest = new Square(destX, destY);
+            clientController.movePiece(curr, dest);
+            waitForTurn();
+        } else {
+            throw new WrongMessageException("unhandled message received: " + move);
+        }
+
+    }
+
+    public void waitForTurn() {
+        final String message = socketIn.nextLine();
+        if ("your turn".equals(message)) {
+            myTurn = true;
+        } else {
+            throw new WrongMessageException("unhandled message received: " + message);
+        }
     }
 }
