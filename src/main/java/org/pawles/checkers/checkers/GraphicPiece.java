@@ -39,9 +39,11 @@ public class GraphicPiece extends StackPane {
         setOnMouseReleased( e-> {
             newTileX = (int)e.getSceneX() / 100;
             newTileY = (int)e.getSceneY() / 100;
+            String str1 = Integer.toString(oldTileX)+Integer.toString(oldTileY)+":"+Integer.toString(newTileX)+Integer.toString(newTileY);
+            System.out.println(str1);
+            communicator.sendMove(str1);
             System.out.println("Old position: "+oldTileX+""+oldTileY+". New position: "+newTileX+""+newTileY);
             move(newTileX, newTileY);
-            communicator.sendMove(Integer.toString(oldTileX)+Integer.toString(oldTileY)+":"+Integer.toString(newTileX)+Integer.toString(newTileY));
         });
     }
 
