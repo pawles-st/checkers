@@ -1,14 +1,17 @@
 package org.pawles.checkers.utils;
 
-import org.pawles.checkers.objects.Colour;
-import org.pawles.checkers.objects.Man;
-import org.pawles.checkers.objects.AbstractPiece;
-import org.pawles.checkers.objects.Square;
+import org.pawles.checkers.objects.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
+
+    @Override
+    public void createNewBoard() {
+        board = new Board(8);
+    }
+
     @Override
     public void buildGrid() {
         final List<List<AbstractPiece>> coordinates = new ArrayList<>();

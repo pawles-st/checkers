@@ -73,6 +73,7 @@ public class GameCommunicator {
             final String message = socketIn.nextLine();
             if (CORRECT_MESSAGE.equals(message)) {
                 clientController.movePiece(curr, dest);
+                clientController.updateView();
                 myTurn = false;
                 verification = true;
             } else if (INCORRECT_MESSAGE.equals(message)) {
@@ -99,6 +100,7 @@ public class GameCommunicator {
             final int destY = Integer.parseInt(String.valueOf(move.charAt(4)));
             final Square dest = new Square(destX, destY);
             clientController.movePiece(curr, dest);
+            clientController.updateView();
             waitForTurn();
         } else {
             throw new WrongMessageException("unhandled message received: " + move);

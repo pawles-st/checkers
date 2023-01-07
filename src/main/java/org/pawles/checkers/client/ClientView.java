@@ -1,8 +1,6 @@
 package org.pawles.checkers.client;
 
-import org.pawles.checkers.objects.Board;
-import org.pawles.checkers.objects.Colour;
-import org.pawles.checkers.objects.AbstractPiece;
+import org.pawles.checkers.objects.*;
 
 import java.util.List;
 
@@ -15,9 +13,13 @@ public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unne
         char tileChar;
         if (piece == null) { // if tile is empty, return whitespace
             tileChar = ' ';
-        } else if (piece.getColour() == Colour.WHITE) { // if white piece, return 'O'
+        } else if (piece.getColour() == Colour.WHITE && piece instanceof Man) { // if white man, return 'o'
+            tileChar = 'o';
+        } else if (piece.getColour() == Colour.BLACK && piece instanceof Man) { // if black man, return 'x'
+            tileChar = 'x';
+        } else if (piece.getColour() == Colour.WHITE && piece instanceof King) { // if white king, return 'O'
             tileChar = 'O';
-        } else { // if black piece, return 'X'
+        } else { // if white king, return 'X'
             tileChar = 'X';
         }
         return tileChar;

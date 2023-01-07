@@ -8,10 +8,40 @@ import java.util.List;
  * @author Szymon
  * @version 1.0
  */
-public class Board { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
+public class Board {
 
     /** coordinates list containing pieces */
     private List<List<AbstractPiece>> coordinates;
+
+    /** vertical size of the board */
+    private transient final int sizeY;
+
+    private void promotePiece(final Square dest) {
+        final Colour colour = coordinates.get(dest.getY()).get(dest.getX()).getColour(); //NOPMD - suppressed LawOfDemeter - 2D array
+        if (colour == Colour.WHITE && dest.getY() == sizeY - 1 || colour == Colour.BLACK && dest.getY() == 0) {
+            coordinates.get(dest.getY()).set(dest.getX(), new King(dest, colour));
+        }
+    }
+
+    /**
+     * kills appropriate pieces for the given move (only if a kill happened)
+     * @param curr square a piece moved from
+     * @param dest square a piece moved to
+     */
+    private void killPiece(final Square curr, final Square dest) {
+        final int diff = Math.abs(curr.getX() - dest.getX());
+        for (int i = 1; i < diff; ++i) {
+            final int diffY = (dest.getY() - curr.getY()) / diff * i;
+            final int diffX = (dest.getX() - curr.getX()) / diff * i;
+            deletePiece(new Square(curr.getX() + diffX, curr.getY() + diffY));
+        }
+    }
+
+    /**
+     * initialises the board object
+     * @param sizeY vertical size of the board
+     */
+    public Board(final int sizeY) {this.sizeY = sizeY;}
 
     public List<List<AbstractPiece>> getCoordinates() {
         return coordinates;
@@ -48,20 +78,6 @@ public class Board { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
     }
 
     /**
-     * kills appropriate pieces for the given move (only if a kill happened)
-     * @param curr square a piece moved from
-     * @param dest square a piece moved to
-     */
-    public void killPiece(final Square curr, final Square dest) {
-        final int diff = Math.abs(curr.getX() - dest.getX());
-        for (int i = 1; i < diff; ++i) {
-            final int diffY = (dest.getY() - curr.getY()) / diff * i;
-            final int diffX = (dest.getX() - curr.getX()) / diff * i;
-            coordinates.get(curr.getY() + diffY).set(curr.getX() + diffX, null);
-        }
-    }
-
-    /**
      * moves a single piece on the board
      * @param curr square the piece is currently on
      * @param dest destination square
@@ -72,6 +88,7 @@ public class Board { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
         coordinates.get(curr.getY()).set(curr.getX(), null); //NOPMD - suppressed LawOfDemeter - 2D array
         coordinates.get(dest.getY()).set(dest.getX(), piece); //NOPMD - suppressed LawOfDemeter - 2D array
         killPiece(curr, dest);
+        promotePiece(dest);
     }
 
     /**

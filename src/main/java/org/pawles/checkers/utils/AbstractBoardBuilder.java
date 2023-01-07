@@ -15,9 +15,7 @@ public abstract class AbstractBoardBuilder { //NOPMD - suppressed AtLeastOneCons
     /**
      * constructs new board
      */
-    public void createNewBoard() {
-        board = new Board();
-    }
+    public abstract void createNewBoard();
 
     public Board getBoard() {
         return board;
