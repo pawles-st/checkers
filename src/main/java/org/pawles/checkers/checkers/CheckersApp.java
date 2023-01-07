@@ -2,6 +2,8 @@ package org.pawles.checkers.checkers;
 
 import javafx.application.Application;
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
@@ -32,13 +34,20 @@ public class CheckersApp extends Application {
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
 
-        for(int y=0; y<HEIGHT; y++) {
-            for(int x=0; x<WIDTH; x++) {
+        for(int y=7; y>=0; y--) {
+            for(int x=7; x>=0; x--) {
                 // create tile with right color (dark or light)
-                Colour colour = (x+y) % 2 == 1 ? Colour.BLACK : Colour.WHITE;
+                Colour colour = (x+y) % 2 == 0 ? Colour.BLACK : Colour.WHITE;
                 Tile tile = new Tile(colour, x, y);
                 // add created tile to tileGroup
                 tileGroup.getChildren().add(tile);
+
+                ///////////////////////////////////////////
+                Text text = new Text(x+""+y);
+                text.setFill(Color.PINK);
+                text.relocate(x * CheckersApp.TILE_SIZE, y * CheckersApp.TILE_SIZE);
+                root.getChildren().add(text);
+                ///////////////////////////////////////////
 
                 // create GraphicPiece object
                 GraphicPiece piece = null;
