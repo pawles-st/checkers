@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import org.pawles.checkers.client.GameCommunicator;
 import org.pawles.checkers.objects.Colour;
-import org.pawles.checkers.objects.Square;
+import org.pawles.checkers.objects.SquareInstancer;
 
 import static org.pawles.checkers.checkers.CheckersApp.TILE_SIZE;
 
@@ -42,7 +42,7 @@ public class GraphicPiece extends StackPane {
             newTileY = (int)e.getSceneY() / 100;
             String str1 = Integer.toString(oldTileX)+Integer.toString(oldTileY)+":"+Integer.toString(newTileX)+Integer.toString(newTileY);
             System.out.println(str1);
-            if (communicator.sendMove(new Square(oldTileX, oldTileY), new Square(newTileX, newTileY))) {
+            if (communicator.sendMove(SquareInstancer.getInstance(oldTileX, oldTileY), SquareInstancer.getInstance(newTileX, newTileY))) {
                 System.out.println("Old position: "+oldTileX+""+oldTileY+". New position: "+newTileX+""+newTileY);
                 move(newTileX, newTileY);
                 communicator.waitForMove();

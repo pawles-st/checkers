@@ -14,6 +14,7 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
 
     @Override
     public void buildGrid() {
+        SquareInstancer.initialise(8, 8);
         final List<List<AbstractPiece>> coordinates = new ArrayList<>();
         for (int i = 0; i < 8; ++i) {
             coordinates.add(new ArrayList<>());
@@ -24,8 +25,8 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
     // can law of Demeter here be fixed?
     @Override
     public void buildPieces() { //NOPMD - suppressed CognitiveComplexity - method does a single job of filling the board with pieces
-        int x; //NOPMD - suppressed ShortVariable - standerd coordinate name
-        int y; //NOPMD - suppressed ShortVariable - standerd coordinate name
+        int x; //NOPMD - suppressed ShortVariable - standard coordinate name
+        int y; //NOPMD - suppressed ShortVariable - standard coordinate name
         for (x = 0; x < 8; ++x) {
             y = 0;
 
@@ -33,7 +34,7 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
 
             for (; y < 3; ++y) {
                 if ((x + y) % 2 == 0) {
-                    board.getCoordinates().get(y).add(new Man(new Square(x, y), Colour.WHITE)); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - objects are created to be held
+                    board.getCoordinates().get(y).add(new Man(SquareInstancer.getInstance(x, y), Colour.WHITE)); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - objects are created to be held
                 } else {
                     board.getCoordinates().get(y).add(null);
                 }
@@ -49,7 +50,7 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
 
             for (; y < 8; ++y) {
                 if ((x + y) % 2 == 0) {
-                    board.getCoordinates().get(y).add(new Man(new Square(x, y), Colour.BLACK)); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - objects are created to be held
+                    board.getCoordinates().get(y).add(new Man(SquareInstancer.getInstance(x, y), Colour.BLACK)); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - objects are created to be held
                 } else {
                     board.getCoordinates().get(y).add(null);
                 }

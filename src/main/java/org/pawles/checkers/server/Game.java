@@ -215,8 +215,8 @@ public class Game implements Runnable {
 
     private void movePawns(MoveData data) {
         // convert int to squares
-        Square start = new Square (data.getStartX(), data.getStartY());
-        Square newSquare = new Square (data.getNewX(), data.getNewY());
+        Square start = SquareInstancer.getInstance(data.getStartX(), data.getStartY());
+        Square newSquare = SquareInstancer.getInstance(data.getNewX(), data.getNewY());
 
         // move piece from one square to another
         board.movePiece(start, newSquare);
@@ -225,7 +225,7 @@ public class Game implements Runnable {
     private void killPawn(MoveData data) {
         int middleX = (data.getNewX() + data.getStartX()) / 2;
         int middleY = (data.getNewY() + data.getStartY()) / 2;
-        Square middleSquare = new Square(middleX, middleY);
+        Square middleSquare = SquareInstancer.getInstance(middleX, middleY);
         board.deletePiece(middleSquare);
     }
     //setup sends to client what colors they're playing

@@ -3,6 +3,7 @@ package org.pawles.checkers.client;
 import org.pawles.checkers.exceptions.WrongMessageException;
 import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.Square;
+import org.pawles.checkers.objects.SquareInstancer;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -95,10 +96,10 @@ public class GameCommunicator {
         if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here
             final int currX = Integer.parseInt(String.valueOf(move.charAt(0)));
             final int currY = Integer.parseInt(String.valueOf(move.charAt(1)));
-            final Square curr = new Square(currX, currY);
+            final Square curr = SquareInstancer.getInstance(currX, currY);
             final int destX = Integer.parseInt(String.valueOf(move.charAt(3)));
             final int destY = Integer.parseInt(String.valueOf(move.charAt(4)));
-            final Square dest = new Square(destX, destY);
+            final Square dest = SquareInstancer.getInstance(destX, destY);
             clientController.movePiece(curr, dest);
             clientController.updateView();
             waitForTurn();
