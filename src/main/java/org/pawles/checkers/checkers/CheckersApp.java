@@ -71,11 +71,11 @@ public class CheckersApp extends Application {
         return root;
     }
 
-    public static void removePiece(Square square) {
+    public void removePiece(Square square) {
         pieceGroup.getChildren().remove(pieces.get(square));
     }
 
-    public static void movePiece(Square curr, Square dest) {
+    public void movePiece(Square curr, Square dest) {
         final GraphicPiece piece = pieces.get(curr);
         piece.move(dest);
         pieces.remove(curr);
@@ -83,7 +83,7 @@ public class CheckersApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         // make board the same way as everywhere
         BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());

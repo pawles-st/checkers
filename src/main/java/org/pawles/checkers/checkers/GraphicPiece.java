@@ -52,7 +52,7 @@ public class GraphicPiece extends StackPane {
         });
     }
 
-    private void move(Square dest) {
+    public void move(Square dest) {
         oldTileX = dest.getX();
         oldTileY = dest.getY();
         relocate(dest.getX() * TILE_SIZE, dest.getY() * TILE_SIZE);
