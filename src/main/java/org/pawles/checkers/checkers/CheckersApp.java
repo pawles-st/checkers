@@ -71,6 +71,17 @@ public class CheckersApp extends Application {
         return root;
     }
 
+    public static void removePiece(Square square) {
+        pieceGroup.getChildren().remove(pieces.get(square));
+    }
+
+    public static void movePiece(Square curr, Square dest) {
+        final GraphicPiece piece = pieces.get(curr);
+        piece.move(dest);
+        pieces.remove(curr);
+        pieces.put(dest, piece);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         // make board the same way as everywhere
@@ -90,6 +101,7 @@ public class CheckersApp extends Application {
         }
         primaryStage.setScene(scene);
         primaryStage.show();
+        pieceGroup.getChildren().remove(pieces.get(SquareInstancer.getInstance(1, 1)));
     }
 
     public static void main(String[] args) {
