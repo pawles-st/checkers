@@ -83,8 +83,6 @@ public class Board {
      * @param dest destination square
      */
     public void movePiece(final Square curr, final Square dest) {
-        System.out.println(curr.getY());
-        System.out.println(curr.getX());
         final AbstractPiece piece = coordinates.get(curr.getY()).get(curr.getX()); //NOPMD - suppressed LawOfDemeter - 2D array
         piece.move(dest); //NOPMD - suppressed LawOfDemeter - 2D array
         System.out.println(curr.getY());
