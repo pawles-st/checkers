@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import org.pawles.checkers.client.GameCommunicator;
 import org.pawles.checkers.objects.Colour;
+import org.pawles.checkers.objects.Square;
 import org.pawles.checkers.objects.SquareInstancer;
 
 import static org.pawles.checkers.checkers.CheckersApp.TILE_SIZE;
@@ -33,29 +34,27 @@ public class GraphicPiece extends StackPane {
             oldTileY = (int)e.getSceneY() / 100;
         });
 
-        setOnMouseDragged( e-> {
-            relocate(e.getSceneX()-TILE_SIZE*0.5, e.getSceneY()-TILE_SIZE*0.5);
-        });
+        setOnMouseDragged( e-> relocate(e.getSceneX()-TILE_SIZE*0.5, e.getSceneY()-TILE_SIZE*0.5));
 
         setOnMouseReleased( e-> {
             newTileX = (int)e.getSceneX() / 100;
             newTileY = (int)e.getSceneY() / 100;
-            String str1 = Integer.toString(oldTileX)+Integer.toString(oldTileY)+":"+Integer.toString(newTileX)+Integer.toString(newTileY);
+            String str1 = Integer.toString(oldTileX) + (oldTileY) + ":" + (newTileX) + (newTileY);
             System.out.println(str1);
             if (communicator.sendMove(SquareInstancer.getInstance(oldTileX, oldTileY), SquareInstancer.getInstance(newTileX, newTileY))) {
                 System.out.println("Old position: "+oldTileX+""+oldTileY+". New position: "+newTileX+""+newTileY);
-                move(newTileX, newTileY);
+                move(SquareInstancer.getInstance(newTileX, newTileY));
                 communicator.waitForMove();
             } else {
                 System.out.println("bad");
-                move(oldTileX, oldTileY);
+                move(SquareInstancer.getInstance(oldTileX, oldTileY));
             }
         });
     }
 
-    private void move(int x, int y) {
-        oldTileX = x;
-        oldTileY = y;
-        relocate(x * TILE_SIZE, y*TILE_SIZE);
+    private void move(Square dest) {
+        oldTileX = dest.getX();
+        oldTileY = dest.getY();
+        relocate(dest.getX() * TILE_SIZE, dest.getY() * TILE_SIZE);
     }
 }
