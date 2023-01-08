@@ -2,7 +2,6 @@ package org.pawles.checkers.checkers;
 
 import javafx.application.Application;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -31,7 +30,7 @@ public class CheckersApp extends Application {
     private Parent createContent() {
         // create pane and set defaults
         Pane root = new Pane();
-        ButtonFX button = new ButtonFX();
+        ButtonFX button = new ButtonFX(gameCom);
         root.setPrefSize(WIDTH * TILE_SIZE, (HEIGHT+1) * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup, button);
         // read starting board status

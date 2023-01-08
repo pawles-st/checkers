@@ -95,6 +95,9 @@ public class GameCommunicator {
      * applies opponent's move to the board once it is sent from the server
      */
     public void waitForMove() {
+        if (myTurn) {
+            return;
+        }
         final String move = socketIn.nextLine();
         System.out.println("--- OPPONENT TURN ---");
         if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here

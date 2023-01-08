@@ -46,7 +46,7 @@ public class GraphicPiece extends StackPane {
             if (communicator.sendMove(SquareInstancer.getInstance(oldTileX, oldTileY), SquareInstancer.getInstance(newTileX, newTileY))) {
                 System.out.println("Old position: "+oldTileX+""+oldTileY+". New position: "+newTileX+""+newTileY);
                 move(SquareInstancer.getInstance(newTileX, newTileY));
-                communicator.waitForMove();
+                //communicator.waitForMove();
             } else {
                 System.out.println("bad");
                 move(SquareInstancer.getInstance(oldTileX, oldTileY));
