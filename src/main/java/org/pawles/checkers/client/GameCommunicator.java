@@ -1,5 +1,6 @@
 package org.pawles.checkers.client;
 
+import org.pawles.checkers.checkers.CheckersApp;
 import org.pawles.checkers.exceptions.WrongMessageException;
 import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.Square;
@@ -73,8 +74,10 @@ public class GameCommunicator {
             socketOut.println(move);
             final String message = socketIn.nextLine();
             if (CORRECT_MESSAGE.equals(message)) {
+                System.out.println("--- MY TURN ---");
                 clientController.movePiece(curr, dest);
                 clientController.updateView();
+                clientController.updateViewFX();
                 myTurn = false;
                 verification = true;
             } else if (INCORRECT_MESSAGE.equals(message)) {
@@ -93,6 +96,7 @@ public class GameCommunicator {
      */
     public void waitForMove() {
         final String move = socketIn.nextLine();
+        System.out.println("--- OPPONENT TURN ---");
         if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here
             final int currX = Integer.parseInt(String.valueOf(move.charAt(0)));
             final int currY = Integer.parseInt(String.valueOf(move.charAt(1)));
@@ -102,6 +106,7 @@ public class GameCommunicator {
             final Square dest = SquareInstancer.getInstance(destX, destY);
             clientController.movePiece(curr, dest);
             clientController.updateView();
+            clientController.updateViewFX();
             waitForTurn();
         } else {
             throw new WrongMessageException("unhandled message received: " + move);
@@ -119,5 +124,13 @@ public class GameCommunicator {
         } else {
             throw new WrongMessageException("unhandled message received: " + message);
         }
+    }
+
+    /**
+     * sets the JavaFX view for MVC controller
+     * @param viewFX JavaFX view object
+     */
+    public void setViewFX(final CheckersApp viewFX) {
+        clientController.setViewFX(viewFX);
     }
 }

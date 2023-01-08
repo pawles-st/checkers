@@ -1,5 +1,6 @@
 package org.pawles.checkers.client;
 
+import org.pawles.checkers.checkers.CheckersApp;
 import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.AbstractPiece;
 import org.pawles.checkers.objects.Square;
@@ -17,6 +18,9 @@ public class ClientController {
 
     /** MVC client view object */
     final private transient ClientView view;
+
+    /** MVC JavaFX client view object */
+    private transient CheckersApp viewFX;
 
     /**
      * initialise the controller
@@ -63,7 +67,18 @@ public class ClientController {
         view.drawBoard(model.getBoard());
     }
 
+    /**
+     * draw the current board in JavaFX
+     */
+    public void updateViewFX() {
+        viewFX.updateBoard(model.getBoard());
+    }
+
     public Colour getColour() { //NOPMD - suppressed CommentRequired - this is a simple getter method
         return model.getColour();
+    }
+
+    public void setViewFX(final CheckersApp viewFX) {
+        this.viewFX = viewFX;
     }
 }

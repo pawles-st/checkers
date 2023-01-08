@@ -11,10 +11,12 @@ import org.pawles.checkers.objects.SquareInstancer;
 import static org.pawles.checkers.checkers.CheckersApp.TILE_SIZE;
 
 public class GraphicPiece extends StackPane {
+    Colour colour;
     int posX, posY;
     int oldTileX, oldTileY;
     int newTileX, newTileY;
     public GraphicPiece(Colour color, int x, int y, GameCommunicator communicator) {
+        this.colour = color;
         // store info on which tile the pawn is
         posX = x;
         posY = y;
@@ -56,5 +58,9 @@ public class GraphicPiece extends StackPane {
         oldTileX = dest.getX();
         oldTileY = dest.getY();
         relocate(dest.getX() * TILE_SIZE, dest.getY() * TILE_SIZE);
+    }
+
+    public Colour getColour() {
+        return colour;
     }
 }

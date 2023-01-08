@@ -15,9 +15,7 @@ import org.pawles.checkers.utils.BoardDirector;
 import org.pawles.checkers.utils.BrazilianBoardBuilder;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CheckersApp extends Application {
     public static final int TILE_SIZE = 100;
@@ -84,6 +82,7 @@ public class CheckersApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        gameCom.setViewFX(this);
         // make board the same way as everywhere
         BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
@@ -101,7 +100,6 @@ public class CheckersApp extends Application {
         }
         primaryStage.setScene(scene);
         primaryStage.show();
-        pieceGroup.getChildren().remove(pieces.get(SquareInstancer.getInstance(1, 1)));
     }
 
     public static void main(String[] args) {
@@ -111,5 +109,69 @@ public class CheckersApp extends Application {
             throw new RuntimeException(e);
         }
         launch(); // call start() function
+    }
+
+    public void updateBoard(final Board board) {
+        List<List<AbstractPiece>> coordinates = board.getCoordinates();
+        Stack<GraphicPiece> changedWhitePieces = new Stack<>();
+        Stack<GraphicPiece> changedBlackPieces = new Stack<>();
+
+        // push pieces that changed location onto the stack
+
+        for (int y = 0; y < HEIGHT; ++y) {
+            for (int x = 0; x < WIDTH; ++x) {
+                final GraphicPiece piece = pieces.get(SquareInstancer.getInstance(x, y));
+                if (coordinates.get(y).get(x) == null && piece != null) {
+                    System.out.println("taking pawn from " + x + " " + y);
+                    if (piece.getColour() == Colour.WHITE) {
+                        changedWhitePieces.push(piece);
+                    } else {
+                        changedBlackPieces.push(piece);
+                    }
+                    pieces.remove(SquareInstancer.getInstance(x, y));
+                }
+            }
+        }
+
+        // place the pieces back on new squares
+
+        for (int y = 0; y < HEIGHT; ++y) {
+            for (int x = 0; x < WIDTH; ++x) {
+                final AbstractPiece piece = coordinates.get(y).get(x);
+                if (piece != null && pieces.get(SquareInstancer.getInstance(x, y)) == null) {
+                    final GraphicPiece movedPiece;
+                    System.out.println("moving the pieces from view");
+                    if (piece.getColour() == Colour.WHITE) {
+                        movedPiece = changedWhitePieces.pop();
+                    } else {
+                        movedPiece = changedBlackPieces.pop();
+                    }
+                    pieces.put(SquareInstancer.getInstance(x, y), movedPiece);
+                    movedPiece.move(SquareInstancer.getInstance(x, y));
+                }
+            }
+        }
+
+        // remove extra pieces from the board
+
+        while (!changedWhitePieces.empty()) {
+            System.out.println("removing white");
+            final GraphicPiece piece = changedWhitePieces.pop();
+            pieceGroup.getChildren().remove(piece);
+            System.out.println("removed white");
+        }
+        while (!changedBlackPieces.empty()) {
+            System.out.println("removing black");
+            final GraphicPiece piece = changedBlackPieces.pop();
+            pieceGroup.getChildren().remove(piece);
+            System.out.println("removed black");
+        }
+
+        // artificial move to fix FX refresh bug TODO: remove this
+
+        //System.out.println("artmove");
+        //final GraphicPiece fixPiece = new GraphicPiece(Colour.BLACK, 0, 0, gameCom);
+        //pieceGroup.getChildren().addAll(fixPiece);
+        //pieceGroup.getChildren().remove(fixPiece);
     }
 }
