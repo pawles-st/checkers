@@ -172,15 +172,18 @@ public class Game implements Runnable {
     private MoveResult tryMove(MoveData data) {
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
-        if(coordinates.get(data.getStartY()).get(data.getStartX()) == null) { // if there isn't any pawn at start position
+        AbstractPiece playersPiece = coordinates.get(data.getStartY()).get(data.getStartX());
+        boolean isKing = playersPiece.isKing(playersPiece);
+
+        if(playersPiece == null) { // if there isn't any pawn at start position
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
 
-        if(whiteTurn && coordinates.get(data.getStartY()).get(data.getStartX()).getColour() == Colour.BLACK) { // if it's whitePlayer's turn and pawn at starting position is black
+        if(whiteTurn && playersPiece.getColour() == Colour.BLACK) { // if it's whitePlayer's turn and pawn at starting position is black
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
 
-        if(!whiteTurn && coordinates.get(data.getStartY()).get(data.getStartX()).getColour() == Colour.WHITE) { // if it isn't whitePlayer's turn and pawn at starting position is white
+        if(!whiteTurn && playersPiece.getColour() == Colour.WHITE) { // if it isn't whitePlayer's turn and pawn at starting position is white
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
 
@@ -188,16 +191,71 @@ public class Game implements Runnable {
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
 
-        if(Math.abs(data.getNewX() - data.getStartX()) == 1 && Math.abs(data.getNewY() - data.getStartY()) == 1) { // if pawn is moving 1 square
-            return new MoveResult(MoveType.NORMAL); // move will be normal
-        }
+        if(!isKing) {
+            if (Math.abs(data.getNewX() - data.getStartX()) == 1 && Math.abs(data.getNewY() - data.getStartY()) == 1) { // if pawn is moving 1 square
+                return new MoveResult(MoveType.NORMAL); // move will be normal
+            }
 
-        if(Math.abs(data.getNewX() - data.getStartX()) == 2 && Math.abs(data.getNewY() - data.getStartY()) == 2) { // if pawn is moving 2 squares
-            int middleX = (data.getNewX() + data.getStartX()) / 2;            // xPosition which moving pawn is jumping over
-            int middleY = (data.getNewY() + data.getStartY()) / 2;            // yPosition which moving pawn is jumping over
-            if(coordinates.get(middleY).get(middleX) != null) {               // check if pawn will be jumping over other pawn
-                if (coordinates.get(middleY).get(middleX).getColour() != coordinates.get(data.getStartY()).get(data.getStartX()).getColour()) { // if pawn in between is different color return kill move
-                    return new MoveResult(MoveType.KILL);
+            if (Math.abs(data.getNewX() - data.getStartX()) == 2 && Math.abs(data.getNewY() - data.getStartY()) == 2) { // if pawn is moving 2 squares
+                int middleX = (data.getNewX() + data.getStartX()) / 2;            // xPosition which moving pawn is jumping over
+                int middleY = (data.getNewY() + data.getStartY()) / 2;            // yPosition which moving pawn is jumping over
+                if (coordinates.get(middleY).get(middleX) != null) {               // check if pawn will be jumping over other pawn
+                    if (coordinates.get(middleY).get(middleX).getColour() != playersPiece.getColour()) { // if pawn in between is different color return kill move
+                        return new MoveResult(MoveType.KILL);
+                    }
+                }
+            }
+        } else {
+            int moveLength = Math.abs(data.getNewX() - data.getStartX());
+            boolean goingUp = data.getNewY() > data.getStartY(); // when new Y is higher, king is going upwards
+            boolean goingRight = data.getNewX() > data.getStartX(); // when new X is higher, king is going right
+            if(goingUp && goingRight) {
+                for(int i=1; i<=moveLength; i++) { // check every single tile in between
+                    if(checkIfThereIsPawn(coordinates.get(data.getStartY()+i).get(data.getStartX()+i))) { // if there is pawn in between
+                        if(i+1 != moveLength) { // and king isn't ending his movement at next tile
+                            return new MoveResult(MoveType.NONE); // this move isn't valid
+                        } else { // but if the move is ending at the next tile
+                            return new MoveResult(MoveType.KILL); // this move will be kill move
+                        }
+                    } else { // if there aren't any pawns in between
+                        return new MoveResult(MoveType.NORMAL); // this move is valid, but won't kill anything
+                    }
+                }
+            } else if (!goingUp && goingRight) {
+                for(int i=1; i<=moveLength; i++) { // check every single tile in between
+                    if(checkIfThereIsPawn(coordinates.get(data.getStartY()+i).get(data.getStartX()+i))) { // if there is pawn in between
+                        if(i+1 != moveLength) { // and king isn't ending his movement at next tile
+                            return new MoveResult(MoveType.NONE); // this move isn't valid
+                        } else { // but if the move is ending at the next tile
+                            return new MoveResult(MoveType.KILL); // this move will be kill move
+                        }
+                    } else { // if there aren't any pawns in between
+                        return new MoveResult(MoveType.NORMAL); // this move is valid, but won't kill anything
+                    }
+                }
+            } else if (goingUp && !goingRight) {
+                for(int i=1; i<=moveLength; i++) { // check every single tile in between
+                    if(checkIfThereIsPawn(coordinates.get(data.getStartY()+i).get(data.getStartX()+i))) { // if there is pawn in between
+                        if(i+1 != moveLength) { // and king isn't ending his movement at next tile
+                            return new MoveResult(MoveType.NONE); // this move isn't valid
+                        } else { // but if the move is ending at the next tile
+                            return new MoveResult(MoveType.KILL); // this move will be kill move
+                        }
+                    } else { // if there aren't any pawns in between
+                        return new MoveResult(MoveType.NORMAL); // this move is valid, but won't kill anything
+                    }
+                }
+            } else if (!goingUp && !goingRight) {
+                for(int i=1; i<=moveLength; i++) { // check every single tile in between
+                    if(checkIfThereIsPawn(coordinates.get(data.getStartY()+i).get(data.getStartX()+i))) { // if there is pawn in between
+                        if(i+1 != moveLength) { // and king isn't ending his movement at next tile
+                            return new MoveResult(MoveType.NONE); // this move isn't valid
+                        } else { // but if the move is ending at the next tile
+                            return new MoveResult(MoveType.KILL); // this move will be kill move
+                        }
+                    } else { // if there aren't any pawns in between
+                        return new MoveResult(MoveType.NORMAL); // this move is valid, but won't kill anything
+                    }
                 }
             }
         }

@@ -43,4 +43,8 @@ public abstract class AbstractPiece {
     public Colour getColour() {
         return colour;
     }
+
+    public boolean isKing(AbstractPiece abstractPiece) {
+        return King.class.isAssignableFrom(abstractPiece.getClass());
+    }
 }
