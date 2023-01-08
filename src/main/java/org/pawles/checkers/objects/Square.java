@@ -14,7 +14,7 @@ public class Square { //NOPMD - suppressed DataClass - easier to read than provi
     private int y; //NOPMD - suppressed ShortVariable - y is a standard axis name
 
     /**
-     * constructs the square
+     * constructs the square (don't use; call SquareInstancer.getInstance() instead)
      * @param x x position
      * @param y y position
      */
