@@ -69,21 +69,26 @@ public class GameCommunicator {
         // verify if the move is allowed
 
         boolean verification;
-        if (myTurn && clientController.verifyMove(curr, dest)) {
+        if (myTurn && clientController.verifyMove(curr, dest)) { // if player's turn and move is logically correct, send to server
+
+            // send move to server
+
             final String move = Integer.toString(curr.getX()) + curr.getY() + ":" + dest.getX() + dest.getY();
             socketOut.println(move);
+
+            // read response
+
             final String message = socketIn.nextLine();
-            if (CORRECT_MESSAGE.equals(message)) {
-                System.out.println("--- MY TURN ---");
+            if (CORRECT_MESSAGE.equals(message)) { // if correct, apply move to the board and switch turns...
                 clientController.movePiece(curr, dest);
                 clientController.updateView();
                 clientController.updateViewFX();
                 myTurn = false;
                 verification = true;
-            } else if (INCORRECT_MESSAGE.equals(message)) {
+            } else if (INCORRECT_MESSAGE.equals(message)) { // ...otherwise move is incorrect
                 verification = false;
             } else {
-                throw new WrongMessageException("unhandled message received: " + message);
+                throw new WrongMessageException("Unhandled message received: " + message);
             }
         } else {
             verification = false;
@@ -92,24 +97,34 @@ public class GameCommunicator {
     }
 
     /**
-     * applies opponent's move to the board once it is sent from the server
+     * waits for the opponent's move from the server and applies it
      */
     public void waitForMove() {
+
+        // if current player's turn, don't wait for opponent
+
         if (myTurn) {
             return;
         }
-        final String move = socketIn.nextLine();
-        System.out.println("--- OPPONENT TURN ---");
-        if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here
+        final String move = socketIn.nextLine();        if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here
+
+            // parse the move
+
             final int currX = Integer.parseInt(String.valueOf(move.charAt(0)));
             final int currY = Integer.parseInt(String.valueOf(move.charAt(1)));
             final Square curr = SquareInstancer.getInstance(currX, currY);
             final int destX = Integer.parseInt(String.valueOf(move.charAt(3)));
             final int destY = Integer.parseInt(String.valueOf(move.charAt(4)));
             final Square dest = SquareInstancer.getInstance(destX, destY);
+
+            // apply the move
+
             clientController.movePiece(curr, dest);
             clientController.updateView();
             clientController.updateViewFX();
+
+            // wait for the player's turn
+
             waitForTurn();
         } else {
             throw new WrongMessageException("unhandled message received: " + move);
@@ -125,7 +140,7 @@ public class GameCommunicator {
         if ("your turn".equals(message)) {
             myTurn = true;
         } else {
-            throw new WrongMessageException("unhandled message received: " + message);
+            throw new WrongMessageException("Unhandled message received: " + message);
         }
     }
 

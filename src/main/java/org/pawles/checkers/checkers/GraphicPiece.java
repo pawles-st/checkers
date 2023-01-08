@@ -15,14 +15,17 @@ public class GraphicPiece extends StackPane {
     int posX, posY;
     int oldTileX, oldTileY;
     int newTileX, newTileY;
+    String type;
+    final Ellipse shape;
     public GraphicPiece(Colour color, int x, int y, GameCommunicator communicator) {
         this.colour = color;
         // store info on which tile the pawn is
         posX = x;
         posY = y;
+        type = "Man";
         relocate(x * TILE_SIZE, y*TILE_SIZE); //set right position
         // set some graphical values so it looks like checkers piece
-        Ellipse shape = new Ellipse(TILE_SIZE*0.3125, TILE_SIZE*0.26);
+        shape = new Ellipse(TILE_SIZE*0.3125, TILE_SIZE*0.26);
         shape.setFill(color == Colour.WHITE ? Color.valueOf("#FFF") : Color.valueOf("#000"));
         shape.setStroke(Color.GRAY);
         shape.setStrokeWidth(TILE_SIZE*0.03);
@@ -62,5 +65,15 @@ public class GraphicPiece extends StackPane {
 
     public Colour getColour() {
         return colour;
+    }
+
+    public void promote() {
+        shape.setStrokeWidth(TILE_SIZE*0.06);
+        shape.setStroke(Color.RED);
+        type = "King";
+    }
+
+    public String getType() {
+        return type;
     }
 }

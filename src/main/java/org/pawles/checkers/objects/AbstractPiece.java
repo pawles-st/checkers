@@ -44,7 +44,12 @@ public abstract class AbstractPiece {
         return colour;
     }
 
-    public boolean isKing(AbstractPiece abstractPiece) {
+    /**
+     * checks whether the piece is a king
+     * @param abstractPiece piece to check
+     * @return true if the piece is a king; false otherwise
+     */
+    public boolean isKing(final AbstractPiece abstractPiece) {
         return King.class.isAssignableFrom(abstractPiece.getClass());
     }
 }

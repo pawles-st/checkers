@@ -114,8 +114,10 @@ public class CheckersApp extends Application {
 
     public void updateBoard(final Board board) {
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
-        Stack<GraphicPiece> changedWhitePieces = new Stack<>();
-        Stack<GraphicPiece> changedBlackPieces = new Stack<>();
+        Stack<GraphicPiece> changedWhiteMen = new Stack<>();
+        Stack<GraphicPiece> changedBlackMen = new Stack<>();
+        Stack<GraphicPiece> changedWhiteKings = new Stack<>();
+        Stack<GraphicPiece> changedBlackKings = new Stack<>();
 
         // push pieces that changed location onto the stack
 
@@ -124,10 +126,14 @@ public class CheckersApp extends Application {
                 final GraphicPiece piece = pieces.get(SquareInstancer.getInstance(x, y));
                 if (coordinates.get(y).get(x) == null && piece != null) {
                     System.out.println("taking pawn from " + x + " " + y);
-                    if (piece.getColour() == Colour.WHITE) {
-                        changedWhitePieces.push(piece);
+                    if (piece.getColour() == Colour.WHITE && "Man".equals(piece.getType())) {
+                        changedWhiteMen.push(piece);
+                    } else if (piece.getColour() == Colour.BLACK && "Man".equals(piece.getType())) {
+                        changedBlackMen.push(piece);
+                    } else if (piece.getColour() == Colour.WHITE && "King".equals(piece.getType())) {
+                        changedWhiteKings.push(piece);
                     } else {
-                        changedBlackPieces.push(piece);
+                        changedBlackKings.push(piece);
                     }
                     pieces.remove(SquareInstancer.getInstance(x, y));
                 }
@@ -141,11 +147,17 @@ public class CheckersApp extends Application {
                 final AbstractPiece piece = coordinates.get(y).get(x);
                 if (piece != null && pieces.get(SquareInstancer.getInstance(x, y)) == null) {
                     final GraphicPiece movedPiece;
-                    System.out.println("moving the pieces from view");
+                    System.out.println("moving the piece from view");
                     if (piece.getColour() == Colour.WHITE) {
-                        movedPiece = changedWhitePieces.pop();
+                        movedPiece = changedWhiteMen.pop();
+                        if (y == HEIGHT - 1) {
+                            movedPiece.promote();
+                        }
                     } else {
-                        movedPiece = changedBlackPieces.pop();
+                        movedPiece = changedBlackMen.pop();
+                        if (y == 0) {
+                            movedPiece.promote();
+                        }
                     }
                     pieces.put(SquareInstancer.getInstance(x, y), movedPiece);
                     movedPiece.move(SquareInstancer.getInstance(x, y));
@@ -155,24 +167,29 @@ public class CheckersApp extends Application {
 
         // remove extra pieces from the board
 
-        while (!changedWhitePieces.empty()) {
+        while (!changedWhiteMen.empty()) {
             System.out.println("removing white");
-            final GraphicPiece piece = changedWhitePieces.pop();
+            final GraphicPiece piece = changedWhiteMen.pop();
             pieceGroup.getChildren().remove(piece);
             System.out.println("removed white");
         }
-        while (!changedBlackPieces.empty()) {
+        while (!changedBlackMen.empty()) {
             System.out.println("removing black");
-            final GraphicPiece piece = changedBlackPieces.pop();
+            final GraphicPiece piece = changedBlackMen.pop();
             pieceGroup.getChildren().remove(piece);
             System.out.println("removed black");
         }
-
-        // artificial move to fix FX refresh bug TODO: remove this
-
-        //System.out.println("artmove");
-        //final GraphicPiece fixPiece = new GraphicPiece(Colour.BLACK, 0, 0, gameCom);
-        //pieceGroup.getChildren().addAll(fixPiece);
-        //pieceGroup.getChildren().remove(fixPiece);
+        while (!changedWhiteKings.empty()) {
+            System.out.println("removing white");
+            final GraphicPiece piece = changedWhiteKings.pop();
+            pieceGroup.getChildren().remove(piece);
+            System.out.println("removed white");
+        }
+        while (!changedBlackKings.empty()) {
+            System.out.println("removing black");
+            final GraphicPiece piece = changedBlackKings.pop();
+            pieceGroup.getChildren().remove(piece);
+            System.out.println("removed black");
+        }
     }
 }

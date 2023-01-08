@@ -46,7 +46,7 @@ public final class ClientInitialiser {
         // set socket and IO fields for communication
 
         try {
-            final Socket socket = new Socket("localhost", PORT);
+            final Socket socket = new Socket("localhost", PORT); //NOPMD - suppressed CloseResource
             socketIn = new Scanner(socket.getInputStream());
             socketOut = new PrintWriter(socket.getOutputStream(), true);
         } catch (UnknownHostException e) {
