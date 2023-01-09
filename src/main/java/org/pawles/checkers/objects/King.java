@@ -27,8 +27,7 @@ public class King extends AbstractPiece { //NOPMD - suppressed ShortClassName - 
     @Override
     public void move(final Square dest) {
         if(verifyMove(dest)) {
-            square.setX(dest.getX());
-            square.setY(dest.getY());
+            square = SquareInstancer.getInstance(dest.getX(), dest.getY());
         } else {
             throw new IncorrectMoveException("The piece doesn't have the ability to move to the provided square");
         }

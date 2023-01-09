@@ -19,7 +19,9 @@ public class Board {
     private void promotePiece(final Square dest) {
         final Colour colour = coordinates.get(dest.getY()).get(dest.getX()).getColour(); //NOPMD - suppressed LawOfDemeter - 2D array
         if (colour == Colour.WHITE && dest.getY() == sizeY - 1 || colour == Colour.BLACK && dest.getY() == 0) {
-            coordinates.get(dest.getY()).set(dest.getX(), new King(dest, colour));
+            if(coordinates.get(dest.getY()).get(dest.getX()) instanceof Man) {
+                coordinates.get(dest.getY()).set(dest.getX(), new King(dest, colour));
+            }
         }
     }
 
