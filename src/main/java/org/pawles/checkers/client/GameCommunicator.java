@@ -106,7 +106,14 @@ public class GameCommunicator {
         if (myTurn) {
             return;
         }
-        final String move = socketIn.nextLine();        if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here
+
+        // wait for server message
+
+        final String move = socketIn.nextLine();
+
+        if ("".equals(move)) { // TODO server message goes here
+            myTurn = true;
+        } else if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here
 
             // parse the move
 
