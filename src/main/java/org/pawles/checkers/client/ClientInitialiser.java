@@ -66,10 +66,8 @@ public final class ClientInitialiser {
 
         final String col = socketIn.nextLine();
         if ("White".equals(col)) {
-            OUT.println("received white color");
             colour = Colour.WHITE;
         } else if ("Black".equals(col)) {
-            OUT.println("received black color");
             colour = Colour.BLACK;
         } else {
             throw new CannotStartGameException("Couldn't receive the player's colour from the server");
