@@ -14,7 +14,7 @@ import java.util.List;
 public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded, conflicting PMD warnings
 
     /** output stream for the view */
-    private transient final PrintWriter out = new PrintWriter(System.out);
+    //private transient final PrintWriter out = new PrintWriter(System.out);
 
     private char convertTileToChar(final AbstractPiece piece) {  //NOPMD - suppressed CyclomaticComplexity - ifs are unavoidable
         char tileChar;
@@ -44,24 +44,24 @@ public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unne
 
         final List<List<AbstractPiece>> coordinates = board.getCoordinates(); //NOPMD - suppressed DataflowAnomalyAnalysis - no data anomaly here
 
-        out.println(hWall);
+        System.out.println(hWall);
 
         for (int y = 7; y >= 0; --y) {
 
             for (int x = 0; x < 8; ++x) {
 
-                out.print('|');
+                System.out.print('|');
                 try {
-                    out.print(convertTileToChar(coordinates.get(y).get(x))); //NOPMD - suppressed LawOfDemeter - 2D arraylist
+                    System.out.print(convertTileToChar(coordinates.get(y).get(x))); //NOPMD - suppressed LawOfDemeter - 2D arraylist
                 } catch (UnknownPieceException e) {
                     throw (UnknownPieceException) new UnknownPieceException("Unknown piece on the board").initCause(e); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - this is an exception creation
                 }
 
             }
 
-            out.println('|');
+            System.out.println('|');
 
-            out.println(hWall);
+            System.out.println(hWall);
         }
     }
 }
