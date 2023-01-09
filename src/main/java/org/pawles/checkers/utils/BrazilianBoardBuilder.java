@@ -12,8 +12,26 @@ import java.util.List;
  */
 public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
 
+    /** height of the board */
+    private static final int HEIGHT = 8;
+
+    /** widht of the board */
+    private static final int WIDTH = 8;
+
+    /** y coordinate for where the white pieces start */
+    private static final int WHITE_LINE_START = 0;
+
+    /** y coordinate for where the white pieces end */
+    private static final int WHITE_LINE_END = 2;
+
+    /** y coordinate for where the black pieces start */
+    private static final int BLACK_LINE_START = 5;
+
+    /** y coordinate for where the black pieces end */
+    private static final int BLACK_LINE_END = 7;
+
     private void buildWhite(final int x) { //NOPMD - suppressed ShortVariable - standard name
-        for (int y = 0; y < 3; ++y) {
+        for (int y = WHITE_LINE_START; y <= WHITE_LINE_END; ++y) {
             if ((x + y) % 2 == 0) {
                 board.getCoordinates().get(y).add(new Man(SquareInstancer.getInstance(x, y), Colour.WHITE)); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - objects are created to be held
             } else {
@@ -23,13 +41,13 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
     }
 
     private void buildEmpty() {
-        for (int y = 3; y < 5; ++y) {
+        for (int y = WHITE_LINE_END + 1; y <= BLACK_LINE_START - 1; ++y) {
             board.getCoordinates().get(y).add(null); //NOPMD - suppressed LawOfDemeter - Array usage
         }
     }
 
     private void buildBlack(final int x) { //NOPMD - suppressed ShortVariable - standard name
-        for (int y = 5; y < 8; ++y) {
+        for (int y = BLACK_LINE_START; y <= BLACK_LINE_END; ++y) {
             if ((x + y) % 2 == 0) {
                 board.getCoordinates().get(y).add(new Man(SquareInstancer.getInstance(x, y), Colour.BLACK)); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - objects are created to be held
             } else {
@@ -40,14 +58,14 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
 
     @Override
     public void createNewBoard() {
-        board = new Board(8);
+        board = new Board(HEIGHT);
     }
 
     @Override
     public void buildGrid() {
-        SquareInstancer.initialise(8, 8);
+        SquareInstancer.initialise(WIDTH, HEIGHT);
         final List<List<AbstractPiece>> coordinates = new ArrayList<>();
-        for (int i = 0; i < 8; ++i) {
+        for (int y = 0; y < HEIGHT; ++y) {
             coordinates.add(new ArrayList<>());
         }
         board.setCoordinates(coordinates);
@@ -57,7 +75,7 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
     @Override
     public void buildPieces() {
         int x; //NOPMD - suppressed ShortVariable - standard coordinate name
-        for (x = 0; x < 8; ++x) {
+        for (x = 0; x < WIDTH; ++x) {
 
             // place white pieces
 

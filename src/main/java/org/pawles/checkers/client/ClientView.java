@@ -3,7 +3,6 @@ package org.pawles.checkers.client;
 import org.pawles.checkers.exceptions.UnknownPieceException;
 import org.pawles.checkers.objects.*; //NOPMD - suppressed UnusedImports - imports ARE indeed used
 
-import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -46,9 +45,9 @@ public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unne
 
         System.out.println(hWall);
 
-        for (int y = 7; y >= 0; --y) {
+        for (int y = board.getCoordinates().size() - 1; y >= 0; --y) {
 
-            for (int x = 0; x < 8; ++x) {
+            for (int x = 0; x < board.getCoordinates().get(y).size(); ++x) {
 
                 System.out.print('|');
                 try {
