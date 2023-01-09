@@ -3,7 +3,7 @@ package org.pawles.checkers.exceptions;
 import java.io.Serial;
 
 /**
- * Exception class to inform the client that the game cannot start
+ * Exception class to inform that server communication failed
  * @author pawles
  * @version 1.0
  */
