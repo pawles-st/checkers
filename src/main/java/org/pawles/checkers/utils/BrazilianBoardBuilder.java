@@ -23,7 +23,7 @@ public class BrazilianBoardBuilder extends AbstractBoardBuilder { //NOPMD - supp
     }
 
     private void buildEmpty() {
-        for (int y = 4; y < 5; ++y) {
+        for (int y = 3; y < 6; ++y) {
             board.getCoordinates().get(y).add(null); //NOPMD - suppressed LawOfDemeter - Array usage
         }
     }
