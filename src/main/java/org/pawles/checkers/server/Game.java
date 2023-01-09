@@ -256,11 +256,11 @@ public class Game implements Runnable {
                     System.out.println("Square: "+x+""+y+" is empty");
                 }
             }
-            if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()-1) != null) {
+            if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()+1) != null) {
                 int x = moveData.getStartX()+1;
                 int y = moveData.getStartY()-1;
                 System.out.println("Square: "+x+""+y+" is not empty");
-                if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()-1).getColour() == playersPiece ) {
+                if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()+1).getColour() == playersPiece ) {
                     System.out.println("But it has player's color piece");
                     return false;
                 } else {
@@ -278,11 +278,11 @@ public class Game implements Runnable {
                     System.out.println("Square: "+x+""+y+" is empty");
                 }
             }
-            if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()-1) != null) {
+            if(coordinates.get(moveData.getNewY()+1).get(moveData.getNewX()-1) != null) {
                 int x = moveData.getStartX()-1;
                 int y = moveData.getStartY()+1;
                 System.out.println("Square: "+x+""+y+" is not empty");
-                if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()-1).getColour() == playersPiece ) {
+                if(coordinates.get(moveData.getNewY()+1).get(moveData.getNewX()-1).getColour() == playersPiece ) {
                     System.out.println("But it has player's color piece");
                     return false;
                 } else {
@@ -300,11 +300,11 @@ public class Game implements Runnable {
                     System.out.println("Square: "+x+""+y+" is empty");
                 }
             }
-            if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()-1) != null) {
+            if(coordinates.get(moveData.getNewY()+1).get(moveData.getNewX()+1) != null) {
                 int x = moveData.getStartX()+1;
                 int y = moveData.getStartY()+1;
                 System.out.println("Square: "+x+""+y+" is not empty");
-                if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()-1).getColour() == playersPiece ) {
+                if(coordinates.get(moveData.getNewY()+1).get(moveData.getNewX()+1).getColour() == playersPiece ) {
                     System.out.println("But it has player's color piece");
                     return false;
                 } else {
