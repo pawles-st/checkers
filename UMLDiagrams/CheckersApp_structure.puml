@@ -1,0 +1,305 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "org.pawles.checkers.checkers.CheckersApp",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_995268684 { 
+   	label=pawles
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_2114002008 { 
+   	label=checkers
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   AbstractBoardBuilder2074455057[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AbstractBoardBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   board: Board [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ buildGrid()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildPieces()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createNewBoard()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Board858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Board</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   coordinates: List&lt;List&lt;AbstractPiece&gt;&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sizeY: int [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ deletePiece(square: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >- killPiece(curr: Square, dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >- promotePiece(dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ verifyMove(curr: Square, dest: Square): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BoardDirector2074455057[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BoardDirector</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   builder: AbstractBoardBuilder [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ buildBoard()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BrazilianBoardBuilder2074455057[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BrazilianBoardBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- buildBlack(x: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >- buildEmpty()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildGrid()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildPieces()</TD></TR>
+<TR><TD ALIGN="LEFT" >- buildWhite(x: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createNewBoard()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CheckersApp612257790[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CheckersApp</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   board: Board [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pieceGroup: Group [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pieces: Map&lt;Square, GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   tileGroup: Group [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- createContent(): Parent</TD></TR>
+<TR><TD ALIGN="LEFT" >+ main(args: String[])</TD></TR>
+<TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removePiece(square: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ start(primaryStage: Stage)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateBoard(board: Board)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ClientController639122325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ClientController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   model: ClientModel [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   view: ClientView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   viewFX: CheckersApp [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateView()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateViewFX()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ verifyMove(curr: Square, dest: Square): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ClientInitialiser639122325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ClientInitialiser</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- await()</TD></TR>
+<TR><TD ALIGN="LEFT" >- connect()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ init(): GameCommunicator</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GameCommunicator639122325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GameCommunicator</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   clientController: ClientController [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   myTurn: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   socketIn: Scanner [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   socketOut: PrintWriter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ sendMove(curr: Square, dest: Square): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ waitForMove()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ waitForTurn()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GraphicPiece612257790[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GraphicPiece</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   colour: Colour [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   oldTileX: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   oldTileY: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   shape: Ellipse [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   type: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ move(dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ promote()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Square858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Square</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   x: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   y: int [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SquareInstancer858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SquareInstancer</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getInstance(x: int, y: int): Square</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initialise(width: int, height: int)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+AbstractBoardBuilder2074455057 -> Board858191756[label="board
+[0..1]"];
+AbstractBoardBuilder2074455057 -> BrazilianBoardBuilder2074455057[arrowhead=none, arrowtail=empty, dir=both];
+BoardDirector2074455057 -> AbstractBoardBuilder2074455057[label="builder
+[0..1]"];
+CheckersApp612257790 -> Board858191756[label="board
+[0..1]"];
+CheckersApp612257790 -> BoardDirector2074455057[label="start() -> buildBoard()"];
+CheckersApp612257790 -> ClientInitialiser639122325[label="main() -> init()"];
+CheckersApp612257790 -> GraphicPiece612257790[label="pieces
+[0..*]"];
+CheckersApp612257790 -> Square858191756[label="pieces
+[0..*]"];
+ClientController639122325 -> CheckersApp612257790[label="viewFX
+[0..1]"];
+GameCommunicator639122325 -> ClientController639122325[label="clientController
+[0..1]"];
+    
+}
+@enduml

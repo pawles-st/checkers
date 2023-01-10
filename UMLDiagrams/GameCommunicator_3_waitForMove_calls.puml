@@ -1,0 +1,304 @@
+@startuml
+
+/' diagram meta data start
+config=CallConfiguration;
+{
+  "rootMethod": "org.pawles.checkers.client.GameCommunicator#waitForMove()",
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showMethodParametersTypes": false,
+    "showMethodParametersNames": false,
+    "showMethodReturnType": false,
+    "showPackageLevels": 2,
+    "showCallOrder": false,
+    "edgeMode": "MethodsOnly", // TypesOnly, MethodsOnly, TypesAndMethods, MethodsAndDirectTypeUsage
+    "showDetailedClassStructure": false
+  },
+  "rootClass": "org.pawles.checkers.client.GameCommunicator",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="LR"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_995268684 { 
+   	label=pawles
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_2114002008 { 
+   	label=checkers
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   subgraph cluster_1144678134 { 
+   	label=ClientController
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   ClientController639122325XXXmovePiece992535570[
+	label="+ movePiece()"
+	style=filled
+	fillcolor=white
+	tooltip="ClientController
+
+&#10;  change the position of a single piece on the board&#10;  @param curr current square&#10;  @param dest destination square&#10; "
+	fontcolor=darkgreen
+];
+
+ClientController639122325XXXupdateView0[
+	label="+ updateView()"
+	style=filled
+	fillcolor=white
+	tooltip="ClientController
+
+&#10;  draw the current board&#10; "
+	fontcolor=darkgreen
+];
+
+ClientController639122325XXXupdateViewFX0[
+	label="+ updateViewFX()"
+	style=filled
+	fillcolor=white
+	tooltip="ClientController
+
+&#10;  draw the current board in JavaFX&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1211231302 { 
+   	label=SquareInstancer
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   SquareInstancer858191756XXXgetInstance515322732[
+	label="+ getInstance()"
+	style=filled
+	fillcolor=white
+	tooltip="SquareInstancer
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1885672694 { 
+   	label=GraphicPiece
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   GraphicPiece612257790XXXmove1810807491[
+	label="+ move()"
+	style=filled
+	fillcolor=white
+	tooltip="GraphicPiece
+
+&#10;  moves the piece on the board&#10;  @param dest square to move to&#10; "
+	fontcolor=darkgreen
+];
+
+GraphicPiece612257790XXXpromote0[
+	label="+ promote()"
+	style=filled
+	fillcolor=white
+	tooltip="GraphicPiece
+
+&#10;  visually promotes the piece into a king&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1932958355 { 
+   	label=ClientView
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   ClientView639122325XXXdrawBoard64356038[
+	label="+ drawBoard()"
+	style=filled
+	fillcolor=white
+	tooltip="ClientView
+
+&#10;  draws the board in commandline style&#10;  @param board current state of the board&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_2103784244 { 
+   	label=Board
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   Board858191756XXXmovePiece992535570[
+	label="+ movePiece()"
+	style=filled
+	fillcolor=white
+	tooltip="Board
+
+&#10;  moves a single piece on the board&#10;  @param curr square the piece is currently on&#10;  @param dest destination square&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_2118178771 { 
+   	label=CheckersApp
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   CheckersApp612257790XXXstart80204510[
+	label="+ start()"
+	style=filled
+	fillcolor=white
+	tooltip="CheckersApp
+
+null"
+	fontcolor=darkgreen
+];
+
+CheckersApp612257790XXXupdateBoard64356038[
+	label="+ updateBoard()"
+	style=filled
+	fillcolor=white
+	tooltip="CheckersApp
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_215967493 { 
+   	label=ClientModel
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   ClientModel639122325XXXmovePiece992535570[
+	label="+ movePiece()"
+	style=filled
+	fillcolor=white
+	tooltip="ClientModel
+
+&#10;  change the position of a single piece on the board&#10;  @param curr current square&#10;  @param dest destination square&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_788877482 { 
+   	label=GameCommunicator
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   GameCommunicator639122325XXXwaitForMove0[
+	label="+ waitForMove()"
+	style=filled
+	fillcolor=white
+	tooltip="GameCommunicator
+
+&#10;  waits for the opponent's move from the server and applies it&#10; "
+	penwidth=4
+	fontcolor=darkgreen
+];
+
+GameCommunicator639122325XXXwaitForTurn0[
+	label="+ waitForTurn()"
+	style=filled
+	fillcolor=white
+	tooltip="GameCommunicator
+
+&#10;  sets myTurn boolean once server informs about turn change&#10; "
+	fontcolor=darkgreen
+];
+} 
+} 
+} 
+
+'edges    
+CheckersApp612257790XXXstart80204510 -> GameCommunicator639122325XXXwaitForMove0;
+CheckersApp612257790XXXupdateBoard64356038 -> GraphicPiece612257790XXXmove1810807491;
+CheckersApp612257790XXXupdateBoard64356038 -> GraphicPiece612257790XXXpromote0;
+CheckersApp612257790XXXupdateBoard64356038 -> SquareInstancer858191756XXXgetInstance515322732;
+ClientController639122325XXXmovePiece992535570 -> ClientModel639122325XXXmovePiece992535570;
+ClientController639122325XXXupdateView0 -> ClientView639122325XXXdrawBoard64356038;
+ClientController639122325XXXupdateViewFX0 -> CheckersApp612257790XXXupdateBoard64356038;
+ClientModel639122325XXXmovePiece992535570 -> Board858191756XXXmovePiece992535570;
+GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXmovePiece992535570;
+GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXupdateView0;
+GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXupdateViewFX0;
+GameCommunicator639122325XXXwaitForMove0 -> GameCommunicator639122325XXXwaitForTurn0;
+GameCommunicator639122325XXXwaitForMove0 -> SquareInstancer858191756XXXgetInstance515322732;
+    
+}
+@enduml

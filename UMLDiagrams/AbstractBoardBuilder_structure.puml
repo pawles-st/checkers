@@ -1,0 +1,187 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "org.pawles.checkers.utils.AbstractBoardBuilder",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_995268684 { 
+   	label=pawles
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_2114002008 { 
+   	label=checkers
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   AbstractBoardBuilder2074455057[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AbstractBoardBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   board: Board [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ buildGrid()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildPieces()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createNewBoard()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Board858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Board</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   coordinates: List&lt;List&lt;AbstractPiece&gt;&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sizeY: int [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ deletePiece(square: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >- killPiece(curr: Square, dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >- promotePiece(dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ verifyMove(curr: Square, dest: Square): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BoardDirector2074455057[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BoardDirector</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   builder: AbstractBoardBuilder [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ buildBoard()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BrazilianBoardBuilder2074455057[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BrazilianBoardBuilder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- buildBlack(x: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >- buildEmpty()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildGrid()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildPieces()</TD></TR>
+<TR><TD ALIGN="LEFT" >- buildWhite(x: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createNewBoard()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SquareInstancer858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SquareInstancer</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getInstance(x: int, y: int): Square</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initialise(width: int, height: int)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+AbstractBoardBuilder2074455057 -> Board858191756[label="board
+[0..1]"];
+AbstractBoardBuilder2074455057 -> BrazilianBoardBuilder2074455057[arrowhead=none, arrowtail=empty, dir=both];
+BoardDirector2074455057 -> AbstractBoardBuilder2074455057[label="builder
+[0..1]"];
+    
+}
+@enduml

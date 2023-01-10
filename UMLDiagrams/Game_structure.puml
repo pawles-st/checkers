@@ -1,0 +1,283 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "org.pawles.checkers.server.Game",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_995268684 { 
+   	label=pawles
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_2114002008 { 
+   	label=checkers
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   AbstractPiece858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)AbstractPiece</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   colour: Colour [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   square: Square [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ isKing(abstractPiece: AbstractPiece): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ move(dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ verifyMove(dest: Square): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Board858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Board</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   coordinates: List&lt;List&lt;AbstractPiece&gt;&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   sizeY: int [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ deletePiece(square: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >- killPiece(curr: Square, dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >- promotePiece(dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ verifyMove(curr: Square, dest: Square): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ClientView639122325[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ClientView</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- convertTileToChar(piece: AbstractPiece): char</TD></TR>
+<TR><TD ALIGN="LEFT" >+ drawBoard(board: Board)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Game187236381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Game</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   blackPlayer: Player [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   board: Board [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   cView: ClientView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   scanner: Scanner [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   whitePlayer: Player [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   whiteTurn: Boolean [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   writer: PrintWriter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   writerOpponent: PrintWriter [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- KillPossible(player: Player): Boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >- Turn(player: Player)</TD></TR>
+<TR><TD ALIGN="LEFT" >- gameLost(): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >- killPawn(data: MoveData)</TD></TR>
+<TR><TD ALIGN="LEFT" >- movePawns(data: MoveData)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ run()</TD></TR>
+<TR><TD ALIGN="LEFT" >- tryMove(data: MoveData): MoveResult</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+King858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)King</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ move(dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ verifyMove(dest: Square): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Man858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Man</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ move(dest: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ verifyMove(dest: Square): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MoveSimulator187236381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MoveSimulator</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   NE: int[] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   NW: int[] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   SE: int[] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   SW: int[] [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- directionReader(direction: boolean): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ simulate(goingUp: boolean, goingRight: boolean, startX: int, startY: int, moveLength: int, coordinates: List&lt;List&lt;AbstractPiece&gt;&gt;): MoveType</TD></TR>
+<TR><TD ALIGN="LEFT" >+ tryToKill(coordinates: List&lt;List&lt;AbstractPiece&gt;&gt;, xPos: int, yPos: int): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Player187236381[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Player</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   color: Colour [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   opponent: Socket [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   opponentColor: Colour [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   socket: Socket [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Square858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Square</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   x: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   y: int [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+SquareInstancer858191756[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)SquareInstancer</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ getInstance(x: int, y: int): Square</TD></TR>
+<TR><TD ALIGN="LEFT" >+ initialise(width: int, height: int)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+AbstractPiece858191756 -> King858191756[arrowhead=none, arrowtail=empty, dir=both];
+AbstractPiece858191756 -> Man858191756[arrowhead=none, arrowtail=empty, dir=both];
+AbstractPiece858191756 -> Square858191756[label="square
+[0..1]"];
+Board858191756 -> AbstractPiece858191756[label="coordinates
+[0..*]"];
+Board858191756 -> SquareInstancer858191756[label="killPiece() -> getInstance()"];
+Game187236381 -> AbstractPiece858191756[label="tryMove() -> isKing()"];
+Game187236381 -> Board858191756[label="board
+[0..1]"];
+Game187236381 -> ClientView639122325[label="cView
+[0..1]"];
+Game187236381 -> Player187236381[label="blackPlayer
+[0..1]"];
+Game187236381 -> Player187236381[label="whitePlayer
+[0..1]"];
+King858191756 -> SquareInstancer858191756[label="move() -> getInstance()"];
+Man858191756 -> SquareInstancer858191756[label="move() -> getInstance()"];
+    
+}
+@enduml

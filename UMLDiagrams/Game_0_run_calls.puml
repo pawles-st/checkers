@@ -1,0 +1,284 @@
+@startuml
+
+/' diagram meta data start
+config=CallConfiguration;
+{
+  "rootMethod": "org.pawles.checkers.server.Game#run()",
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showMethodParametersTypes": false,
+    "showMethodParametersNames": false,
+    "showMethodReturnType": false,
+    "showPackageLevels": 2,
+    "showCallOrder": false,
+    "edgeMode": "MethodsOnly", // TypesOnly, MethodsOnly, TypesAndMethods, MethodsAndDirectTypeUsage
+    "showDetailedClassStructure": false
+  },
+  "rootClass": "org.pawles.checkers.server.Game",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="LR"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_995268684 { 
+   	label=pawles
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_2114002008 { 
+   	label=checkers
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   subgraph cluster_1037432591 { 
+   	label=King
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   King858191756XXXmove1810807491[
+	label="+ move()"
+	style=filled
+	fillcolor=white
+	tooltip="King
+
+&#10;  updates piece's current square to a new one&#10;  @param dest destination square&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1118173230 { 
+   	label=AbstractPiece
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   AbstractPiece858191756XXXisKing1213685812[
+	label="+ isKing()"
+	style=filled
+	fillcolor=white
+	tooltip="AbstractPiece
+
+&#10;  checks whether the piece is a king&#10;  @param abstractPiece piece to check&#10;  @return true if the piece is a king; false otherwise&#10; "
+	fontcolor=darkgreen
+];
+
+AbstractPiece858191756XXXmove1810807491[
+	label="+ move()"
+	style=filled
+	fillcolor=white
+	tooltip="AbstractPiece
+
+&#10;  updates piece's current square to a new one&#10;  @param dest destination square&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1211231302 { 
+   	label=SquareInstancer
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   SquareInstancer858191756XXXgetInstance515322732[
+	label="+ getInstance()"
+	style=filled
+	fillcolor=white
+	tooltip="SquareInstancer
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1253470013 { 
+   	label=Game
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   Game187236381XXXrun0[
+	label="+ run()"
+	style=filled
+	fillcolor=white
+	tooltip="Game
+
+null"
+	penwidth=4
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1346157496 { 
+   	label=MoveSimulator
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   MoveSimulator187236381XXXsimulate995083543[
+	label="+ simulate()"
+	style=filled
+	fillcolor=white
+	tooltip="MoveSimulator
+
+null"
+	fontcolor=darkgreen
+];
+
+MoveSimulator187236381XXXtryToKill155718740[
+	label="+ tryToKill()"
+	style=filled
+	fillcolor=white
+	tooltip="MoveSimulator
+
+null"
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1932958355 { 
+   	label=ClientView
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   ClientView639122325XXXdrawBoard64356038[
+	label="+ drawBoard()"
+	style=filled
+	fillcolor=white
+	tooltip="ClientView
+
+&#10;  draws the board in commandline style&#10;  @param board current state of the board&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_2103784244 { 
+   	label=Board
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   Board858191756XXXdeletePiece1810807491[
+	label="+ deletePiece()"
+	style=filled
+	fillcolor=white
+	tooltip="Board
+
+&#10;  removes piece from the board&#10;  @param square square to clear&#10; "
+	fontcolor=darkgreen
+];
+
+Board858191756XXXmovePiece992535570[
+	label="+ movePiece()"
+	style=filled
+	fillcolor=white
+	tooltip="Board
+
+&#10;  moves a single piece on the board&#10;  @param curr square the piece is currently on&#10;  @param dest destination square&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_797820096 { 
+   	label=Man
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   Man858191756XXXmove1810807491[
+	label="+ move()"
+	style=filled
+	fillcolor=white
+	tooltip="Man
+
+&#10;  updates piece's current square to a new one&#10;  @param dest destination square&#10; "
+	fontcolor=darkgreen
+];
+} 
+} 
+} 
+
+'edges    
+AbstractPiece858191756XXXmove1810807491 -> King858191756XXXmove1810807491;
+AbstractPiece858191756XXXmove1810807491 -> Man858191756XXXmove1810807491;
+Board858191756XXXmovePiece992535570 -> AbstractPiece858191756XXXmove1810807491;
+Board858191756XXXmovePiece992535570 -> Board858191756XXXdeletePiece1810807491;
+Board858191756XXXmovePiece992535570 -> SquareInstancer858191756XXXgetInstance515322732;
+Game187236381XXXrun0 -> AbstractPiece858191756XXXisKing1213685812;
+Game187236381XXXrun0 -> Board858191756XXXdeletePiece1810807491;
+Game187236381XXXrun0 -> Board858191756XXXmovePiece992535570;
+Game187236381XXXrun0 -> ClientView639122325XXXdrawBoard64356038;
+Game187236381XXXrun0 -> MoveSimulator187236381XXXsimulate995083543;
+Game187236381XXXrun0 -> MoveSimulator187236381XXXtryToKill155718740;
+Game187236381XXXrun0 -> SquareInstancer858191756XXXgetInstance515322732;
+MoveSimulator187236381XXXtryToKill155718740 -> MoveSimulator187236381XXXsimulate995083543;
+    
+}
+@enduml
