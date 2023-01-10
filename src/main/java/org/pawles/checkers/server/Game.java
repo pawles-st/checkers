@@ -59,8 +59,10 @@ public class Game implements Runnable {
         boolean start = whiteTurn;
         boolean killIsPossible = KillPossible(player);
 
-        writer.println("your turn");
         do {
+            List<List<AbstractPiece>> coordinates = board.getCoordinates();
+            writer.println("your turn");
+            //@TODO here i want to add somethign like 'writerOpponent.println("not your turn");'
             if(whiteTurn) {
                 System.out.println("Waiting for whitePlayer input");
             }else{
@@ -95,8 +97,20 @@ public class Game implements Runnable {
                     System.out.println("Move type is KILL");
                     movePawns(data);       // do it
                     killPawn(data);
-                    whiteTurn = !whiteTurn;              // switch turn to the second player
-                    writerOpponent.println(line); // send the move to the second player
+                    if(MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY())) {
+                        System.out.println("Player can do another kill");
+                    //    /* @TODO
+                        writerOpponent.println(line); // send the move to the second player
+                    //     */
+                    } else {
+                        System.out.println("Player cannot do any more kills");
+                    //    /* @TODO
+                        whiteTurn = !whiteTurn;       // switch turn to the second player
+                        writerOpponent.println(line); // send the move to the second player
+                    //     */
+                    }
+                    //whiteTurn = !whiteTurn;              // switch turn to the second player
+                    //writerOpponent.println(line); // send the move to the second player
                     break;
             }
         } while (start == whiteTurn);
@@ -139,11 +153,6 @@ public class Game implements Runnable {
 
         System.out.println("UP: "+goingUp+" Right: "+goingRight+" King: "+isKing+" MoveLength: "+moveLength);
 
-        if(playersPiece == null) { // if there isn't any pawn at start position
-            System.out.println("Trying to move empty tile");
-            return new MoveResult(MoveType.NONE); // move cannot be done
-        }
-
         if(whiteTurn && playersPiece.getColour() == Colour.BLACK) { // if it's whitePlayer's turn and pawn at starting position is black
             System.out.println("White player is trying to move black piece");
             return new MoveResult(MoveType.NONE); // move cannot be done
@@ -151,11 +160,6 @@ public class Game implements Runnable {
 
         if(!whiteTurn && playersPiece.getColour() == Colour.WHITE) { // if it isn't whitePlayer's turn and pawn at starting position is white
             System.out.println("Black player is trying to move white piece");
-            return new MoveResult(MoveType.NONE); // move cannot be done
-        }
-
-        if(checkIfThereIsPawn(coordinates.get(data.getNewY()).get(data.getNewX()))) { // if there is pawn at new coordinates
-            System.out.println("There is already a piece");
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
 
@@ -172,15 +176,6 @@ public class Game implements Runnable {
 
         // move piece from one square to another
         board.movePiece(start, newSquare);
-    }
-
-
-    private boolean checkIfThereIsPawn(AbstractPiece piece) {
-        if (piece==null) { // if there is no piece
-            return false;
-        } else {           // if there is piece of any color
-            return true;
-        }
     }
 
     private void killPawn(MoveData data) {

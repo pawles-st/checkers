@@ -17,11 +17,27 @@ public class MoveSimulator {
         int verDirection = directionReader(goingUp);
         int horDirection = directionReader(goingRight);
         Colour playersColour = coordinates.get(startY).get(startX).getColour();
+        int endX = startX + (moveLength*horDirection);
+        int endY = startY + (moveLength*verDirection);
+
 
         AbstractPiece playersPiece = coordinates.get(startY).get(startX);
+        if(playersPiece == null) { // if there isn't any pawn at start position
+            //System.out.println("Trying to move empty tile");
+            return MoveType.NONE; // move cannot be done
+        }
+
+        if(coordinates.get(endY).get(endX) != null) { // if there is pawn at new coordinates
+            //System.out.println("There is already a piece");
+            return MoveType.NONE; // move cannot be done
+        }
+
+        //@TODO copy all statements from game to here
+
         if(playersPiece instanceof Man && moveLength > 2) {
             return MoveType.NONE;
         }
+
 
         for (int i=1; i<moveLength; i++) {
             int x = startX+(i*horDirection);
@@ -29,15 +45,15 @@ public class MoveSimulator {
             if(coordinates.get(startY+(i*verDirection)).get(startX+(i*horDirection)) == null) {
                 //System.out.println("Square: "+x+""+y+" is empty");
             } else {
-                System.out.println("Square: "+x+""+y+" is not empty");
+                //System.out.println("Square: "+x+""+y+" is not empty");
                 if(i != moveLength-1) {
-                    System.out.println("And it's not second to last tile i:"+i+" moveLength:"+moveLength);
+                    //System.out.println("And it's not second to last tile i:"+i+" moveLength:"+moveLength);
                     return MoveType.NONE;
                 } else if (coordinates.get(startY+(i*verDirection)).get(startX+(i*horDirection)).getColour() != playersColour) {
-                    System.out.println("And it's second to last tile i:"+i+" moveLength:"+moveLength+" and it has opponents piece on it");
+                    //System.out.println("And it's second to last tile i:"+i+" moveLength:"+moveLength+" and it has opponents piece on it");
                     return MoveType.KILL;
                 } else {
-                    System.out.println("And it's second to last tile i:"+i+" moveLength:"+moveLength+" but it has yours piece on it");
+                    //System.out.println("And it's second to last tile i:"+i+" moveLength:"+moveLength+" but it has yours piece on it");
                     return MoveType.NONE;
                 }
             }
@@ -66,13 +82,12 @@ public class MoveSimulator {
                 right = ((i%2) == 0);
                 for (int j=2; j<=directionTiles[i]; j++) {
                     if (simulate(up, right,xPos, yPos, j, coordinates) == MoveType.KILL) {
+                        System.out.println("Kill in direction: "+up+""+right+" tiles:"+j+" starting pos:"+xPos+""+yPos);
                         return true;
                     }
                 }
             }
         }
-
-
         return false;
     }
 
