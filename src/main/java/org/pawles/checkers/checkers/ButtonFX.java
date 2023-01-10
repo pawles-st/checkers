@@ -2,6 +2,7 @@ package org.pawles.checkers.checkers;
 
 import javafx.scene.control.Button;
 import org.pawles.checkers.client.GameCommunicator;
+import static org.pawles.checkers.checkers.CheckersApp.TILE_SIZE;
 
 /**
  * Button class for registering a move
@@ -17,8 +18,8 @@ public class ButtonFX extends Button {
      */
     public ButtonFX(final GameCommunicator gameCommunicator) {
         super("Register move");
-        this.setMinSize(800, 100);
-        this.relocate(0, 800);
+        this.setMinSize(8*TILE_SIZE, TILE_SIZE);
+        this.relocate(0, 8*TILE_SIZE);
         this.setOnAction(e -> gameCommunicator.waitForMove());
     }
 }

@@ -56,15 +56,15 @@ public class GraphicPiece extends StackPane {
         getChildren().addAll(shape);
 
         setOnMousePressed( e-> {
-            oldTileX = (int)e.getSceneX() / 100;
-            oldTileY = (int)e.getSceneY() / 100;
+            oldTileX = (int)e.getSceneX() / TILE_SIZE;
+            oldTileY = (int)e.getSceneY() / TILE_SIZE;
         });
 
         setOnMouseDragged( e-> relocate(e.getSceneX()-TILE_SIZE*0.5, e.getSceneY()-TILE_SIZE*0.5));
 
         setOnMouseReleased( e-> {
-            final int newTileX = (int)e.getSceneX() / 100;
-            final int newTileY = (int)e.getSceneY() / 100;
+            final int newTileX = (int)e.getSceneX() / TILE_SIZE;
+            final int newTileY = (int)e.getSceneY() / TILE_SIZE;
             if (communicator.sendMove(SquareInstancer.getInstance(oldTileX, oldTileY), SquareInstancer.getInstance(newTileX, newTileY))) {
                 move(SquareInstancer.getInstance(newTileX, newTileY));
             } else {
