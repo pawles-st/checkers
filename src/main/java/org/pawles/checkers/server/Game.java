@@ -56,8 +56,8 @@ public class Game implements Runnable {
         writerOpponent = new PrintWriter(player.getOpponent().getOutputStream(), true);
 
         String line;
-        Boolean start = whiteTurn;
-        Boolean killIsPossible = KillPossible(player);
+        boolean start = whiteTurn;
+        boolean killIsPossible = KillPossible(player);
 
         writer.println("your turn");
         do {
@@ -177,6 +177,7 @@ public class Game implements Runnable {
         boolean goingUp = data.getNewY() > data.getStartY();
         boolean goingRight = data.getNewX() > data.getStartX();
         int moveLength = Math.abs(data.getNewX() - data.getStartX());
+        Colour playerColour = playersPiece.getColour();
 
         System.out.println("UP: "+goingUp+" Right: "+goingRight+" King: "+isKing+" MoveLength: "+moveLength);
 
@@ -200,24 +201,18 @@ public class Game implements Runnable {
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
 
-        if (allBetweenSquaresAreEmpty(goingUp, goingRight, data, moveLength)) {
-            System.out.println("All between squares are empty, move is normal");
-            return new MoveResult(MoveType.NORMAL);
-        }
-        if(pawnAtSecondLastSquareAndOppositeColor(goingUp, goingRight, data, moveLength)) {
-            System.out.println("Pawn detected, kill");
-            return new MoveResult(MoveType.KILL);
-        }
+        return new MoveResult(MoveSimulator.simulate(goingUp, goingRight, data, playerColour, coordinates));
 
-        return new MoveResult(MoveType.NONE); // if none requirements were met, return none
-    }
+        //if (allBetweenSquaresAreEmpty(goingUp, goingRight, data, moveLength)) {
+        //    System.out.println("All between squares are empty, move is normal");
+        //    return new MoveResult(MoveType.NORMAL);
+        //}
+        //if(pawnAtSecondLastSquareAndOppositeColor(goingUp, goingRight, data, moveLength)) {
+        //    System.out.println("Pawn detected, kill");
+        //    return new MoveResult(MoveType.KILL);
+        //}
 
-    private boolean checkIfThereIsPawn(AbstractPiece piece) {
-        if (piece==null) { // if there is no piece
-            return false;
-        } else {           // if there is piece of any color
-            return true;
-        }
+        //return new MoveResult(MoveType.NONE); // if none requirements were met, return none
     }
 
     private boolean pawnAtSecondLastSquareAndOppositeColor(boolean goingUp, boolean goingRight, MoveData moveData, int moveLength) {
@@ -235,8 +230,8 @@ public class Game implements Runnable {
                 }
             }
             if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()-1) != null) {
-                int x = moveData.getStartX()-1;
-                int y = moveData.getStartY()-1;
+                int x = moveData.getNewX()-1;
+                int y = moveData.getNewY()-1;
                 System.out.println("Square: "+x+""+y+" is not empty");
                 if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()-1).getColour() == playersPiece ) {
                     System.out.println("But it has player's color piece");
@@ -257,8 +252,8 @@ public class Game implements Runnable {
                 }
             }
             if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()+1) != null) {
-                int x = moveData.getStartX()+1;
-                int y = moveData.getStartY()-1;
+                int x = moveData.getNewX()+1;
+                int y = moveData.getNewY()-1;
                 System.out.println("Square: "+x+""+y+" is not empty");
                 if(coordinates.get(moveData.getNewY()-1).get(moveData.getNewX()+1).getColour() == playersPiece ) {
                     System.out.println("But it has player's color piece");
@@ -279,8 +274,8 @@ public class Game implements Runnable {
                 }
             }
             if(coordinates.get(moveData.getNewY()+1).get(moveData.getNewX()-1) != null) {
-                int x = moveData.getStartX()-1;
-                int y = moveData.getStartY()+1;
+                int x = moveData.getNewX()-1;
+                int y = moveData.getNewY()+1;
                 System.out.println("Square: "+x+""+y+" is not empty");
                 if(coordinates.get(moveData.getNewY()+1).get(moveData.getNewX()-1).getColour() == playersPiece ) {
                     System.out.println("But it has player's color piece");
@@ -301,8 +296,8 @@ public class Game implements Runnable {
                 }
             }
             if(coordinates.get(moveData.getNewY()+1).get(moveData.getNewX()+1) != null) {
-                int x = moveData.getStartX()+1;
-                int y = moveData.getStartY()+1;
+                int x = moveData.getNewX()+1;
+                int y = moveData.getNewY()+1;
                 System.out.println("Square: "+x+""+y+" is not empty");
                 if(coordinates.get(moveData.getNewY()+1).get(moveData.getNewX()+1).getColour() == playersPiece ) {
                     System.out.println("But it has player's color piece");
@@ -322,6 +317,9 @@ public class Game implements Runnable {
         if(goingUp && goingRight) {
             for (int i=1; i<moveLength; i++) {
                 if(coordinates.get(moveData.getStartY()+i).get(moveData.getStartX()+i) != null) {
+                    int x = moveData.getStartX()+i;
+                    int y = moveData.getStartY()+i;
+                    System.out.println("Square: "+x+""+y+" is not empty, so all squares aren't empty");
                     return false;
                 } else {
                     int x = moveData.getStartX()+i;
@@ -332,6 +330,9 @@ public class Game implements Runnable {
         } else if (goingUp && !goingRight) {
             for (int i=1; i<moveLength; i++) {
                 if(coordinates.get(moveData.getStartY()+i).get(moveData.getStartX()-i) != null) {
+                    int x = moveData.getStartX()-i;
+                    int y = moveData.getStartY()+i;
+                    System.out.println("Square: "+x+""+y+" is not empty, so all squares aren't empty");
                     return false;
                 } else {
                     int x = moveData.getStartX()-i;
@@ -342,6 +343,9 @@ public class Game implements Runnable {
         } else if (!goingUp && goingRight) {
             for (int i=1; i<moveLength; i++) {
                 if(coordinates.get(moveData.getStartY()-i).get(moveData.getStartX()+i) != null) {
+                    int x = moveData.getStartX()+i;
+                    int y = moveData.getStartY()-i;
+                    System.out.println("Square: "+x+""+y+" is not empty, so all squares aren't empty");
                     return false;
                 } else {
                     int x = moveData.getStartX()+i;
@@ -352,6 +356,9 @@ public class Game implements Runnable {
         } else if (!goingUp && !goingRight) {
             for (int i=1; i<moveLength; i++) {
                 if(coordinates.get(moveData.getStartY()-i).get(moveData.getStartX()-i) != null) {
+                    int x = moveData.getStartX()-i;
+                    int y = moveData.getStartY()-i;
+                    System.out.println("Square: "+x+""+y+" is not empty, so all squares aren't empty");
                     return false;
                 } else {
                     int x = moveData.getStartX()-i;
@@ -366,12 +373,21 @@ public class Game implements Runnable {
     private void movePawns(MoveData data) {
         // convert int to squares
         Square start = SquareInstancer.getInstance(data.getStartX(), data.getStartY());
-        System.out.println("Starting square: "+data.getStartX()+""+data.getStartY());
+        //System.out.println("Starting square: "+data.getStartX()+""+data.getStartY());
         Square newSquare = SquareInstancer.getInstance(data.getNewX(), data.getNewY());
-        System.out.println("Ending square: "+data.getNewX()+""+data.getNewY());
+        //System.out.println("Ending square: "+data.getNewX()+""+data.getNewY());
 
         // move piece from one square to another
         board.movePiece(start, newSquare);
+    }
+
+
+    private boolean checkIfThereIsPawn(AbstractPiece piece) {
+        if (piece==null) { // if there is no piece
+            return false;
+        } else {           // if there is piece of any color
+            return true;
+        }
     }
 
     private void killPawn(MoveData data) {
