@@ -117,52 +117,11 @@ public class Game implements Runnable {
             for(int x=0; x<8; x++) {
                 if(coordinates.get(y).get(x) != null) {
                     if(coordinates.get(y).get(x).getColour() == playerColor) {
-                        if(CheckKill(x, y, player)) {
+                        if(MoveSimulator.tryToKill(coordinates, x, y)) {
                             System.out.println("Kill is possible");
                             return true;
                         }
                     }
-                }
-            }
-        }
-        return false;
-    }
-
-    private Boolean CheckKill(int x, int y, Player player) {
-        List<List<AbstractPiece>> coordinates = board.getCoordinates();
-        Boolean northPossible = false;
-        Boolean southPossible = false;
-        Boolean eastPossible = false;
-        Boolean westPossible = false;
-        if(y<=5) {northPossible = true;}
-        if(y>=2) {southPossible = true;}
-        if(x<=5) {eastPossible = true;}
-        if(x>=2) {westPossible = true;}
-        if(northPossible && eastPossible) {
-            if (coordinates.get(y+1).get(x+1) != null && coordinates.get(y+2).get(x+2) == null) {
-                if (coordinates.get(y+1).get(x+1).getColour() == player.getOpponentColor()) {
-                    return true;
-                }
-            }
-        }
-        if(northPossible && westPossible) {
-            if (coordinates.get(y+1).get(x-1) != null && coordinates.get(y+2).get(x-2) == null) {
-                if (coordinates.get(y+1).get(x-1).getColour() == player.getOpponentColor()) {
-                    return true;
-                }
-            }
-        }
-        if(southPossible && eastPossible) {
-            if (coordinates.get(y-1).get(x+1) != null && coordinates.get(y-2).get(x+2) == null) {
-                if (coordinates.get(y-1).get(x+1).getColour() == player.getOpponentColor()) {
-                    return true;
-                }
-            }
-        }
-        if(southPossible && westPossible) {
-            if (coordinates.get(y-1).get(x-1) != null && coordinates.get(y-2).get(x-2) == null) {
-                if (coordinates.get(y-1).get(x-1).getColour() == player.getOpponentColor()) {
-                    return true;
                 }
             }
         }
@@ -177,7 +136,6 @@ public class Game implements Runnable {
         boolean goingUp = data.getNewY() > data.getStartY();
         boolean goingRight = data.getNewX() > data.getStartX();
         int moveLength = Math.abs(data.getNewX() - data.getStartX());
-        Colour playerColour = playersPiece.getColour();
 
         System.out.println("UP: "+goingUp+" Right: "+goingRight+" King: "+isKing+" MoveLength: "+moveLength);
 
@@ -201,18 +159,7 @@ public class Game implements Runnable {
             return new MoveResult(MoveType.NONE); // move cannot be done
         }
 
-        return new MoveResult(MoveSimulator.simulate(goingUp, goingRight, data, playerColour, coordinates));
-
-        //if (allBetweenSquaresAreEmpty(goingUp, goingRight, data, moveLength)) {
-        //    System.out.println("All between squares are empty, move is normal");
-        //    return new MoveResult(MoveType.NORMAL);
-        //}
-        //if(pawnAtSecondLastSquareAndOppositeColor(goingUp, goingRight, data, moveLength)) {
-        //    System.out.println("Pawn detected, kill");
-        //    return new MoveResult(MoveType.KILL);
-        //}
-
-        //return new MoveResult(MoveType.NONE); // if none requirements were met, return none
+        return new MoveResult(MoveSimulator.simulate(goingUp, goingRight, data.getStartX(), data.getStartY(), moveLength, coordinates));
     }
 
 
