@@ -111,7 +111,7 @@ public class GameCommunicator {
 
         final String move = socketIn.nextLine();
 
-        if ("".equals(move)) { // TODO server message goes here
+        if ("your turn".equals(move)) {
             myTurn = true;
         } else if (move.length() == 5 && move.charAt(2) == ':') { //NOPMD - suppressed LawOfDemeter - there is no LawOfDemeter here
 

@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import org.pawles.checkers.client.ClientInitialiser;
 import org.pawles.checkers.client.GameCommunicator;
+import org.pawles.checkers.exceptions.UnknownPieceException;
 import org.pawles.checkers.objects.*; //NOPMD - suppressed UnusedImports - these imports are used
 import org.pawles.checkers.utils.BoardDirector;
 import org.pawles.checkers.utils.BrazilianBoardBuilder;
@@ -150,15 +151,41 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
                 if (piece != null && pieces.get(SquareInstancer.getInstance(x, y)) == null) {
                     final GraphicPiece movedPiece; //NOPMD - suppressed AvoidFinalLocalVariable
                     if (piece.getColour() == Colour.WHITE) {
-                        movedPiece = changedWhiteMen.pop();
                         if (y == HEIGHT - 1) {
-                            movedPiece.promote();
+                            if (!changedWhiteKings.empty()) {
+                                movedPiece = changedWhiteKings.pop();
+                            } else {
+                                movedPiece = changedWhiteMen.pop();
+                                movedPiece.promote();
+                            }
+                        } else {
+                            if (piece instanceof Man) {
+                                movedPiece = changedWhiteMen.pop();
+                            } else {
+                                movedPiece = changedWhiteKings.pop();
+                            }
                         }
-                    } else {
-                        movedPiece = changedBlackMen.pop();
+                    } else if (piece.getColour() == Colour.BLACK) {
                         if (y == 0) {
-                            movedPiece.promote();
+                            if (!changedBlackKings.empty()) {
+                                movedPiece = changedBlackKings.pop();
+                            } else {
+                                movedPiece = changedBlackMen.pop();
+                                movedPiece.promote();
+                            }
+                        } else {
+                            if (piece instanceof Man) {
+                                movedPiece = changedBlackMen.pop();
+                            } else {
+                                movedPiece = changedBlackKings.pop();
+                            }
                         }
+                    } /*else if (piece.getColour() == Colour.WHITE && piece instanceof King) {
+                        movedPiece = changedWhiteKings.pop();
+                    } else if (piece.getColour() == Colour.BLACK && piece instanceof King) {
+                        movedPiece = changedBlackKings.pop();
+                    }*/ else {
+                        throw new UnknownPieceException("Unknown piece found on the board while moving the pieces");
                     }
                     pieces.put(SquareInstancer.getInstance(x, y), movedPiece);
                     movedPiece.move(SquareInstancer.getInstance(x, y));
