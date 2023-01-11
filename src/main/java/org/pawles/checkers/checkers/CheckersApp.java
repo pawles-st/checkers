@@ -98,7 +98,7 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
         // set scene title and display it
         if(gameCom.getColour() == Colour.WHITE) {
             primaryStage.setTitle("Checkers - White");
-            gameCom.waitForTurn();
+            gameCom.waitForMove();
         } else {
             primaryStage.setTitle("Checkers - Black");
             gameCom.waitForMove();

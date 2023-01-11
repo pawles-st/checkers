@@ -132,16 +132,18 @@ public class GameCommunicator {
 
             // wait for the player's turn
 
-            waitForTurn();
+            waitForMove();
         } else {
             throw new WrongMessageException("unhandled message received: " + move);
         }
 
     }
 
-    /**
+
+    /*
      * sets myTurn boolean once server informs about turn change
      */
+    /*
     public void waitForTurn() {
         final String message = socketIn.nextLine();
         if ("your turn".equals(message)) {
@@ -150,6 +152,7 @@ public class GameCommunicator {
             throw new WrongMessageException("Unhandled message received: " + message);
         }
     }
+    */
 
     /**
      * sets the JavaFX view for MVC controller
