@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class MoveSimulator {
     /**
-     * Simulate move to check if it's possible, and if what type it will be
+     * Simulate move to check if it's possible, and if what type it will be.
      *
      * @param goingUp - vertical direction of movement
      * @param goingRight - horizontal direction of movement
@@ -22,32 +22,32 @@ public class MoveSimulator {
      * @param coordinates - current board status
      * @return - NONE, NORMAL or KILL, depending what game move was recognized
      */
-    public static MoveType simulate(boolean goingUp, boolean goingRight, int startX, int startY, int moveLength, List<List<AbstractPiece>> coordinates) {
+    public static MoveType simulate(final boolean goingUp, final boolean goingRight, final int startX, final int startY, final int moveLength, final List<List<AbstractPiece>> coordinates) {
         int verDirection = directionReader(goingUp);
         int horDirection = directionReader(goingRight);
         Colour playersColour = coordinates.get(startY).get(startX).getColour();
-        int endX = startX + (moveLength*horDirection);
-        int endY = startY + (moveLength*verDirection);
+        int endX = startX + (moveLength * horDirection);
+        int endY = startY + (moveLength * verDirection);
 
         AbstractPiece playersPiece = coordinates.get(startY).get(startX);
-        if(playersPiece == null) { // if there isn't any pawn at start position
+        if (playersPiece == null) { // if there isn't any pawn at start position
             return MoveType.NONE; // move cannot be done
         }
 
-        if(coordinates.get(endY).get(endX) != null) { // if there is pawn at new coordinates
+        if (coordinates.get(endY).get(endX) != null) { // if there is pawn at new coordinates
             return MoveType.NONE; // move cannot be done
         }
 
-        if(playersPiece instanceof Man && moveLength > 2) {
+        if (playersPiece instanceof Man && moveLength > 2) {
             return MoveType.NONE;
         }
 
 
-        for (int i=1; i<moveLength; i++) {
-            if(coordinates.get(startY+(i*verDirection)).get(startX+(i*horDirection)) != null) {
-                if(i != moveLength-1) {
+        for (int i = 1; i < moveLength; i++) {
+            if (coordinates.get(startY + (i * verDirection)).get(startX + (i * horDirection)) != null) {
+                if (i != moveLength - 1) {
                     return MoveType.NONE;
-                } else if (coordinates.get(startY+(i*verDirection)).get(startX+(i*horDirection)).getColour() != playersColour) {
+                } else if (coordinates.get(startY + (i * verDirection)).get(startX + (i * horDirection)).getColour() != playersColour) {
                     return MoveType.KILL;
                 } else {
                     return MoveType.NONE;
@@ -60,14 +60,14 @@ public class MoveSimulator {
     }
 
     /**
-     * Look if given pawn can kill in any direction
+     * Look if given pawn can kill in any direction.
      * @param coordinates - current board status
      * @param xPos - starting X position of piece
      * @param yPos - starting Y position of piece
      * @param boardSize - size of the board, on which the game is being played
      * @return - true when given piece can kill, false if not
      */
-    public static boolean tryToKill(List<List<AbstractPiece>> coordinates, int xPos, int yPos, int boardSize) {
+    public static boolean tryToKill(final List<List<AbstractPiece>> coordinates, final int xPos, final int yPos, final int boardSize) {
         int topTiles = boardSize - 1 - yPos;
         int botTiles = yPos;
         int rightTiles = boardSize - 1 - xPos;
@@ -80,13 +80,13 @@ public class MoveSimulator {
         boolean up;
         boolean right;
 
-        for(int i=0; i<4; i++) { // for every direction
-            if( directionTiles[i] >= 2 ) {// if in given direction there are 2 or more tiles
-                up = ((i/2) == 0);
-                right = ((i%2) == 0);
-                for (int j=2; j<=directionTiles[i]; j++) {
-                    if (simulate(up, right,xPos, yPos, j, coordinates) == MoveType.KILL) {
-                        System.out.println("Kill in direction: "+up+""+right+" tiles:"+j+" starting pos:"+xPos+""+yPos);
+        for (int i = 0; i < 4; i++) { // for every direction
+            if (directionTiles[i] >= 2) { // if in given direction there are 2 or more tiles
+                up = ((i / 2) == 0);
+                right = ((i % 2) == 0);
+                for (int j = 2; j <= directionTiles[i]; j++) {
+                    if (simulate(up, right, xPos, yPos, j, coordinates) == MoveType.KILL) {
+                        System.out.println("Kill in direction: " + up + "" + right + " tiles:" + j + " starting pos:" + xPos + "" + yPos);
                         return true;
                     }
                 }
@@ -96,12 +96,12 @@ public class MoveSimulator {
     }
 
     /**
-     * Function made to convert 0;1 to -1;1
+     * Function made to convert 0;1 to -1;1.
      * @param direction if piece is moving in given direction
      * @return -1 or 1, depends on given bool
      */
-    private static int directionReader(boolean direction) {
-        if(direction) {
+    private static int directionReader(final boolean direction) {
+        if (direction) {
             return 1;
         } else {
             return -1;
