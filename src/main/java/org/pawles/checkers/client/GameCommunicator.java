@@ -1,6 +1,6 @@
 package org.pawles.checkers.client;
 
-import org.pawles.checkers.checkers.CheckersApp;
+import org.pawles.checkers.checkers.ClientViewFX;
 import org.pawles.checkers.exceptions.WrongMessageException;
 import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.Square;
@@ -153,7 +153,7 @@ public class GameCommunicator {
      * sets the JavaFX view for MVC controller
      * @param viewFX JavaFX view object
      */
-    public void setViewFX(final CheckersApp viewFX) {
+    public void setViewFX(final ClientViewFX viewFX) {
         clientController.setViewFX(viewFX);
     }
 }

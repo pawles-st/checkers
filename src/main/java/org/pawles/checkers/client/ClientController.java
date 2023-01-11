@@ -1,6 +1,6 @@
 package org.pawles.checkers.client;
 
-import org.pawles.checkers.checkers.CheckersApp;
+import org.pawles.checkers.checkers.ClientViewFX;
 import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.AbstractPiece;
 import org.pawles.checkers.objects.Square;
@@ -20,7 +20,7 @@ public class ClientController {
     final private transient ClientView view;
 
     /** MVC JavaFX client view object */
-    private transient CheckersApp viewFX;
+    private transient ClientViewFX viewFX;
 
     /**
      * initialise the controller
@@ -39,7 +39,7 @@ public class ClientController {
      */
     public void setCoordinate(final Square square, final AbstractPiece piece) {
         model.setCoordinate(square, piece);
-    }
+    } // USED FOR TESTS
 
     /**
      * check whether the piece has the ability to move between squares
@@ -71,14 +71,14 @@ public class ClientController {
      * draw the current board in JavaFX
      */
     public void updateViewFX() {
-        viewFX.updateBoard(model.getBoard());
+        viewFX.updateView(model.getBoard());
     }
 
     public Colour getColour() { //NOPMD - suppressed CommentRequired - this is a simple getter method
         return model.getColour();
     }
 
-    public void setViewFX(final CheckersApp viewFX) {
+    public void setViewFX(final ClientViewFX viewFX) {
         this.viewFX = viewFX;
     }
 }

@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import org.pawles.checkers.client.ClientInitialiser;
 import org.pawles.checkers.client.GameCommunicator;
-import org.pawles.checkers.exceptions.UnknownPieceException;
 import org.pawles.checkers.objects.*; //NOPMD - suppressed UnusedImports - these imports are used
 import org.pawles.checkers.utils.BoardDirector;
 import org.pawles.checkers.utils.BrazilianBoardBuilder;
@@ -18,16 +17,34 @@ import org.pawles.checkers.utils.BrazilianBoardBuilder;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * main JavaFX client class
+ * @author Szymon
+ * @author pawles
+ * @version 1.0
+ */
 public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
-    public static final String MAN_TYPE = "Man";
-    public static final String KING_TYPE = "King";
+
+    /** FX size of a single tile */
     public static final int TILE_SIZE = 100;
+
+    /** communicator object for interacting with the server */
     private static GameCommunicator gameCom;
+
+    /** game board */
     private transient Board board;
+
+    /** group composed of all the FX tiles */
     private transient final Group tileGroup = new Group();
+
+    /** group composed of all the FX */
     private transient final Group pieceGroup = new Group();
+
+    /** pieces on the board */
     private transient final Map<Square, GraphicPiece> pieces = new HashMap<>(); //NOPMD - suppressed UseConcurrentHashMap - no multithreading needed
-    private int boardSize;
+
+    /** size of the board */
+    private transient int boardSize;
 
     private Parent createContent() {
 
@@ -35,7 +52,7 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
         final Pane root = new Pane();
         final ButtonFX button = new ButtonFX(gameCom, boardSize);
         root.setPrefSize(boardSize * TILE_SIZE, (boardSize+1) * TILE_SIZE);
-        root.getChildren().addAll(tileGroup, pieceGroup, button);
+        root.getChildren().addAll(tileGroup, pieceGroup, button); //NOPMD - suppressed LawOfDemeter
         // read starting board status
         final List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
@@ -46,26 +63,26 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
                 final Colour colour = (x+y) % 2 == 0 ? Colour.BLACK : Colour.WHITE;
                 final Tile tile = new Tile(colour, x, y); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - the loop exists for initialising objects
                 // add created tile to tileGroup
-                tileGroup.getChildren().add(tile);
+                tileGroup.getChildren().add(tile); //NOPMD - suppressed LawOfDemeter
 
                 ///////////////////////////////////////////
                 final Text text = new Text(x+""+y); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - the loop exists for initialising objects
                 text.setFill(Color.PINK);
                 text.relocate(x * CheckersApp.TILE_SIZE, y * CheckersApp.TILE_SIZE);
-                root.getChildren().add(text);
+                root.getChildren().add(text); //NOPMD - suppressed LawOfDemeter
                 ///////////////////////////////////////////
 
                 // create GraphicPiece object
                 GraphicPiece piece = null; //NOPMD - suppressed AvoidFinalLocalVariable
                 // if square xy isn't null
-                if(coordinates.get(y).get(x) != null) {
+                if(coordinates.get(y).get(x) != null) { //NOPMD - suppressed LawOfDemeter
                     //check if it contains white or black piece, then create one
                     piece = new GraphicPiece(coordinates.get(y).get(x).getColour(), x, y, gameCom); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - the loop exists for initialising objects
                     pieces.put(SquareInstancer.getInstance(x, y), piece);
                 }
                 // if piece was created add it to this exact tile and pieceGroup
                 if(piece != null) {
-                    pieceGroup.getChildren().add(piece);
+                    pieceGroup.getChildren().add(piece); //NOPMD - suppressed LawOfDemeter
                 }
             }
         }
@@ -73,22 +90,31 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
         return root;
     }
 
-    public void removePiece(final Square square) {
-        pieceGroup.getChildren().remove(pieces.get(square));
+    /**
+     * removes a single piece
+     * @param piece piece to remove
+     */
+    public void removePiece(final GraphicPiece piece) {
+        pieceGroup.getChildren().remove(piece); //NOPMD - suppressed LawOfDemeter
     }
 
+    /**
+     * moves a single piece between tiles
+     * @param curr square to move from
+     * @param dest square to move to
+     */
     public void movePiece(final Square curr, final Square dest) {
         final GraphicPiece piece = pieces.get(curr);
-        piece.move(dest);
+        piece.move(dest); //NOPMD - suppressed LawOfDemeter
         pieces.remove(curr);
         pieces.put(dest, piece);
     }
 
     @Override
     public void start(final Stage primaryStage) {
-        gameCom.setViewFX(this);
         // make board the same way as everywhere
         boardSize = gameCom.getBoardSize();
+        gameCom.setViewFX(new ClientViewFX(this, pieces, boardSize));
         final BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
         director.buildBoard(boardSize);
@@ -107,6 +133,11 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
         primaryStage.show();
     }
 
+    /**
+     * starts the client program
+     * @param args entry arguments (leave empty)
+     * @throws IOException if couldn't establish a connection with the server
+     */
     public static void main(final String[] args) throws IOException {
         try {
             gameCom = ClientInitialiser.init();
@@ -114,102 +145,5 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
             throw new IOException("", e);
         }
         launch(); // call start() function
-    }
-
-    public void updateBoard(final Board board) {
-        final List<List<AbstractPiece>> coordinates = board.getCoordinates();
-        final Stack<GraphicPiece> changedWhiteMen = new Stack<>();
-        final Stack<GraphicPiece> changedBlackMen = new Stack<>();
-        final Stack<GraphicPiece> changedWhiteKings = new Stack<>();
-        final Stack<GraphicPiece> changedBlackKings = new Stack<>();
-
-        // push pieces that changed location onto the stack
-
-        for (int y = 0; y < boardSize; ++y) {
-            for (int x = 0; x < boardSize; ++x) {
-                final GraphicPiece piece = pieces.get(SquareInstancer.getInstance(x, y));
-                if (coordinates.get(y).get(x) == null && piece != null) {
-                    if (piece.getColour() == Colour.WHITE && MAN_TYPE.equals(piece.getType())) {
-                        changedWhiteMen.push(piece);
-                    } else if (piece.getColour() == Colour.BLACK && MAN_TYPE.equals(piece.getType())) {
-                        changedBlackMen.push(piece);
-                    } else if (piece.getColour() == Colour.WHITE && KING_TYPE.equals(piece.getType())) {
-                        changedWhiteKings.push(piece);
-                    } else {
-                        changedBlackKings.push(piece);
-                    }
-                    pieces.remove(SquareInstancer.getInstance(x, y));
-                }
-            }
-        }
-
-        // place the pieces back on new squares
-
-        for (int y = 0; y < boardSize; ++y) {
-            for (int x = 0; x < boardSize; ++x) {
-                final AbstractPiece piece = coordinates.get(y).get(x);
-                if (piece != null && pieces.get(SquareInstancer.getInstance(x, y)) == null) {
-                    final GraphicPiece movedPiece; //NOPMD - suppressed AvoidFinalLocalVariable
-                    if (piece.getColour() == Colour.WHITE) {
-                        if (y == boardSize - 1) {
-                            if (changedWhiteKings.empty()) {
-                                movedPiece = changedWhiteMen.pop();
-                                movedPiece.promote();
-                            } else {
-                                movedPiece = changedWhiteKings.pop();
-                            }
-                        } else {
-                            if (piece instanceof Man) {
-                                movedPiece = changedWhiteMen.pop();
-                            } else {
-                                movedPiece = changedWhiteKings.pop();
-                            }
-                        }
-                    } else if (piece.getColour() == Colour.BLACK) {
-                        if (y == 0) {
-                            if (changedBlackKings.empty()) {
-                                movedPiece = changedBlackMen.pop();
-                                movedPiece.promote();
-                            } else {
-                                movedPiece = changedBlackKings.pop();
-                            }
-                        } else {
-                            if (piece instanceof Man) {
-                                movedPiece = changedBlackMen.pop();
-                            } else {
-                                movedPiece = changedBlackKings.pop();
-                            }
-                        }
-                    } /*else if (piece.getColour() == Colour.WHITE && piece instanceof King) {
-                        movedPiece = changedWhiteKings.pop();
-                    } else if (piece.getColour() == Colour.BLACK && piece instanceof King) {
-                        movedPiece = changedBlackKings.pop();
-                    }*/ else {
-                        throw new UnknownPieceException("Unknown piece found on the board while moving the pieces");
-                    }
-                    pieces.put(SquareInstancer.getInstance(x, y), movedPiece);
-                    movedPiece.move(SquareInstancer.getInstance(x, y));
-                }
-            }
-        }
-
-        // remove extra pieces from the board
-
-        while (!changedWhiteMen.empty()) {
-            final GraphicPiece piece = changedWhiteMen.pop();
-            pieceGroup.getChildren().remove(piece);
-        }
-        while (!changedBlackMen.empty()) {
-            final GraphicPiece piece = changedBlackMen.pop();
-            pieceGroup.getChildren().remove(piece);
-        }
-        while (!changedWhiteKings.empty()) {
-            final GraphicPiece piece = changedWhiteKings.pop();
-            pieceGroup.getChildren().remove(piece);
-        }
-        while (!changedBlackKings.empty()) {
-            final GraphicPiece piece = changedBlackKings.pop();
-            pieceGroup.getChildren().remove(piece);
-        }
     }
 }
