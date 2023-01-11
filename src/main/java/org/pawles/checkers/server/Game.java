@@ -28,7 +28,7 @@ public class Game implements Runnable {
 
         BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
-        director.buildBoard();
+        director.buildBoard(boardSize);
         board = director.getBoard();
 
         cView = new ClientView();

@@ -90,6 +90,6 @@ public final class ClientInitialiser {
             ERR.println(e.getMessage());
             throw new IOException(e);
         }
-        return new GameCommunicator(colour, socketIn, socketOut);
+        return new GameCommunicator(colour, socketIn, socketOut, boardSize);
     }
 }

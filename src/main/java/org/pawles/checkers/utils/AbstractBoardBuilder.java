@@ -15,7 +15,7 @@ public abstract class AbstractBoardBuilder { //NOPMD - suppressed AtLeastOneCons
     /**
      * constructs new board
      */
-    public abstract void createNewBoard();
+    public abstract void createNewBoard(int boardSize);
 
     public Board getBoard() {
         return board;
@@ -24,10 +24,10 @@ public abstract class AbstractBoardBuilder { //NOPMD - suppressed AtLeastOneCons
     /**
      * creates the board grid
      */
-    public abstract void buildGrid();
+    public abstract void buildGrid(int boardSize);
 
     /**
      * adds pieces to the board
      */
-    public abstract void buildPieces();
+    public abstract void buildPieces(int boardSize);
 }

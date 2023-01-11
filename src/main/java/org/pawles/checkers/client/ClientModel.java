@@ -25,13 +25,13 @@ public class ClientModel {
      * initialise the MVC client's model
      * @param colour player's colour
      */
-    public ClientModel(final Colour colour) {
+    public ClientModel(final Colour colour, int boardSize) {
 
         // build board
 
         final BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
-        director.buildBoard();
+        director.buildBoard(boardSize);
         board = director.getBoard();
 
         // set colour

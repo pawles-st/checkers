@@ -38,17 +38,25 @@ public class GameCommunicator {
         return clientController.getColour();
     }
 
+    public int getBoardSize() {
+        return boardSize;
+    }
+
+    private final int boardSize;
+
     /**
      * initialises the server communicator object
      * @param colour player's colour
      * @param socketIn input stream for server communication
      * @param socketOut output stream for server communication
      */
-    public GameCommunicator(final Colour colour, final Scanner socketIn, final PrintWriter socketOut) {
+    public GameCommunicator(final Colour colour, final Scanner socketIn, final PrintWriter socketOut, int boardSize) {
+
+        this.boardSize = boardSize;
 
         // create ClientController object
 
-        final ClientModel clientModel = new ClientModel(colour);
+        final ClientModel clientModel = new ClientModel(colour, boardSize);
         final ClientView clientView = new ClientView();
         clientController = new ClientController(clientModel, clientView);
 

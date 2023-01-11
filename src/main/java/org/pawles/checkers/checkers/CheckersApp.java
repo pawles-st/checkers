@@ -91,7 +91,7 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
         // make board the same way as everywhere
         final BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
-        director.buildBoard();
+        director.buildBoard(gameCom.getBoardSize());
         board = director.getBoard();
         // create scene using createContent function
         final Scene scene = new Scene(createContent());

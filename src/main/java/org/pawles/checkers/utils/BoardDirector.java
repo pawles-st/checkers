@@ -27,9 +27,9 @@ public class BoardDirector { //NOPMD - suppressed AtLeastOneConstructor - ctor u
     /**
      * initialises the board
      */
-    public void buildBoard() {
-        builder.createNewBoard();
-        builder.buildGrid();
-        builder.buildPieces();
+    public void buildBoard(int boardSize) {
+        builder.createNewBoard(boardSize);
+        builder.buildGrid(boardSize);
+        builder.buildPieces(boardSize);
     }
 }
