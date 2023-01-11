@@ -99,22 +99,18 @@ public class Game implements Runnable {
                     killPawn(data);
                     if(MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY())) {
                         System.out.println("Player can do another kill");
-                    //    /* @TODO
                         writerOpponent.println(line); // send the move to the second player
-                    //     */
                     } else {
                         System.out.println("Player cannot do any more kills");
-                    //    /* @TODO
                         whiteTurn = !whiteTurn;       // switch turn to the second player
                         writerOpponent.println(line); // send the move to the second player
-                    //     */
                     }
                     //whiteTurn = !whiteTurn;              // switch turn to the second player
                     //writerOpponent.println(line); // send the move to the second player
                     break;
             }
+            writer.println("correct"); // send info to client, that the move is correct and will be done
         } while (start == whiteTurn);
-        writer.println("correct"); // send info to client, that the move is correct and will be done
     }
 
     private boolean gameLost() {
