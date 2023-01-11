@@ -13,7 +13,7 @@ public class server {
 
             int boardSize = Integer.parseInt(args[0]);
 
-            while(true) {   // this has to be in while(true) because it has to be in loop, so it accepts all users
+            while (true) {   // this has to be in while(true) because it has to be in loop, so it accepts all users
                 firstClient = serverSocket.accept();
                 System.out.println("First player joined the game");
 

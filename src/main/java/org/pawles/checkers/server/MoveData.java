@@ -38,7 +38,7 @@ public class MoveData {
     /**
      * @param line - string like XY:XY (from:where)
      */
-    public MoveData(String line) {
+    public MoveData(final String line) {
         // read and store all data from string given from client app
         this.startX = Integer.parseInt(String.valueOf(line.charAt(0)));
         this.startY = Integer.parseInt(String.valueOf(line.charAt(1)));

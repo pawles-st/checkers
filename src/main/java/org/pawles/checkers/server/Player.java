@@ -37,20 +37,20 @@ public class Player {
         return opponent;
     }
 
-    private int Pieces;
+    private int pieces;
 
     /**
      * @return amount of player's pieces
      */
     public int getPieces() {
-        return Pieces;
+        return pieces;
     }
 
     /**
-     * decrease player's piece number by 1
+     * Decrease player's piece number by 1.
      */
     public void removePieceFromBoard() {
-        Pieces = Pieces-1;
+        pieces = pieces - 1;
     }
 
     /**
@@ -59,18 +59,18 @@ public class Player {
      * @param color player's color
      * @param boardSize size of the board, at which the game will be played
      */
-    public Player(Socket socket, Socket opponent, Colour color, int boardSize) {
+    public Player(final Socket socket, final Socket opponent, final Colour color, final int boardSize) {
         this.socket = socket;
         this.opponent = opponent;
         this.color = color;
-        Pieces = calcPieces(boardSize);
+        pieces = calcPieces(boardSize);
     }
 
     /**
      * @param boardSize size of the board, at which the game will be played
      * @return ammount of pieces for each player
      */
-    private int calcPieces(int boardSize) {
-        return (boardSize/2)*((boardSize/2)-1);
+    private int calcPieces(final int boardSize) {
+        return (boardSize / 2) * ((boardSize / 2) - 1);
     }
 }
