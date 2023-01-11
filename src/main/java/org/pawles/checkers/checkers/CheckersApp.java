@@ -42,8 +42,8 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
         final List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
 
-        for(int y=7; y>=0; y--) {
-            for(int x=7; x>=0; x--) {
+        for(int y=boardSize-1; y>=0; y--) {
+            for(int x=boardSize-1; x>=0; x--) {
                 // create tile with right color (dark or light)
                 final Colour colour = (x+y) % 2 == 0 ? Colour.BLACK : Colour.WHITE;
                 final Tile tile = new Tile(colour, x, y); //NOPMD - suppressed AvoidInstantiatingObjectsInLoops - the loop exists for initialising objects
