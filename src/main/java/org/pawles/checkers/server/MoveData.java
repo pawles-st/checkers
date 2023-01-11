@@ -1,7 +1,10 @@
 package org.pawles.checkers.server;
 
 public class MoveData {
-    private int startX, startY, newX, newY;
+    private final int startX;
+    private final int startY;
+    private final int newX;
+    private final int newY;
 
     public int getNewX() {
         return newX;

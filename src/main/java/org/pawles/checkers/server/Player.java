@@ -5,25 +5,25 @@ import org.pawles.checkers.objects.Colour;
 import java.net.Socket;
 
 public class Player {
-    private Colour color;
+    private final Colour color;
 
     public Colour getColor() {
         return color;
     }
 
-    private Colour opponentColor;
+    private final Colour opponentColor;
 
     public Colour getOpponentColor() {
         return opponentColor;
     }
 
-    private Socket socket;
+    private final Socket socket;
 
     public Socket getSocket() {
         return socket;
     }
 
-    private Socket opponent;
+    private final Socket opponent;
 
     public Socket getOpponent() {
         return opponent;
@@ -44,6 +44,10 @@ public class Player {
         this.opponent = opponent;
         this.color = color;
         this.opponentColor = opponentColor;
-        Pieces = (boardSize/2)*((boardSize/2)-1);
+        Pieces = calcPieces(boardSize);
+    }
+
+    private int calcPieces(int boardSize) {
+        return (boardSize/2)*((boardSize/2)-1);
     }
 }

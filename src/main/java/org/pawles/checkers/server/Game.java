@@ -12,15 +12,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game implements Runnable {
-    Player whitePlayer;
-    Player blackPlayer;
+    final Player whitePlayer;
+    final Player blackPlayer;
     Scanner scanner;
     PrintWriter writer;
     PrintWriter writerOpponent;
-    Board board;
-    ClientView cView;
+    final Board board;
+    final ClientView cView;
     Boolean whiteTurn = true;
-    int boardSize;
+    final int boardSize;
     Game(Socket firstPlayer, Socket secondPlayer, int boardSize) {
         this.whitePlayer = new Player(firstPlayer, secondPlayer, Colour.WHITE, Colour.BLACK, boardSize);
         this.blackPlayer = new Player(secondPlayer, firstPlayer, Colour.BLACK, Colour.WHITE, boardSize);
@@ -46,6 +46,7 @@ public class Game implements Runnable {
                 }
                 cView.drawBoard(board); // after every move draw current board status on server terminal
             }
+            System.out.println("Match ended");
         } catch (IOException e) {
             System.out.println("IOException");
         }
@@ -101,6 +102,13 @@ public class Game implements Runnable {
                     System.out.println("Move type is KILL");
                     movePawns(data);       // do it
                     killPawn(data);
+                    if(whiteTurn) {
+                        blackPlayer.removePieceFromBoard();
+                        System.out.println("Black has now: "+blackPlayer.getPieces()+" pieces");
+                    } else {
+                        whitePlayer.removePieceFromBoard();
+                        System.out.println("White has now: "+whitePlayer.getPieces()+" pieces");
+                    }
                     if(MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY(), boardSize)) {
                         System.out.println("Player can do another kill");
                         writerOpponent.println(line); // send the move to the second player
@@ -110,8 +118,6 @@ public class Game implements Runnable {
                         writerOpponent.println(line); // send the move to the second player
                     }
                     retryMove = false;
-                    //whiteTurn = !whiteTurn;              // switch turn to the second player
-                    //writerOpponent.println(line); // send the move to the second player
                     break;
             }
             if(!retryMove) {
@@ -121,8 +127,13 @@ public class Game implements Runnable {
     }
 
     private boolean gameLost() {
-        //TODO something like whitePlayer.pawns==0 || blackPlayer.pawns==0
-
+        if(whitePlayer.getPieces() == 0) {
+            System.out.println("Black player won!");
+            return true;
+        } else if (blackPlayer.getPieces() == 0) {
+            System.out.println("White player won!");
+            return true;
+        }
         return false;
     }
 
@@ -191,13 +202,13 @@ public class Game implements Runnable {
     private void setup() throws IOException {
         PrintWriter firstOuput;
         firstOuput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
-        firstOuput.println(Integer.toString(boardSize));
+        firstOuput.println(boardSize);
         firstOuput.println("White");
         System.out.println("First Player received white color");
 
         PrintWriter secondOutput;
         secondOutput = new PrintWriter(blackPlayer.getSocket().getOutputStream(), true);
-        secondOutput.println(Integer.toString(boardSize));
+        secondOutput.println(boardSize);
         secondOutput.println("Black");
         System.out.println("Second Player received black color");
     }

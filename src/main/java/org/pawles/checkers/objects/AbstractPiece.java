@@ -12,7 +12,7 @@ public abstract class AbstractPiece {
     protected transient Square square;
 
     /** piece's colour */
-    protected transient Colour colour;
+    protected final transient Colour colour;
 
     /**
      * construct the piece
