@@ -191,11 +191,13 @@ public class Game implements Runnable {
     private void setup() throws IOException {
         PrintWriter firstOuput;
         firstOuput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
+        firstOuput.println(Integer.toString(boardSize));
         firstOuput.println("White");
         System.out.println("First Player received white color");
 
         PrintWriter secondOutput;
         secondOutput = new PrintWriter(blackPlayer.getSocket().getOutputStream(), true);
+        secondOutput.println(Integer.toString(boardSize));
         secondOutput.println("Black");
         System.out.println("Second Player received black color");
     }

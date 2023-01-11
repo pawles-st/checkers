@@ -39,6 +39,8 @@ public final class ClientInitialiser {
     /** error stream for client messages */
     private static final PrintWriter ERR = new PrintWriter(System.err);
 
+    private static int boardSize;
+
     private ClientInitialiser() { }
 
     private static void connect() throws IOException {
@@ -58,9 +60,12 @@ public final class ClientInitialiser {
 
     private static void await() {
 
-        // print the waiting message
+        //reading boardSize
+        final String size = socketIn.nextLine();
+        boardSize = Integer.parseInt(size);
 
-        OUT.println("Waiting for the game to begin...");
+        // print the waiting message
+        OUT.println("Waiting for the game to begin at "+boardSize+"x"+boardSize+" board");
 
         // when server returns the colour, finish waiting
 
