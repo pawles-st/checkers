@@ -7,19 +7,12 @@ import org.pawles.checkers.objects.Man;
 import java.util.List;
 
 public class MoveSimulator {
-
-    int[] NE = new int[]{1, 1};
-    int[] NW = new int[]{1, -1};
-    int[] SE = new int[]{-1, 1};
-    int[] SW = new int[]{-1, -1};
-
     public static MoveType simulate(boolean goingUp, boolean goingRight, int startX, int startY, int moveLength, List<List<AbstractPiece>> coordinates) {
         int verDirection = directionReader(goingUp);
         int horDirection = directionReader(goingRight);
         Colour playersColour = coordinates.get(startY).get(startX).getColour();
         int endX = startX + (moveLength*horDirection);
         int endY = startY + (moveLength*verDirection);
-
 
         AbstractPiece playersPiece = coordinates.get(startY).get(startX);
         if(playersPiece == null) { // if there isn't any pawn at start position
@@ -63,10 +56,10 @@ public class MoveSimulator {
         return MoveType.NORMAL;
     }
 
-    public static boolean tryToKill(List<List<AbstractPiece>> coordinates, int xPos, int yPos) {
-        int topTiles = 7 - yPos;
+    public static boolean tryToKill(List<List<AbstractPiece>> coordinates, int xPos, int yPos, int boardSize) {
+        int topTiles = boardSize - 1 - yPos;
         int botTiles = yPos;
-        int rightTiles = 7 - xPos;
+        int rightTiles = boardSize - 1 - xPos;
         int leftTiles = xPos;
         int[] directionTiles = new int[4];
         directionTiles[0] = Math.min(topTiles, rightTiles); // NE

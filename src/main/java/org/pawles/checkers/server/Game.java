@@ -22,8 +22,8 @@ public class Game implements Runnable {
     Boolean whiteTurn = true;
     int boardSize;
     Game(Socket firstPlayer, Socket secondPlayer, int boardSize) {
-        this.whitePlayer = new Player(firstPlayer, secondPlayer, Colour.WHITE, Colour.BLACK);
-        this.blackPlayer = new Player(secondPlayer, firstPlayer, Colour.BLACK, Colour.WHITE);
+        this.whitePlayer = new Player(firstPlayer, secondPlayer, Colour.WHITE, Colour.BLACK, boardSize);
+        this.blackPlayer = new Player(secondPlayer, firstPlayer, Colour.BLACK, Colour.WHITE, boardSize);
         this.boardSize = boardSize;
 
         BoardDirector director = new BoardDirector();
@@ -32,7 +32,6 @@ public class Game implements Runnable {
         board = director.getBoard();
 
         cView = new ClientView();
-
     }
 
     @Override
@@ -102,7 +101,7 @@ public class Game implements Runnable {
                     System.out.println("Move type is KILL");
                     movePawns(data);       // do it
                     killPawn(data);
-                    if(MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY())) {
+                    if(MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY(), boardSize)) {
                         System.out.println("Player can do another kill");
                         writerOpponent.println(line); // send the move to the second player
                     } else {
@@ -135,7 +134,7 @@ public class Game implements Runnable {
             for(int x=0; x<boardSize; x++) {
                 if(coordinates.get(y).get(x) != null) {
                     if(coordinates.get(y).get(x).getColour() == playerColor) {
-                        if(MoveSimulator.tryToKill(coordinates, x, y)) {
+                        if(MoveSimulator.tryToKill(coordinates, x, y, boardSize)) {
                             System.out.println("Kill is possible");
                             return true;
                         }
