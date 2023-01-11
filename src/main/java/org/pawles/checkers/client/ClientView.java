@@ -39,7 +39,7 @@ public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unne
      */
     public void drawBoard(final Board board) {
 
-        final String hWall = "+-+-+-+-+-+-+-+-+"; //NOPMD - suppressed AvoidFinalLocalVariable - conflicting PMD warnings
+        String hWall = generateHWall(board.getCoordinates().size());
 
         final List<List<AbstractPiece>> coordinates = board.getCoordinates(); //NOPMD - suppressed DataflowAnomalyAnalysis - no data anomaly here
 
@@ -62,5 +62,14 @@ public class ClientView { //NOPMD - suppressed AtLeastOneConstructor - ctor unne
 
             System.out.println(hWall);
         }
+    }
+
+    private String generateHWall(int size) {
+        String HWall = "";
+        for (int i=0; i<size; i++) {
+            HWall += "+-";
+        }
+        HWall += "+";
+        return HWall;
     }
 }
