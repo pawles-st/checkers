@@ -29,13 +29,14 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
     private transient final Group tileGroup = new Group();
     private transient final Group pieceGroup = new Group();
     private transient final Map<Square, GraphicPiece> pieces = new HashMap<>(); //NOPMD - suppressed UseConcurrentHashMap - no multithreading needed
+    private int boardSize;
 
     private Parent createContent() {
 
         // create pane and set defaults
         final Pane root = new Pane();
-        final ButtonFX button = new ButtonFX(gameCom);
-        root.setPrefSize(WIDTH * TILE_SIZE, (HEIGHT+1) * TILE_SIZE);
+        final ButtonFX button = new ButtonFX(gameCom, boardSize);
+        root.setPrefSize(boardSize * TILE_SIZE, (boardSize+1) * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup, button);
         // read starting board status
         final List<List<AbstractPiece>> coordinates = board.getCoordinates();
@@ -89,9 +90,10 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
     public void start(final Stage primaryStage) {
         gameCom.setViewFX(this);
         // make board the same way as everywhere
+        boardSize = gameCom.getBoardSize();
         final BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
-        director.buildBoard(gameCom.getBoardSize());
+        director.buildBoard(boardSize);
         board = director.getBoard();
         // create scene using createContent function
         final Scene scene = new Scene(createContent());
@@ -125,8 +127,8 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
 
         // push pieces that changed location onto the stack
 
-        for (int y = 0; y < HEIGHT; ++y) {
-            for (int x = 0; x < WIDTH; ++x) {
+        for (int y = 0; y < boardSize; ++y) {
+            for (int x = 0; x < boardSize; ++x) {
                 final GraphicPiece piece = pieces.get(SquareInstancer.getInstance(x, y));
                 if (coordinates.get(y).get(x) == null && piece != null) {
                     if (piece.getColour() == Colour.WHITE && MAN_TYPE.equals(piece.getType())) {
@@ -145,13 +147,13 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
 
         // place the pieces back on new squares
 
-        for (int y = 0; y < HEIGHT; ++y) {
-            for (int x = 0; x < WIDTH; ++x) {
+        for (int y = 0; y < boardSize; ++y) {
+            for (int x = 0; x < boardSize; ++x) {
                 final AbstractPiece piece = coordinates.get(y).get(x);
                 if (piece != null && pieces.get(SquareInstancer.getInstance(x, y)) == null) {
                     final GraphicPiece movedPiece; //NOPMD - suppressed AvoidFinalLocalVariable
                     if (piece.getColour() == Colour.WHITE) {
-                        if (y == HEIGHT - 1) {
+                        if (y == boardSize - 1) {
                             if (!changedWhiteKings.empty()) {
                                 movedPiece = changedWhiteKings.pop();
                             } else {

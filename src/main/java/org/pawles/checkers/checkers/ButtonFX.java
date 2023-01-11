@@ -16,10 +16,10 @@ public class ButtonFX extends Button {
      * constructs the "register move" button
      * @param gameCommunicator server communicator object
      */
-    public ButtonFX(final GameCommunicator gameCommunicator) {
+    public ButtonFX(final GameCommunicator gameCommunicator, int boardSize) {
         super("Register move");
-        this.setMinSize(8*TILE_SIZE, TILE_SIZE);
-        this.relocate(0, 8*TILE_SIZE);
+        this.setMinSize(boardSize*TILE_SIZE, TILE_SIZE);
+        this.relocate(0, boardSize*TILE_SIZE);
         this.setOnAction(e -> gameCommunicator.waitForMove());
     }
 }

@@ -13,12 +13,13 @@ public class Board {
     /** coordinates list containing pieces */
     private List<List<AbstractPiece>> coordinates;
 
-    /** vertical size of the board */
-    private transient final int sizeY;
+    /** size of the board */
+    int boardSize;
+    //private transient final int sizeY;
 
     private void promotePiece(final Square dest) {
         final Colour colour = coordinates.get(dest.getY()).get(dest.getX()).getColour(); //NOPMD - suppressed LawOfDemeter - 2D array
-        if (colour == Colour.WHITE && dest.getY() == sizeY - 1 || colour == Colour.BLACK && dest.getY() == 0) {
+        if (colour == Colour.WHITE && dest.getY() == boardSize - 1 || colour == Colour.BLACK && dest.getY() == 0) {
             if(coordinates.get(dest.getY()).get(dest.getX()) instanceof Man) {
                 coordinates.get(dest.getY()).set(dest.getX(), new King(dest, colour));
             }
@@ -41,9 +42,9 @@ public class Board {
 
     /**
      * initialises the board object
-     * @param sizeY vertical size of the board
+     * @param boardSize size of the board
      */
-    public Board(final int sizeY) {this.sizeY = sizeY;}
+    public Board(int boardSize) {this.boardSize = boardSize;}
 
     public List<List<AbstractPiece>> getCoordinates() {
         return coordinates;
