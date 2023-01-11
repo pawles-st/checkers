@@ -20,9 +20,11 @@ public class Game implements Runnable {
     Board board;
     ClientView cView;
     Boolean whiteTurn = true;
-    Game(Socket firstPlayer, Socket secondPlayer) {
+    int boardSize;
+    Game(Socket firstPlayer, Socket secondPlayer, int boardSize) {
         this.whitePlayer = new Player(firstPlayer, secondPlayer, Colour.WHITE, Colour.BLACK);
         this.blackPlayer = new Player(secondPlayer, firstPlayer, Colour.BLACK, Colour.WHITE);
+        this.boardSize = boardSize;
 
         BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
@@ -54,6 +56,7 @@ public class Game implements Runnable {
         scanner = new Scanner(player.getSocket().getInputStream());
         writer = new PrintWriter(player.getSocket().getOutputStream(), true);
         writerOpponent = new PrintWriter(player.getOpponent().getOutputStream(), true);
+        boolean retryMove = false;
 
         String line;
         boolean start = whiteTurn;
@@ -61,8 +64,9 @@ public class Game implements Runnable {
 
         do {
             List<List<AbstractPiece>> coordinates = board.getCoordinates();
-            writer.println("your turn");
-            //@TODO here i want to add somethign like 'writerOpponent.println("not your turn");'
+            if(!retryMove) {
+                writer.println("your turn");
+            }
             if(whiteTurn) {
                 System.out.println("Waiting for whitePlayer input");
             }else{
@@ -79,6 +83,7 @@ public class Game implements Runnable {
             if(killIsPossible && result.getType()!=MoveType.KILL) {
                 System.out.println("Move type should be KILL");
                 writer.println("incorrect"); // send info to client, that his move cannot be done
+                retryMove = true;
                 continue;
             }
 
@@ -105,11 +110,14 @@ public class Game implements Runnable {
                         whiteTurn = !whiteTurn;       // switch turn to the second player
                         writerOpponent.println(line); // send the move to the second player
                     }
+                    retryMove = false;
                     //whiteTurn = !whiteTurn;              // switch turn to the second player
                     //writerOpponent.println(line); // send the move to the second player
                     break;
             }
-            writer.println("correct"); // send info to client, that the move is correct and will be done
+            if(!retryMove) {
+                writer.println("correct"); // send info to client, that the move is correct and will be done
+            }
         } while (start == whiteTurn);
     }
 
@@ -123,8 +131,8 @@ public class Game implements Runnable {
         Colour playerColor = player.getColor();
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
-        for(int y=0; y<8; y++) {
-            for(int x=0; x<8; x++) {
+        for(int y=0; y<boardSize; y++) {
+            for(int x=0; x<boardSize; x++) {
                 if(coordinates.get(y).get(x) != null) {
                     if(coordinates.get(y).get(x).getColour() == playerColor) {
                         if(MoveSimulator.tryToKill(coordinates, x, y)) {
