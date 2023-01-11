@@ -5,6 +5,7 @@ import org.pawles.checkers.objects.Board;
 /**
  * Parent class for specific board builders
  * @author pawles
+ * @author Szymon
  * @version 1.0
  */
 public abstract class AbstractBoardBuilder { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded

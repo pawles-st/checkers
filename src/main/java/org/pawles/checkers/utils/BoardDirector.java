@@ -5,6 +5,7 @@ import org.pawles.checkers.objects.Board;
 /**
  * Director class for creating board using the builder pattern
  * @author pawles
+ * @author Szymon
  * @version 1.0
  */
 public class BoardDirector { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
@@ -27,7 +28,7 @@ public class BoardDirector { //NOPMD - suppressed AtLeastOneConstructor - ctor u
     /**
      * initialises the board
      */
-    public void buildBoard(int boardSize) {
+    public void buildBoard(final int boardSize) {
         builder.createNewBoard(boardSize);
         builder.buildGrid(boardSize);
         builder.buildPieces(boardSize);

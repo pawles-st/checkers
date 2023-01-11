@@ -14,13 +14,13 @@ public class Board {
     private List<List<AbstractPiece>> coordinates;
 
     /** size of the board */
-    int boardSize;
+    private transient final int boardSize;
     //private transient final int sizeY;
 
     private void promotePiece(final Square dest) {
         final Colour colour = coordinates.get(dest.getY()).get(dest.getX()).getColour(); //NOPMD - suppressed LawOfDemeter - 2D array
         if (colour == Colour.WHITE && dest.getY() == boardSize - 1 || colour == Colour.BLACK && dest.getY() == 0) {
-            if(coordinates.get(dest.getY()).get(dest.getX()) instanceof Man) {
+            if(coordinates.get(dest.getY()).get(dest.getX()) instanceof Man) { //NOPMD - suppressed LawOfDemeter - 2D array
                 coordinates.get(dest.getY()).set(dest.getX(), new King(dest, colour));
             }
         }
@@ -44,7 +44,7 @@ public class Board {
      * initialises the board object
      * @param boardSize size of the board
      */
-    public Board(int boardSize) {this.boardSize = boardSize;}
+    public Board(final int boardSize) {this.boardSize = boardSize;}
 
     public List<List<AbstractPiece>> getCoordinates() {
         return coordinates;
@@ -100,5 +100,13 @@ public class Board {
      */
     public void deletePiece(final Square square) {
         coordinates.get(square.getY()).set(square.getX(), null); //NOPMD - suppressed LawOfDemeter - 2D array
+    }
+
+    public int getHeight() { //NOPMD - supressed CommentRequired - getter method
+        return coordinates.size();
+    }
+
+    public int getWidth(final int y) { //NOPMD - suppressed CommentRequired - getter method
+        return coordinates.get(y).size(); //NOPMD - suppressed LawOfDemeter - array usage
     }
 }

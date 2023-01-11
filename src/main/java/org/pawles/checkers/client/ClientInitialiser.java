@@ -13,6 +13,7 @@ import java.util.Scanner;
  * Main class to run from the client side
  *
  * @author pawles
+ * @author Szymon
  * @version 1.0
  */
 public final class ClientInitialiser {
@@ -39,6 +40,7 @@ public final class ClientInitialiser {
     /** error stream for client messages */
     private static final PrintWriter ERR = new PrintWriter(System.err);
 
+    /** size of the board */
     private static int boardSize;
 
     private ClientInitialiser() { }

@@ -109,11 +109,11 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
         primaryStage.show();
     }
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws IOException {
         try {
             gameCom = ClientInitialiser.init();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IOException("", e);
         }
         launch(); // call start() function
     }
@@ -154,11 +154,11 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
                     final GraphicPiece movedPiece; //NOPMD - suppressed AvoidFinalLocalVariable
                     if (piece.getColour() == Colour.WHITE) {
                         if (y == boardSize - 1) {
-                            if (!changedWhiteKings.empty()) {
-                                movedPiece = changedWhiteKings.pop();
-                            } else {
+                            if (changedWhiteKings.empty()) {
                                 movedPiece = changedWhiteMen.pop();
                                 movedPiece.promote();
+                            } else {
+                                movedPiece = changedWhiteKings.pop();
                             }
                         } else {
                             if (piece instanceof Man) {
@@ -169,11 +169,11 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
                         }
                     } else if (piece.getColour() == Colour.BLACK) {
                         if (y == 0) {
-                            if (!changedBlackKings.empty()) {
-                                movedPiece = changedBlackKings.pop();
-                            } else {
+                            if (changedBlackKings.empty()) {
                                 movedPiece = changedBlackMen.pop();
                                 movedPiece.promote();
+                            } else {
+                                movedPiece = changedBlackKings.pop();
                             }
                         } else {
                             if (piece instanceof Man) {

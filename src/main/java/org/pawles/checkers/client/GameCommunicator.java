@@ -12,6 +12,7 @@ import java.util.Scanner;
 /**
  * Client communicator with the server that also applies moves
  * @author pawles
+ * @author Szymon
  * @version 1.0
  */
 public class GameCommunicator {
@@ -34,6 +35,9 @@ public class GameCommunicator {
     /** boolean informing whether it is the current player's turn */
     private transient boolean myTurn;
 
+    /** size of the board */
+    private final int boardSize;
+
     public Colour getColour() { //NOPMD - suppressed CommentRequired - this is a simple getter
         return clientController.getColour();
     }
@@ -42,15 +46,13 @@ public class GameCommunicator {
         return boardSize;
     }
 
-    private final int boardSize;
-
     /**
      * initialises the server communicator object
      * @param colour player's colour
      * @param socketIn input stream for server communication
      * @param socketOut output stream for server communication
      */
-    public GameCommunicator(final Colour colour, final Scanner socketIn, final PrintWriter socketOut, int boardSize) {
+    public GameCommunicator(final Colour colour, final Scanner socketIn, final PrintWriter socketOut, final int boardSize) {
 
         this.boardSize = boardSize;
 

@@ -11,6 +11,7 @@ import org.pawles.checkers.utils.BrazilianBoardBuilder;
  * MVC model class for the client side
  *
  * @author pawles
+ * @author Szymon
  * @version 1.0
  */
 public class ClientModel {
@@ -25,7 +26,7 @@ public class ClientModel {
      * initialise the MVC client's model
      * @param colour player's colour
      */
-    public ClientModel(final Colour colour, int boardSize) {
+    public ClientModel(final Colour colour, final int boardSize) {
 
         // build board
 

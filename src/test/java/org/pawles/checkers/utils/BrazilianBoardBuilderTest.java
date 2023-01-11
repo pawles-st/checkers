@@ -17,7 +17,7 @@ class BrazilianBoardBuilderTest {
     public static void init() {
         final BoardDirector director = new BoardDirector();
         director.setBoardBuilder(new BrazilianBoardBuilder());
-        director.buildBoard();
+        director.buildBoard(8);
         board = director.getBoard();
     }
 

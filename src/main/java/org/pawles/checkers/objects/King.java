@@ -5,6 +5,7 @@ import org.pawles.checkers.exceptions.IncorrectMoveException;
 /**
  * King piece representation
  * @author pawles
+ * @author Szymon
  * @version 1.0
  */
 public class King extends AbstractPiece { //NOPMD - suppressed ShortClassName - class name makes the most sense
