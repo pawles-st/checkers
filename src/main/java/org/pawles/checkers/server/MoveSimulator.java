@@ -6,7 +6,22 @@ import org.pawles.checkers.objects.Man;
 
 import java.util.List;
 
+/**
+ * @author Szymon
+ * @version 1.0
+ */
 public class MoveSimulator {
+    /**
+     * Simulate move to check if it's possible, and if what type it will be
+     *
+     * @param goingUp - vertical direction of movement
+     * @param goingRight - horizontal direction of movement
+     * @param startX - starting X position
+     * @param startY - starting Y position
+     * @param moveLength - how far the piece is moving
+     * @param coordinates - current board status
+     * @return - NONE, NORMAL or KILL, depending what game move was recognized
+     */
     public static MoveType simulate(boolean goingUp, boolean goingRight, int startX, int startY, int moveLength, List<List<AbstractPiece>> coordinates) {
         int verDirection = directionReader(goingUp);
         int horDirection = directionReader(goingRight);
@@ -44,6 +59,14 @@ public class MoveSimulator {
         return MoveType.NORMAL;
     }
 
+    /**
+     * Look if given pawn can kill in any direction
+     * @param coordinates - current board status
+     * @param xPos - starting X position of piece
+     * @param yPos - starting Y position of piece
+     * @param boardSize - size of the board, on which the game is being played
+     * @return - true when given piece can kill, false if not
+     */
     public static boolean tryToKill(List<List<AbstractPiece>> coordinates, int xPos, int yPos, int boardSize) {
         int topTiles = boardSize - 1 - yPos;
         int botTiles = yPos;
@@ -72,6 +95,11 @@ public class MoveSimulator {
         return false;
     }
 
+    /**
+     * Function made to convert 0;1 to -1;1
+     * @param direction if piece is moving in given direction
+     * @return -1 or 1, depends on given bool
+     */
     private static int directionReader(boolean direction) {
         if(direction) {
             return 1;
