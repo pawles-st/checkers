@@ -29,10 +29,21 @@ public class Player {
         return opponent;
     }
 
-    public Player(Socket socket, Socket opponent, Colour color, Colour opponentColor) {
+    private int Pieces;
+
+    public int getPieces() {
+        return Pieces;
+    }
+
+    public void removePieceFromBoard() {
+        Pieces = Pieces-1;
+    }
+
+    public Player(Socket socket, Socket opponent, Colour color, Colour opponentColor, int boardSize) {
         this.socket = socket;
         this.opponent = opponent;
         this.color = color;
         this.opponentColor = opponentColor;
+        Pieces = (boardSize/2)*((boardSize/2)-1);
     }
 }
