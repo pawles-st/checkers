@@ -29,8 +29,6 @@ public class MoveSimulator {
 
 
         for (int i=1; i<moveLength; i++) {
-            int x = startX+(i*horDirection);
-            int y = startY+(i*verDirection);
             if(coordinates.get(startY+(i*verDirection)).get(startX+(i*horDirection)) != null) {
                 if(i != moveLength-1) {
                     return MoveType.NONE;

@@ -22,8 +22,6 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
     public static final String MAN_TYPE = "Man";
     public static final String KING_TYPE = "King";
     public static final int TILE_SIZE = 100;
-    public static final int WIDTH = 8;
-    public static final int HEIGHT = 8;
     private static GameCommunicator gameCom;
     private transient Board board;
     private transient final Group tileGroup = new Group();

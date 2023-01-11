@@ -11,12 +11,6 @@ public class Player {
         return color;
     }
 
-    private final Colour opponentColor;
-
-    public Colour getOpponentColor() {
-        return opponentColor;
-    }
-
     private final Socket socket;
 
     public Socket getSocket() {
@@ -39,11 +33,10 @@ public class Player {
         Pieces = Pieces-1;
     }
 
-    public Player(Socket socket, Socket opponent, Colour color, Colour opponentColor, int boardSize) {
+    public Player(Socket socket, Socket opponent, Colour color, int boardSize) {
         this.socket = socket;
         this.opponent = opponent;
         this.color = color;
-        this.opponentColor = opponentColor;
         Pieces = calcPieces(boardSize);
     }
 

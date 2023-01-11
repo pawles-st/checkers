@@ -1,7 +1,5 @@
 package org.pawles.checkers.server;
 
-import org.pawles.checkers.objects.AbstractPiece;
-
 public class MoveResult {
     private final MoveType type;
 

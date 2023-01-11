@@ -22,8 +22,8 @@ public class Game implements Runnable {
     Boolean whiteTurn = true;
     final int boardSize;
     Game(Socket firstPlayer, Socket secondPlayer, int boardSize) {
-        this.whitePlayer = new Player(firstPlayer, secondPlayer, Colour.WHITE, Colour.BLACK, boardSize);
-        this.blackPlayer = new Player(secondPlayer, firstPlayer, Colour.BLACK, Colour.WHITE, boardSize);
+        this.whitePlayer = new Player(firstPlayer, secondPlayer, Colour.WHITE, boardSize);
+        this.blackPlayer = new Player(secondPlayer, firstPlayer, Colour.BLACK, boardSize);
         this.boardSize = boardSize;
 
         BoardDirector director = new BoardDirector();
