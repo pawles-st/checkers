@@ -12,21 +12,18 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Game thread for checkers
+ * Game thread for checkers.
  *
  * @author Szymon
  * @version 1.0
  */
 public class Game implements Runnable {
-    final Player whitePlayer;
-    final Player blackPlayer;
-    Scanner scanner;
-    PrintWriter writer;
-    PrintWriter writerOpponent;
-    final Board board;
-    final ClientView cView;
-    Boolean whiteTurn = true;
-    final int boardSize;
+    private final Player whitePlayer;
+    private final Player blackPlayer;
+    private final Board board;
+    private final ClientView cView;
+    private Boolean whiteTurn = true;
+    private final int boardSize;
 
     /**
      *
@@ -34,7 +31,7 @@ public class Game implements Runnable {
      * @param secondPlayer - second player connected to server, plays black color
      * @param boardSize - board size on which players will play
      */
-    Game(Socket firstPlayer, Socket secondPlayer, int boardSize) {
+    Game(final Socket firstPlayer, final Socket secondPlayer, final int boardSize) {
         this.whitePlayer = new Player(firstPlayer, secondPlayer, Colour.WHITE, boardSize);
         this.blackPlayer = new Player(secondPlayer, firstPlayer, Colour.BLACK, boardSize);
         this.boardSize = boardSize;
@@ -51,8 +48,8 @@ public class Game implements Runnable {
     public void run() {
         try {
             setup();
-            while(!gameLost()) {
-                if(whiteTurn) {
+            while (!gameLost()) {
+                if (whiteTurn) {
                     Turn(whitePlayer); // it's whitePlayer turn, and blackPlayer is opponent
                 } else {
                     Turn(blackPlayer); // it's blackPlayer turn, and whitePlayer is opponent
@@ -70,10 +67,10 @@ public class Game implements Runnable {
      * @param player - player whose turn is right now
      * @throws IOException - thrown when function cannot get player's scanner, printwriter and his opponents printwriter
      */
-    private void Turn(Player player) throws IOException {
-        scanner = new Scanner(player.getSocket().getInputStream());
-        writer = new PrintWriter(player.getSocket().getOutputStream(), true);
-        writerOpponent = new PrintWriter(player.getOpponent().getOutputStream(), true);
+    private void Turn(final Player player) throws IOException {
+        Scanner scanner = new Scanner(player.getSocket().getInputStream());
+        PrintWriter writer = new PrintWriter(player.getSocket().getOutputStream(), true);
+        PrintWriter writerOpponent = new PrintWriter(player.getOpponent().getOutputStream(), true);
         boolean retryMove = false;
 
         String line;
@@ -82,23 +79,23 @@ public class Game implements Runnable {
 
         do {
             List<List<AbstractPiece>> coordinates = board.getCoordinates();
-            if(!retryMove) {
+            if (!retryMove) {
                 writer.println("your turn");
             }
-            if(whiteTurn) {
+            if (whiteTurn) {
                 System.out.println("Waiting for whitePlayer input");
-            }else{
+            } else {
                 System.out.println("Waiting for blackPlayer input");
             }
             // reading what move to do from whitePlayer
             line = scanner.nextLine();
             // outputing it on server
-            System.out.println("Player input: "+line);
+            System.out.println("Player input: " + line);
 
             MoveData data = new MoveData(line);
             MoveType result = tryMove(data);
 
-            if(killIsPossible && result != MoveType.KILL) {
+            if (killIsPossible && result != MoveType.KILL) {
                 System.out.println("Move type should be KILL");
                 writer.println("incorrect"); // send info to client, that his move cannot be done
                 retryMove = true;
@@ -106,28 +103,28 @@ public class Game implements Runnable {
             }
 
             switch (result) {
-                case NONE:
+                case NONE -> {
                     System.out.println("Move type is NONE");
                     writer.println("incorrect"); // send info to client, that his move cannot be done
-                    break;
-                case NORMAL:
+                }
+                case NORMAL -> {
                     System.out.println("Move type is NORMAL");
                     movePawns(data);       // do it
                     whiteTurn = !whiteTurn;              // switch turn to the second player
                     writerOpponent.println(line); // send the move to the second player
-                    break;
-                case KILL:
+                }
+                case KILL -> {
                     System.out.println("Move type is KILL");
                     movePawns(data);       // do it
                     killPawn(data);
-                    if(whiteTurn) {
+                    if (whiteTurn) {
                         blackPlayer.removePieceFromBoard();
-                        System.out.println("Black has now: "+blackPlayer.getPieces()+" pieces");
+                        System.out.println("Black has now: " + blackPlayer.getPieces() + " pieces");
                     } else {
                         whitePlayer.removePieceFromBoard();
-                        System.out.println("White has now: "+whitePlayer.getPieces()+" pieces");
+                        System.out.println("White has now: " + whitePlayer.getPieces() + " pieces");
                     }
-                    if(MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY(), boardSize)) {
+                    if (MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY(), boardSize)) {
                         System.out.println("Player can do another kill");
                         writerOpponent.println(line); // send the move to the second player
                     } else {
@@ -136,9 +133,9 @@ public class Game implements Runnable {
                         writerOpponent.println(line); // send the move to the second player
                     }
                     retryMove = false;
-                    break;
+                }
             }
-            if(!retryMove) {
+            if (!retryMove) {
                 writer.println("correct"); // send info to client, that the move is correct and will be done
             }
         } while (start == whiteTurn);
@@ -148,7 +145,7 @@ public class Game implements Runnable {
      * @return - true when one of players doesn't have any pieces left
      */
     private boolean gameLost() {
-        if(whitePlayer.getPieces() == 0) {
+        if (whitePlayer.getPieces() == 0) {
             System.out.println("Black player won!");
             return true;
         } else if (blackPlayer.getPieces() == 0) {
@@ -162,15 +159,15 @@ public class Game implements Runnable {
      * @param player - player for which function will look for kill
      * @return - true when given player can kill opponents piece
      */
-    private Boolean KillPossible(Player player) {
+    private Boolean KillPossible(final Player player) {
         Colour playerColor = player.getColor();
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
-        for(int y=0; y<boardSize; y++) {
-            for(int x=0; x<boardSize; x++) {
-                if(coordinates.get(y).get(x) != null) {
-                    if(coordinates.get(y).get(x).getColour() == playerColor) {
-                        if(MoveSimulator.tryToKill(coordinates, x, y, boardSize)) {
+        for (int y = 0; y < boardSize; y++) {
+            for (int x = 0; x < boardSize; x++) {
+                if (coordinates.get(y).get(x) != null) {
+                    if (coordinates.get(y).get(x).getColour() == playerColor) {
+                        if (MoveSimulator.tryToKill(coordinates, x, y, boardSize)) {
                             System.out.println("Kill is possible");
                             return true;
                         }
@@ -185,7 +182,7 @@ public class Game implements Runnable {
      * @param data - from where and where to move
      * @return - check's what move is player trying to do : NONE, NORMAL or KILL
      */
-    private MoveType tryMove(MoveData data) {
+    private MoveType tryMove(final MoveData data) {
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
         AbstractPiece playersPiece = coordinates.get(data.getStartY()).get(data.getStartX());
@@ -194,14 +191,14 @@ public class Game implements Runnable {
         boolean goingRight = data.getNewX() > data.getStartX();
         int moveLength = Math.abs(data.getNewX() - data.getStartX());
 
-        System.out.println("UP: "+goingUp+" Right: "+goingRight+" King: "+isKing+" MoveLength: "+moveLength);
+        System.out.println("UP: " + goingUp + " Right: " + goingRight + " King: " + isKing + " MoveLength: " + moveLength);
 
-        if(whiteTurn && playersPiece.getColour() == Colour.BLACK) { // if it's whitePlayer's turn and pawn at starting position is black
+        if (whiteTurn && playersPiece.getColour() == Colour.BLACK) { // if it's whitePlayer's turn and pawn at starting position is black
             System.out.println("White player is trying to move black piece");
             return MoveType.NONE; // move cannot be done
         }
 
-        if(!whiteTurn && playersPiece.getColour() == Colour.WHITE) { // if it isn't whitePlayer's turn and pawn at starting position is white
+        if (!whiteTurn && playersPiece.getColour() == Colour.WHITE) { // if it isn't whitePlayer's turn and pawn at starting position is white
             System.out.println("Black player is trying to move white piece");
             return MoveType.NONE; // move cannot be done
         }
@@ -212,7 +209,7 @@ public class Game implements Runnable {
     /**
      * @param data - data about the move (which piece and where to move)
      */
-    private void movePawns(MoveData data) {
+    private void movePawns(final MoveData data) {
         // convert int to squares
         Square start = SquareInstancer.getInstance(data.getStartX(), data.getStartY());
         //System.out.println("Starting square: "+data.getStartX()+""+data.getStartY());
@@ -223,17 +220,17 @@ public class Game implements Runnable {
         board.movePiece(start, newSquare);
     }
 
-    private void killPawn(MoveData data) {
+    private void killPawn(final MoveData data) {
         int middleX = (data.getNewX() + data.getStartX()) / 2;
         int middleY = (data.getNewY() + data.getStartY()) / 2;
-        System.out.println(middleX+""+middleY);
+        System.out.println(middleX + "" + middleY);
         Square middleSquare = SquareInstancer.getInstance(middleX, middleY);
         board.deletePiece(middleSquare);
     }
     //setup sends to client what colors they're playing
 
     /**
-     * send info about colors to players
+     * Send info about colors to players.
      * @throws IOException when player print writer can not be recognized
      */
     private void setup() throws IOException {
