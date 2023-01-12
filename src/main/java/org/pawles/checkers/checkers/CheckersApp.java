@@ -26,7 +26,7 @@ import java.util.*;
 public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneConstructor - ctor unneeded
 
     /** FX size of a single tile */
-    public static final int TILE_SIZE = 100;
+    public static final int TILE_SIZE = 60;
 
     /** communicator object for interacting with the server */
     private static GameCommunicator gameCom;
