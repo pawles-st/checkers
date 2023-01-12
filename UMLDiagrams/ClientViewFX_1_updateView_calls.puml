@@ -3,7 +3,7 @@
 /' diagram meta data start
 config=CallConfiguration;
 {
-  "rootMethod": "org.pawles.checkers.checkers.CheckersApp#updateBoard(Board)",
+  "rootMethod": "org.pawles.checkers.checkers.ClientViewFX#updateView(Board)",
   "projectClassification": {
     "searchMode": "OpenProject", // OpenProject, AllProjects
     "includedProjects": "",
@@ -71,7 +71,7 @@ config=CallConfiguration;
     "edgeMode": "MethodsOnly", // TypesOnly, MethodsOnly, TypesAndMethods, MethodsAndDirectTypeUsage
     "showDetailedClassStructure": false
   },
-  "rootClass": "org.pawles.checkers.checkers.CheckersApp",
+  "rootClass": "org.pawles.checkers.checkers.ClientViewFX",
   "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
 }
 diagram meta data end '/
@@ -109,6 +109,24 @@ subgraph cluster_995268684 {
 	tooltip="ClientController
 
 &#10;  draw the current board in JavaFX&#10; "
+	fontcolor=darkgreen
+];
+} 
+
+subgraph cluster_1208457742 { 
+   	label=ClientViewFX
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   ClientViewFX612257790XXXupdateView64356038[
+	label="+ updateView()"
+	style=filled
+	fillcolor=white
+	tooltip="ClientViewFX
+
+&#10;  updates the FX view of the game board&#10;  @param board current state of the board&#10; "
+	penwidth=4
 	fontcolor=darkgreen
 ];
 } 
@@ -163,24 +181,23 @@ subgraph cluster_2118178771 {
 	fillcolor=white
 	style=filled
    
-   CheckersApp612257790XXXstart80204510[
+   CheckersApp612257790XXXremovePiece1901186310[
+	label="+ removePiece()"
+	style=filled
+	fillcolor=white
+	tooltip="CheckersApp
+
+&#10;  removes a single piece&#10;  @param piece piece to remove&#10; "
+	fontcolor=darkgreen
+];
+
+CheckersApp612257790XXXstart80204510[
 	label="+ start()"
 	style=filled
 	fillcolor=white
 	tooltip="CheckersApp
 
 null"
-	fontcolor=darkgreen
-];
-
-CheckersApp612257790XXXupdateBoard64356038[
-	label="+ updateBoard()"
-	style=filled
-	fillcolor=white
-	tooltip="CheckersApp
-
-null"
-	penwidth=4
 	fontcolor=darkgreen
 ];
 } 
@@ -216,12 +233,14 @@ GameCommunicator639122325XXXwaitForMove0[
 
 'edges    
 CheckersApp612257790XXXstart80204510 -> GameCommunicator639122325XXXwaitForMove0;
-CheckersApp612257790XXXupdateBoard64356038 -> GraphicPiece612257790XXXmove1810807491;
-CheckersApp612257790XXXupdateBoard64356038 -> GraphicPiece612257790XXXpromote0;
-CheckersApp612257790XXXupdateBoard64356038 -> SquareInstancer858191756XXXgetInstance515322732;
-ClientController639122325XXXupdateViewFX0 -> CheckersApp612257790XXXupdateBoard64356038;
+ClientController639122325XXXupdateViewFX0 -> ClientViewFX612257790XXXupdateView64356038;
+ClientViewFX612257790XXXupdateView64356038 -> CheckersApp612257790XXXremovePiece1901186310;
+ClientViewFX612257790XXXupdateView64356038 -> GraphicPiece612257790XXXmove1810807491;
+ClientViewFX612257790XXXupdateView64356038 -> GraphicPiece612257790XXXpromote0;
+ClientViewFX612257790XXXupdateView64356038 -> SquareInstancer858191756XXXgetInstance515322732;
 GameCommunicator639122325XXXsendMove992535570 -> ClientController639122325XXXupdateViewFX0;
 GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXupdateViewFX0;
+GameCommunicator639122325XXXwaitForMove0 -> GameCommunicator639122325XXXwaitForMove0;
     
 }
 @enduml

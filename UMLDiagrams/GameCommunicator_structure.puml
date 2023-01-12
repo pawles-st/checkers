@@ -95,35 +95,13 @@ subgraph cluster_995268684 {
 	fillcolor="#d8d8d8"
 	style=filled
    
-   CheckersApp612257790[
-	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)CheckersApp</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >-   board: Board [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   pieceGroup: Group [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   pieces: Map&lt;Square, GraphicPiece&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   tileGroup: Group [0..1]</TD></TR>
-<HR/>
-<TR><TD ALIGN="LEFT" >- createContent(): Parent</TD></TR>
-<TR><TD ALIGN="LEFT" >+ main(args: String[])</TD></TR>
-<TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
-<TR><TD ALIGN="LEFT" >+ removePiece(square: Square)</TD></TR>
-<TR><TD ALIGN="LEFT" >+ start(primaryStage: Stage)</TD></TR>
-<TR><TD ALIGN="LEFT" >+ updateBoard(board: Board)</TD></TR>
-</TABLE>>
-	style=filled
-	margin=0
-	shape=plaintext
-	fillcolor="#FFFFFF"
-];
-
-ClientController639122325[
+   ClientController639122325[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)ClientController</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >-   model: ClientModel [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   view: ClientView [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   viewFX: CheckersApp [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   viewFX: ClientViewFX [0..1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
 <TR><TD ALIGN="LEFT" >+ updateView()</TD></TR>
@@ -156,8 +134,34 @@ ClientView639122325[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)ClientView</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   out: PrintWriter [0..1]</TD></TR>
+<HR/>
 <TR><TD ALIGN="LEFT" >- convertTileToChar(piece: AbstractPiece): char</TD></TR>
 <TR><TD ALIGN="LEFT" >+ drawBoard(board: Board)</TD></TR>
+<TR><TD ALIGN="LEFT" >- generateHWall(size: int): String</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ClientViewFX612257790[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ClientViewFX</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   app: CheckersApp [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   boardSize: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   changedBlackKings: Stack&lt;GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   changedBlackMen: Stack&lt;GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   changedWhiteKings: Stack&lt;GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   changedWhiteMen: Stack&lt;GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pieces: Map&lt;Square, GraphicPiece&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- placePieces(board: Board)</TD></TR>
+<TR><TD ALIGN="LEFT" >- removePieces()</TD></TR>
+<TR><TD ALIGN="LEFT" >- takePieces(board: Board)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateView(board: Board)</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -169,6 +173,7 @@ GameCommunicator639122325[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)GameCommunicator</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   boardSize: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   clientController: ClientController [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   myTurn: boolean [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   socketIn: Scanner [0..1]</TD></TR>
@@ -176,7 +181,6 @@ GameCommunicator639122325[
 <HR/>
 <TR><TD ALIGN="LEFT" >+ sendMove(curr: Square, dest: Square): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ waitForMove()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ waitForTurn()</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -200,11 +204,11 @@ SquareInstancer858191756[
 } 
 
 'edges    
-ClientController639122325 -> CheckersApp612257790[label="viewFX
-[0..1]"];
 ClientController639122325 -> ClientModel639122325[label="model
 [0..1]"];
 ClientController639122325 -> ClientView639122325[label="view
+[0..1]"];
+ClientController639122325 -> ClientViewFX612257790[label="viewFX
 [0..1]"];
 GameCommunicator639122325 -> ClientController639122325[label="clientController
 [0..1]"];

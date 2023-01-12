@@ -187,17 +187,17 @@ subgraph cluster_1346157496 {
 	fillcolor=white
 	tooltip="MoveSimulator
 
-null"
+&#10;  Simulate move to check if it's possible, and if what type it will be.&#10; &#10;  @param goingUp - vertical direction of movement&#10;  @param goingRight - horizontal direction of movement&#10;  @param startX - starting X position&#10;  @param startY - starting Y position&#10;  @param moveLength - how far the piece is moving&#10;  @param coordinates - current board status&#10;  @return - NONE, NORMAL or KILL, depending what game move was recognized&#10; "
 	fontcolor=darkgreen
 ];
 
-MoveSimulator187236381XXXtryToKill155718740[
+MoveSimulator187236381XXXtryToKill830427697[
 	label="+ tryToKill()"
 	style=filled
 	fillcolor=white
 	tooltip="MoveSimulator
 
-null"
+&#10;  Look if given pawn can kill in any direction.&#10;  @param coordinates - current board status&#10;  @param xPos - starting X position of piece&#10;  @param yPos - starting Y position of piece&#10;  @param boardSize - size of the board, on which the game is being played&#10;  @return - true when given piece can kill, false if not&#10; "
 	fontcolor=darkgreen
 ];
 } 
@@ -219,6 +219,23 @@ subgraph cluster_1932958355 {
 ];
 } 
 
+subgraph cluster_2033641620 { 
+   	label=Player
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   Player187236381XXXremovePieceFromBoard0[
+	label="+ removePieceFromBoard()"
+	style=filled
+	fillcolor=white
+	tooltip="Player
+
+&#10;  Decrease player's piece number by 1.&#10; "
+	fontcolor=darkgreen
+];
+} 
+
 subgraph cluster_2103784244 { 
    	label=Board
 	labeljust=l
@@ -232,6 +249,16 @@ subgraph cluster_2103784244 {
 	tooltip="Board
 
 &#10;  removes piece from the board&#10;  @param square square to clear&#10; "
+	fontcolor=darkgreen
+];
+
+Board858191756XXXgetWidth104431[
+	label="+ getWidth()"
+	style=filled
+	fillcolor=white
+	tooltip="Board
+
+null"
 	fontcolor=darkgreen
 ];
 
@@ -271,14 +298,16 @@ AbstractPiece858191756XXXmove1810807491 -> Man858191756XXXmove1810807491;
 Board858191756XXXmovePiece992535570 -> AbstractPiece858191756XXXmove1810807491;
 Board858191756XXXmovePiece992535570 -> Board858191756XXXdeletePiece1810807491;
 Board858191756XXXmovePiece992535570 -> SquareInstancer858191756XXXgetInstance515322732;
+ClientView639122325XXXdrawBoard64356038 -> Board858191756XXXgetWidth104431;
 Game187236381XXXrun0 -> AbstractPiece858191756XXXisKing1213685812;
 Game187236381XXXrun0 -> Board858191756XXXdeletePiece1810807491;
 Game187236381XXXrun0 -> Board858191756XXXmovePiece992535570;
 Game187236381XXXrun0 -> ClientView639122325XXXdrawBoard64356038;
 Game187236381XXXrun0 -> MoveSimulator187236381XXXsimulate995083543;
-Game187236381XXXrun0 -> MoveSimulator187236381XXXtryToKill155718740;
+Game187236381XXXrun0 -> MoveSimulator187236381XXXtryToKill830427697;
+Game187236381XXXrun0 -> Player187236381XXXremovePieceFromBoard0;
 Game187236381XXXrun0 -> SquareInstancer858191756XXXgetInstance515322732;
-MoveSimulator187236381XXXtryToKill155718740 -> MoveSimulator187236381XXXsimulate995083543;
+MoveSimulator187236381XXXtryToKill830427697 -> MoveSimulator187236381XXXsimulate995083543;
     
 }
 @enduml

@@ -116,10 +116,11 @@ Board858191756[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)Board</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   boardSize: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   coordinates: List&lt;List&lt;AbstractPiece&gt;&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   sizeY: int [1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ deletePiece(square: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getWidth(y: int): int</TD></TR>
 <TR><TD ALIGN="LEFT" >- killPiece(curr: Square, dest: Square)</TD></TR>
 <TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
 <TR><TD ALIGN="LEFT" >- promotePiece(dest: Square)</TD></TR>
@@ -135,8 +136,11 @@ ClientView639122325[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)ClientView</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   out: PrintWriter [0..1]</TD></TR>
+<HR/>
 <TR><TD ALIGN="LEFT" >- convertTileToChar(piece: AbstractPiece): char</TD></TR>
 <TR><TD ALIGN="LEFT" >+ drawBoard(board: Board)</TD></TR>
+<TR><TD ALIGN="LEFT" >- generateHWall(size: int): String</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -148,14 +152,12 @@ Game187236381[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)Game</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >#   blackPlayer: Player [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   board: Board [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   cView: ClientView [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   scanner: Scanner [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   whitePlayer: Player [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   whiteTurn: Boolean [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   writer: PrintWriter [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   writerOpponent: PrintWriter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   blackPlayer: Player [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   board: Board [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   boardSize: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   cView: ClientView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   whitePlayer: Player [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   whiteTurn: Boolean [0..1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >- KillPossible(player: Player): Boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >- Turn(player: Player)</TD></TR>
@@ -163,7 +165,7 @@ Game187236381[
 <TR><TD ALIGN="LEFT" >- killPawn(data: MoveData)</TD></TR>
 <TR><TD ALIGN="LEFT" >- movePawns(data: MoveData)</TD></TR>
 <TR><TD ALIGN="LEFT" >+ run()</TD></TR>
-<TR><TD ALIGN="LEFT" >- tryMove(data: MoveData): MoveResult</TD></TR>
+<TR><TD ALIGN="LEFT" >- tryMove(data: MoveData): MoveType</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -201,14 +203,9 @@ MoveSimulator187236381[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)MoveSimulator</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >#   NE: int[] [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   NW: int[] [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   SE: int[] [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >#   SW: int[] [0..*]</TD></TR>
-<HR/>
 <TR><TD ALIGN="LEFT" >- directionReader(direction: boolean): int</TD></TR>
 <TR><TD ALIGN="LEFT" >+ simulate(goingUp: boolean, goingRight: boolean, startX: int, startY: int, moveLength: int, coordinates: List&lt;List&lt;AbstractPiece&gt;&gt;): MoveType</TD></TR>
-<TR><TD ALIGN="LEFT" >+ tryToKill(coordinates: List&lt;List&lt;AbstractPiece&gt;&gt;, xPos: int, yPos: int): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ tryToKill(coordinates: List&lt;List&lt;AbstractPiece&gt;&gt;, xPos: int, yPos: int, boardSize: int): boolean</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -222,8 +219,11 @@ Player187236381[
 <HR/>
 <TR><TD ALIGN="LEFT" >-   color: Colour [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   opponent: Socket [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   opponentColor: Colour [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pieces: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   socket: Socket [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- calcPieces(boardSize: int): int</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removePieceFromBoard()</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -264,9 +264,7 @@ AbstractPiece858191756 -> King858191756[arrowhead=none, arrowtail=empty, dir=bot
 AbstractPiece858191756 -> Man858191756[arrowhead=none, arrowtail=empty, dir=both];
 AbstractPiece858191756 -> Square858191756[label="square
 [0..1]"];
-Board858191756 -> AbstractPiece858191756[label="coordinates
-[0..*]"];
-Board858191756 -> SquareInstancer858191756[label="killPiece() -> getInstance()"];
+ClientView639122325 -> Board858191756[label="drawBoard() -> getWidth()"];
 Game187236381 -> AbstractPiece858191756[label="tryMove() -> isKing()"];
 Game187236381 -> Board858191756[label="board
 [0..1]"];
