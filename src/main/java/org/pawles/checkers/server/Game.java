@@ -203,6 +203,16 @@ public class Game implements Runnable {
             return MoveType.NONE; // move cannot be done
         }
 
+        if (playersPiece.getColour() == Colour.WHITE && data.getNewY() == data.getStartY()-1) {
+            System.out.println("White player is trying to move backwards");
+            return MoveType.NONE; // move cannot be done
+        }
+
+        if (playersPiece.getColour() == Colour.BLACK && data.getNewY() == data.getStartY()+1) {
+            System.out.println("Black player is trying to move backwards");
+            return MoveType.NONE; // move cannot be done
+        }
+
         return MoveSimulator.simulate(goingUp, goingRight, data.getStartX(), data.getStartY(), moveLength, coordinates);
     }
 

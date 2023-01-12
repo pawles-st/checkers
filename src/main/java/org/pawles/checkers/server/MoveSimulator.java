@@ -28,8 +28,8 @@ public class MoveSimulator {
         Colour playersColour = coordinates.get(startY).get(startX).getColour();
         int endX = startX + (moveLength * horDirection);
         int endY = startY + (moveLength * verDirection);
-
         AbstractPiece playersPiece = coordinates.get(startY).get(startX);
+
         if (playersPiece == null) { // if there isn't any pawn at start position
             return MoveType.NONE; // move cannot be done
         }
@@ -38,8 +38,16 @@ public class MoveSimulator {
             return MoveType.NONE; // move cannot be done
         }
 
-        if (playersPiece instanceof Man && moveLength > 2) {
-            return MoveType.NONE;
+        if (playersPiece instanceof Man) {
+            if (moveLength > 2) {
+                return MoveType.NONE;
+            }
+            if (playersColour == Colour.WHITE && verDirection == -1 && moveLength == 1) {
+                return MoveType.NONE;
+            }
+            if (playersColour == Colour.BLACK && verDirection == 1 && moveLength == 1) {
+                return MoveType.NONE;
+            }
         }
 
 
