@@ -3,7 +3,7 @@
 /' diagram meta data start
 config=CallConfiguration;
 {
-  "rootMethod": "org.pawles.checkers.client.GameCommunicator#sendMove(Square,Square)",
+  "rootMethod": "org.pawles.checkers.client.GameCommunicator#waitForMove()",
   "projectClassification": {
     "searchMode": "OpenProject", // OpenProject, AllProjects
     "includedProjects": "",
@@ -131,14 +131,21 @@ ClientController639122325XXXupdateViewFX0[
 &#10;  draw the current board in JavaFX&#10; "
 	fontcolor=darkgreen
 ];
+} 
 
-ClientController639122325XXXverifyMove992535570[
-	label="+ verifyMove()"
+subgraph cluster_1208457742 { 
+   	label=ClientViewFX
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   ClientViewFX612257790XXXupdateView64356038[
+	label="+ updateView()"
 	style=filled
 	fillcolor=white
-	tooltip="ClientController
+	tooltip="ClientViewFX
 
-&#10;  check whether the piece has the ability to move between squares&#10;  @param curr current square&#10;  @param dest destination square&#10;  @return true if the move is correct; false otherwise&#10; "
+&#10;  updates the FX view of the game board&#10;  @param board current state of the board&#10; "
 	fontcolor=darkgreen
 ];
 } 
@@ -210,23 +217,23 @@ subgraph cluster_2103784244 {
 	fillcolor=white
 	style=filled
    
-   Board858191756XXXmovePiece992535570[
+   Board858191756XXXgetWidth104431[
+	label="+ getWidth()"
+	style=filled
+	fillcolor=white
+	tooltip="Board
+
+null"
+	fontcolor=darkgreen
+];
+
+Board858191756XXXmovePiece992535570[
 	label="+ movePiece()"
 	style=filled
 	fillcolor=white
 	tooltip="Board
 
 &#10;  moves a single piece on the board&#10;  @param curr square the piece is currently on&#10;  @param dest destination square&#10; "
-	fontcolor=darkgreen
-];
-
-Board858191756XXXverifyMove992535570[
-	label="+ verifyMove()"
-	style=filled
-	fillcolor=white
-	tooltip="Board
-
-&#10;  checks whether a piece can be moved between two squares&#10;  @param curr square to move from&#10;  @param dest square to move to&#10;  @return true if the move is possible; false otherwise&#10; "
 	fontcolor=darkgreen
 ];
 } 
@@ -237,8 +244,18 @@ subgraph cluster_2118178771 {
 	fillcolor=white
 	style=filled
    
-   CheckersApp612257790XXXupdateBoard64356038[
-	label="+ updateBoard()"
+   CheckersApp612257790XXXremovePiece1901186310[
+	label="+ removePiece()"
+	style=filled
+	fillcolor=white
+	tooltip="CheckersApp
+
+&#10;  removes a single piece&#10;  @param piece piece to remove&#10; "
+	fontcolor=darkgreen
+];
+
+CheckersApp612257790XXXstart80204510[
+	label="+ start()"
 	style=filled
 	fillcolor=white
 	tooltip="CheckersApp
@@ -263,16 +280,6 @@ subgraph cluster_215967493 {
 &#10;  change the position of a single piece on the board&#10;  @param curr current square&#10;  @param dest destination square&#10; "
 	fontcolor=darkgreen
 ];
-
-ClientModel639122325XXXverifyMove992535570[
-	label="+ verifyMove()"
-	style=filled
-	fillcolor=white
-	tooltip="ClientModel
-
-&#10;  check whether the piece has the ability to move between squares&#10;  @param curr current square&#10;  @param dest destination square&#10;  @return true if the move is correct; false otherwise&#10; "
-	fontcolor=darkgreen
-];
 } 
 
 subgraph cluster_788877482 { 
@@ -281,13 +288,13 @@ subgraph cluster_788877482 {
 	fillcolor=white
 	style=filled
    
-   GameCommunicator639122325XXXsendMove992535570[
-	label="+ sendMove()"
+   GameCommunicator639122325XXXwaitForMove0[
+	label="+ waitForMove()"
 	style=filled
 	fillcolor=white
 	tooltip="GameCommunicator
 
-&#10;  sends the move to the server and applies if it is correct&#10;  @param curr square to move from&#10;  @param dest square to move to&#10;  @return true if the move was correct; false otherwise&#10; "
+&#10;  waits for the opponent's move from the server and applies it&#10; "
 	penwidth=4
 	fontcolor=darkgreen
 ];
@@ -296,19 +303,21 @@ subgraph cluster_788877482 {
 } 
 
 'edges    
-CheckersApp612257790XXXupdateBoard64356038 -> GraphicPiece612257790XXXmove1810807491;
-CheckersApp612257790XXXupdateBoard64356038 -> GraphicPiece612257790XXXpromote0;
-CheckersApp612257790XXXupdateBoard64356038 -> SquareInstancer858191756XXXgetInstance515322732;
+CheckersApp612257790XXXstart80204510 -> GameCommunicator639122325XXXwaitForMove0;
 ClientController639122325XXXmovePiece992535570 -> ClientModel639122325XXXmovePiece992535570;
 ClientController639122325XXXupdateView0 -> ClientView639122325XXXdrawBoard64356038;
-ClientController639122325XXXupdateViewFX0 -> CheckersApp612257790XXXupdateBoard64356038;
-ClientController639122325XXXverifyMove992535570 -> ClientModel639122325XXXverifyMove992535570;
+ClientController639122325XXXupdateViewFX0 -> ClientViewFX612257790XXXupdateView64356038;
 ClientModel639122325XXXmovePiece992535570 -> Board858191756XXXmovePiece992535570;
-ClientModel639122325XXXverifyMove992535570 -> Board858191756XXXverifyMove992535570;
-GameCommunicator639122325XXXsendMove992535570 -> ClientController639122325XXXmovePiece992535570;
-GameCommunicator639122325XXXsendMove992535570 -> ClientController639122325XXXupdateView0;
-GameCommunicator639122325XXXsendMove992535570 -> ClientController639122325XXXupdateViewFX0;
-GameCommunicator639122325XXXsendMove992535570 -> ClientController639122325XXXverifyMove992535570;
+ClientView639122325XXXdrawBoard64356038 -> Board858191756XXXgetWidth104431;
+ClientViewFX612257790XXXupdateView64356038 -> CheckersApp612257790XXXremovePiece1901186310;
+ClientViewFX612257790XXXupdateView64356038 -> GraphicPiece612257790XXXmove1810807491;
+ClientViewFX612257790XXXupdateView64356038 -> GraphicPiece612257790XXXpromote0;
+ClientViewFX612257790XXXupdateView64356038 -> SquareInstancer858191756XXXgetInstance515322732;
+GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXmovePiece992535570;
+GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXupdateView0;
+GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXupdateViewFX0;
+GameCommunicator639122325XXXwaitForMove0 -> GameCommunicator639122325XXXwaitForMove0;
+GameCommunicator639122325XXXwaitForMove0 -> SquareInstancer858191756XXXgetInstance515322732;
     
 }
 @enduml

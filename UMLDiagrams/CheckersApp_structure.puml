@@ -101,9 +101,9 @@ subgraph cluster_995268684 {
 <HR/>
 <TR><TD ALIGN="LEFT" >#   board: Board [0..1]</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ buildGrid()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ buildPieces()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ createNewBoard()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildGrid(boardSize: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildPieces(boardSize: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createNewBoard(boardSize: int)</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -115,10 +115,11 @@ Board858191756[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)Board</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   boardSize: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   coordinates: List&lt;List&lt;AbstractPiece&gt;&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   sizeY: int [1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ deletePiece(square: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getWidth(y: int): int</TD></TR>
 <TR><TD ALIGN="LEFT" >- killPiece(curr: Square, dest: Square)</TD></TR>
 <TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
 <TR><TD ALIGN="LEFT" >- promotePiece(dest: Square)</TD></TR>
@@ -136,7 +137,7 @@ BoardDirector2074455057[
 <HR/>
 <TR><TD ALIGN="LEFT" >-   builder: AbstractBoardBuilder [0..1]</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ buildBoard()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildBoard(boardSize: int)</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -148,12 +149,12 @@ BrazilianBoardBuilder2074455057[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)BrazilianBoardBuilder</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >- buildBlack(x: int)</TD></TR>
-<TR><TD ALIGN="LEFT" >- buildEmpty()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ buildGrid()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ buildPieces()</TD></TR>
-<TR><TD ALIGN="LEFT" >- buildWhite(x: int)</TD></TR>
-<TR><TD ALIGN="LEFT" >+ createNewBoard()</TD></TR>
+<TR><TD ALIGN="LEFT" >- buildBlack(x: int, boardSize: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >- buildEmpty(boardSize: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildGrid(boardSize: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ buildPieces(boardSize: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >- buildWhite(x: int, boardSize: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ createNewBoard(boardSize: int)</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -166,6 +167,7 @@ CheckersApp612257790[
 <TR><TD ALIGN="LEFT" >(C)CheckersApp</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >-   board: Board [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   boardSize: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   pieceGroup: Group [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   pieces: Map&lt;Square, GraphicPiece&gt; [0..*]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   tileGroup: Group [0..1]</TD></TR>
@@ -173,9 +175,8 @@ CheckersApp612257790[
 <TR><TD ALIGN="LEFT" >- createContent(): Parent</TD></TR>
 <TR><TD ALIGN="LEFT" >+ main(args: String[])</TD></TR>
 <TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
-<TR><TD ALIGN="LEFT" >+ removePiece(square: Square)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ removePiece(piece: GraphicPiece)</TD></TR>
 <TR><TD ALIGN="LEFT" >+ start(primaryStage: Stage)</TD></TR>
-<TR><TD ALIGN="LEFT" >+ updateBoard(board: Board)</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -189,7 +190,7 @@ ClientController639122325[
 <HR/>
 <TR><TD ALIGN="LEFT" >-   model: ClientModel [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   view: ClientView [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   viewFX: CheckersApp [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   viewFX: ClientViewFX [0..1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ movePiece(curr: Square, dest: Square)</TD></TR>
 <TR><TD ALIGN="LEFT" >+ updateView()</TD></TR>
@@ -216,10 +217,34 @@ ClientInitialiser639122325[
 	fillcolor="#FFFFFF"
 ];
 
+ClientViewFX612257790[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ClientViewFX</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   app: CheckersApp [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   boardSize: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   changedBlackKings: Stack&lt;GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   changedBlackMen: Stack&lt;GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   changedWhiteKings: Stack&lt;GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   changedWhiteMen: Stack&lt;GraphicPiece&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   pieces: Map&lt;Square, GraphicPiece&gt; [0..*]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- placePieces(board: Board)</TD></TR>
+<TR><TD ALIGN="LEFT" >- removePieces()</TD></TR>
+<TR><TD ALIGN="LEFT" >- takePieces(board: Board)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateView(board: Board)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
 GameCommunicator639122325[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)GameCommunicator</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   boardSize: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   clientController: ClientController [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   myTurn: boolean [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   socketIn: Scanner [0..1]</TD></TR>
@@ -227,7 +252,6 @@ GameCommunicator639122325[
 <HR/>
 <TR><TD ALIGN="LEFT" >+ sendMove(curr: Square, dest: Square): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ waitForMove()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ waitForTurn()</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -296,7 +320,10 @@ CheckersApp612257790 -> GraphicPiece612257790[label="pieces
 [0..*]"];
 CheckersApp612257790 -> Square858191756[label="pieces
 [0..*]"];
-ClientController639122325 -> CheckersApp612257790[label="viewFX
+CheckersApp612257790 -> SquareInstancer858191756[label="createContent() -> getInstance()"];
+ClientController639122325 -> ClientViewFX612257790[label="viewFX
+[0..1]"];
+ClientViewFX612257790 -> CheckersApp612257790[label="app
 [0..1]"];
 GameCommunicator639122325 -> ClientController639122325[label="clientController
 [0..1]"];

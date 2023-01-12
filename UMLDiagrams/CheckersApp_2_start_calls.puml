@@ -102,7 +102,7 @@ subgraph cluster_995268684 {
 	fillcolor=white
 	style=filled
    
-   BrazilianBoardBuilder2074455057XXXbuildGrid0[
+   BrazilianBoardBuilder2074455057XXXbuildGrid104431[
 	label="+ buildGrid()"
 	style=filled
 	fillcolor=white
@@ -112,7 +112,7 @@ subgraph cluster_995268684 {
 	fontcolor=darkgreen
 ];
 
-BrazilianBoardBuilder2074455057XXXbuildPieces0[
+BrazilianBoardBuilder2074455057XXXbuildPieces104431[
 	label="+ buildPieces()"
 	style=filled
 	fillcolor=white
@@ -122,7 +122,7 @@ BrazilianBoardBuilder2074455057XXXbuildPieces0[
 	fontcolor=darkgreen
 ];
 
-BrazilianBoardBuilder2074455057XXXcreateNewBoard0[
+BrazilianBoardBuilder2074455057XXXcreateNewBoard104431[
 	label="+ createNewBoard()"
 	style=filled
 	fillcolor=white
@@ -170,6 +170,23 @@ ClientController639122325XXXupdateViewFX0[
 ];
 } 
 
+subgraph cluster_1208457742 { 
+   	label=ClientViewFX
+	labeljust=l
+	fillcolor=white
+	style=filled
+   
+   ClientViewFX612257790XXXupdateView64356038[
+	label="+ updateView()"
+	style=filled
+	fillcolor=white
+	tooltip="ClientViewFX
+
+&#10;  updates the FX view of the game board&#10;  @param board current state of the board&#10; "
+	fontcolor=darkgreen
+];
+} 
+
 subgraph cluster_1211231302 { 
    	label=SquareInstancer
 	labeljust=l
@@ -193,7 +210,7 @@ subgraph cluster_1273002667 {
 	fillcolor=white
 	style=filled
    
-   BoardDirector2074455057XXXbuildBoard0[
+   BoardDirector2074455057XXXbuildBoard104431[
 	label="+ buildBoard()"
 	style=filled
 	fillcolor=white
@@ -237,16 +254,6 @@ null"
 	penwidth=4
 	fontcolor=darkgreen
 ];
-
-CheckersApp612257790XXXupdateBoard64356038[
-	label="+ updateBoard()"
-	style=filled
-	fillcolor=white
-	tooltip="CheckersApp
-
-null"
-	fontcolor=darkgreen
-];
 } 
 
 subgraph cluster_215967493 { 
@@ -281,16 +288,6 @@ subgraph cluster_788877482 {
 &#10;  waits for the opponent's move from the server and applies it&#10; "
 	fontcolor=darkgreen
 ];
-
-GameCommunicator639122325XXXwaitForTurn0[
-	label="+ waitForTurn()"
-	style=filled
-	fillcolor=white
-	tooltip="GameCommunicator
-
-&#10;  sets myTurn boolean once server informs about turn change&#10; "
-	fontcolor=darkgreen
-];
 } 
 
 subgraph cluster_813618420 { 
@@ -299,7 +296,7 @@ subgraph cluster_813618420 {
 	fillcolor=white
 	style=filled
    
-   AbstractBoardBuilder2074455057XXXbuildGrid0[
+   AbstractBoardBuilder2074455057XXXbuildGrid104431[
 	label="+ buildGrid()"
 	style=filled
 	fillcolor=white
@@ -309,7 +306,7 @@ subgraph cluster_813618420 {
 	fontcolor=darkgreen
 ];
 
-AbstractBoardBuilder2074455057XXXbuildPieces0[
+AbstractBoardBuilder2074455057XXXbuildPieces104431[
 	label="+ buildPieces()"
 	style=filled
 	fillcolor=white
@@ -319,7 +316,7 @@ AbstractBoardBuilder2074455057XXXbuildPieces0[
 	fontcolor=darkgreen
 ];
 
-AbstractBoardBuilder2074455057XXXcreateNewBoard0[
+AbstractBoardBuilder2074455057XXXcreateNewBoard104431[
 	label="+ createNewBoard()"
 	style=filled
 	fillcolor=white
@@ -333,23 +330,22 @@ AbstractBoardBuilder2074455057XXXcreateNewBoard0[
 } 
 
 'edges    
-AbstractBoardBuilder2074455057XXXbuildGrid0 -> BrazilianBoardBuilder2074455057XXXbuildGrid0;
-AbstractBoardBuilder2074455057XXXbuildPieces0 -> BrazilianBoardBuilder2074455057XXXbuildPieces0;
-AbstractBoardBuilder2074455057XXXcreateNewBoard0 -> BrazilianBoardBuilder2074455057XXXcreateNewBoard0;
-BoardDirector2074455057XXXbuildBoard0 -> AbstractBoardBuilder2074455057XXXbuildGrid0;
-BoardDirector2074455057XXXbuildBoard0 -> AbstractBoardBuilder2074455057XXXbuildPieces0;
-BoardDirector2074455057XXXbuildBoard0 -> AbstractBoardBuilder2074455057XXXcreateNewBoard0;
-CheckersApp612257790XXXstart80204510 -> BoardDirector2074455057XXXbuildBoard0;
+AbstractBoardBuilder2074455057XXXbuildGrid104431 -> BrazilianBoardBuilder2074455057XXXbuildGrid104431;
+AbstractBoardBuilder2074455057XXXbuildPieces104431 -> BrazilianBoardBuilder2074455057XXXbuildPieces104431;
+AbstractBoardBuilder2074455057XXXcreateNewBoard104431 -> BrazilianBoardBuilder2074455057XXXcreateNewBoard104431;
+BoardDirector2074455057XXXbuildBoard104431 -> AbstractBoardBuilder2074455057XXXbuildGrid104431;
+BoardDirector2074455057XXXbuildBoard104431 -> AbstractBoardBuilder2074455057XXXbuildPieces104431;
+BoardDirector2074455057XXXbuildBoard104431 -> AbstractBoardBuilder2074455057XXXcreateNewBoard104431;
+CheckersApp612257790XXXstart80204510 -> BoardDirector2074455057XXXbuildBoard104431;
 CheckersApp612257790XXXstart80204510 -> GameCommunicator639122325XXXwaitForMove0;
-CheckersApp612257790XXXstart80204510 -> GameCommunicator639122325XXXwaitForTurn0;
 CheckersApp612257790XXXstart80204510 -> SquareInstancer858191756XXXgetInstance515322732;
 ClientController639122325XXXmovePiece992535570 -> ClientModel639122325XXXmovePiece992535570;
 ClientController639122325XXXupdateView0 -> ClientView639122325XXXdrawBoard64356038;
-ClientController639122325XXXupdateViewFX0 -> CheckersApp612257790XXXupdateBoard64356038;
+ClientController639122325XXXupdateViewFX0 -> ClientViewFX612257790XXXupdateView64356038;
 GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXmovePiece992535570;
 GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXupdateView0;
 GameCommunicator639122325XXXwaitForMove0 -> ClientController639122325XXXupdateViewFX0;
-GameCommunicator639122325XXXwaitForMove0 -> GameCommunicator639122325XXXwaitForTurn0;
+GameCommunicator639122325XXXwaitForMove0 -> GameCommunicator639122325XXXwaitForMove0;
 GameCommunicator639122325XXXwaitForMove0 -> SquareInstancer858191756XXXgetInstance515322732;
     
 }
