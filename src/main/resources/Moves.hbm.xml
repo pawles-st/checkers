@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.pawles.checkers.db.Move" table="moves">
+        <meta attribute="class-description">
+            This class contains the move details
+        </meta>
+
+        <composite-id>
+            <key-many-to-one name="gameId" column="game_id" class="Game"/>
+            <key-property name="moveNr" type="int" column="move_nr"/>
+        </composite-id>
+    </class>
+</hibernate-mapping>

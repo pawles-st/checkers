@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.pawles.checkers.db.Game" table="games">
+        <meta attribute="class-description">
+            This class contains the game details
+        </meta>
+
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+
+        <property name="boardSize" type="int" column="board_size"/>
+        <property name="winner" type="enum" column="winner"/>
+        
+        <set name="moves" inverse="true" cascade="all">
+            <key column="game_id" not-null="true"/>
+            <one-to-many class="Move"/>
+        </set>
+    </class>
+</hibernate-mapping>

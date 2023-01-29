@@ -1,5 +1,10 @@
 package org.pawles.checkers.server;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import org.pawles.checkers.client.ClientView;
 import org.pawles.checkers.objects.*;
 import org.pawles.checkers.utils.BoardDirector;
@@ -255,5 +260,15 @@ public class Game implements Runnable {
         secondOutput.println(boardSize);
         secondOutput.println("Black");
         System.out.println("Second Player received black color");
+
+        // setup db connection
+
+        Configuration configuration = new Configuration().configure();
+        StandardServiceRegistryBuilder registry = new StandardServiceRegistryBuilder();
+        registry.applySettings(configuration.getProperties());
+        ServiceRegistry serviceRegistry = registry.build();
+        SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+        Session session = sessionFactory.openSession();
+
     }
 }
