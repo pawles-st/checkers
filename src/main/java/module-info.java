@@ -6,6 +6,8 @@ module org.pawles.checkers.checkers {
     requires org.hibernate.orm.core;
     requires java.naming;
     requires java.sql;
+    requires java.persistence;
+    requires jakarta.persistence;
 
     opens org.pawles.checkers.checkers to javafx.fxml;
     exports org.pawles.checkers.checkers;

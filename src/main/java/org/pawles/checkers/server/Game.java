@@ -1,10 +1,28 @@
 package org.pawles.checkers.server;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.SessionFactoryBuilder;
+import org.hibernate.boot.model.IdentifierGeneratorDefinition;
+import org.hibernate.boot.model.TypeDefinition;
+import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
+import org.hibernate.boot.model.relational.Database;
+import org.hibernate.boot.query.NamedHqlQueryDefinition;
+import org.hibernate.boot.query.NamedNativeQueryDefinition;
+import org.hibernate.boot.query.NamedProcedureCallDefinition;
+import org.hibernate.boot.query.NamedResultSetMappingDescriptor;
+import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.annotations.NamedEntityGraphDefinition;
+import org.hibernate.engine.spi.FilterDefinition;
+import org.hibernate.mapping.FetchProfile;
+import org.hibernate.mapping.PersistentClass;
+import org.hibernate.mapping.Table;
+import org.hibernate.query.sqm.function.SqmFunctionDescriptor;
 import org.hibernate.service.ServiceRegistry;
+import org.hibernate.type.Type;
 import org.pawles.checkers.client.ClientView;
 import org.pawles.checkers.objects.*;
 import org.pawles.checkers.utils.BoardDirector;
@@ -13,8 +31,8 @@ import org.pawles.checkers.utils.BrazilianBoardBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Game thread for checkers.
@@ -263,12 +281,39 @@ public class Game implements Runnable {
 
         // setup db connection
 
+        /*
         Configuration configuration = new Configuration().configure();
         StandardServiceRegistryBuilder registry = new StandardServiceRegistryBuilder();
         registry.applySettings(configuration.getProperties());
         ServiceRegistry serviceRegistry = registry.build();
         SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         Session session = sessionFactory.openSession();
+         */
+
+        StandardServiceRegistry standardServiceRegistry = new StandardServiceRegistryBuilder().configure().build();
+        Metadata metadata = new MetadataSources(standardServiceRegistry)
+                .addResource("Games.hbm.xml")
+                .addResource("Moves.hbm.xml")
+                .getMetadataBuilder().applyImplicitNamingStrategy(ImplicitNamingStrategyJpaCompliantImpl.INSTANCE)
+                .build();
+        SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
+        Session session = sessionFactory.openSession();
+
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            org.pawles.checkers.db.Game game = new org.pawles.checkers.db.Game(6, null);
+            session.persist(game);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
 
     }
 }
