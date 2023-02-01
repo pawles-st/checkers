@@ -360,6 +360,11 @@ public class Game implements Runnable {
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
         AbstractPiece playersPiece = coordinates.get(data.getStartY()).get(data.getStartX());
+
+        if (playersPiece == null) {
+            return MoveType.NONE;
+        }
+
         boolean isKing = playersPiece.isKing(playersPiece);
         boolean goingUp = data.getNewY() > data.getStartY();
         boolean goingRight = data.getNewX() > data.getStartX();
@@ -418,19 +423,25 @@ public class Game implements Runnable {
      * @throws IOException when player print writer can not be recognized
      */
     private void setup() throws IOException {
-        PrintWriter firstOutput;
-        firstOutput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
-        firstOutput.println(boardSize);
-        firstOutput.println("White");
-        System.out.println("First Player received white color");
+        if(multiplayer) {
+            PrintWriter firstOutput;
+            firstOutput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
+            firstOutput.println(boardSize);
+            firstOutput.println("White");
+            System.out.println("First Player received white color");
 
-        PrintWriter secondOutput;
-        secondOutput = new PrintWriter(blackPlayer.getSocket().getOutputStream(), true);
-        secondOutput.println(boardSize);
-        secondOutput.println("Black");
-        System.out.println("Second Player received black color");
-
-        // setup db connection
+            PrintWriter secondOutput;
+            secondOutput = new PrintWriter(blackPlayer.getSocket().getOutputStream(), true);
+            secondOutput.println(boardSize);
+            secondOutput.println("Black");
+            System.out.println("Second Player received black color");
+        } else {
+            PrintWriter firstOutput;
+            firstOutput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
+            firstOutput.println(boardSize);
+            firstOutput.println("White");
+            System.out.println("First Player received white color");
+        }
 
 
 
