@@ -133,6 +133,7 @@ public class Game implements Runnable {
                         System.out.println("White has now: " + whitePlayer.getPieces() + " pieces");
                     }
                     if (MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY(), boardSize)) {
+                        ++turnCount;
                         System.out.println("Player can do another kill");
                         writerOpponent.println(line); // send the move to the second player
                     } else {
