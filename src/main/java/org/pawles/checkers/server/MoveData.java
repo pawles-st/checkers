@@ -35,6 +35,10 @@ public class MoveData {
         return startY;
     }
 
+    public String toString() {
+        return ("" + startX + startY + ":" + newX  + newY);
+    }
+
     /**
      * @param line - string like XY:XY (from:where)
      */
@@ -44,5 +48,12 @@ public class MoveData {
         this.startY = Integer.parseInt(String.valueOf(line.charAt(1)));
         this.newX = Integer.parseInt(String.valueOf(line.charAt(3)));
         this.newY = Integer.parseInt(String.valueOf(line.charAt(4)));
+    }
+
+    public MoveData(int startX, int startY, int newX, int newY) {
+        this.startX = startX;
+        this.startY = startY;
+        this.newX = newX;
+        this.newY = newY;
     }
 }

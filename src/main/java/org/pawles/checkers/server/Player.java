@@ -10,7 +10,7 @@ import java.net.Socket;
  */
 
 public class Player {
-    private final Colour color;
+    protected Colour color;
 
     /**
      * @return player's pieces color
@@ -19,7 +19,7 @@ public class Player {
         return color;
     }
 
-    private final Socket socket;
+    protected Socket socket;
 
     /**
      * @return player's socket
@@ -28,7 +28,7 @@ public class Player {
         return socket;
     }
 
-    private final Socket opponent;
+    protected Socket opponent;
 
     /**
      * @return opponent's socket
@@ -37,7 +37,7 @@ public class Player {
         return opponent;
     }
 
-    private int pieces;
+    protected int pieces;
 
     /**
      * @return amount of player's pieces
@@ -67,10 +67,24 @@ public class Player {
     }
 
     /**
+     * constructor fot bot
+     */
+    public Player(final Socket socket, final Colour color, final int boardSize) {
+        this.socket = socket;
+        this.opponent = null;
+        this.color = color;
+        pieces = calcPieces(boardSize);
+    }
+
+    public Player() {
+
+    }
+
+    /**
      * @param boardSize size of the board, at which the game will be played
      * @return ammount of pieces for each player
      */
-    private int calcPieces(final int boardSize) {
+    protected int calcPieces(final int boardSize) {
         return (boardSize / 2) * ((boardSize / 2) - 1);
     }
 }

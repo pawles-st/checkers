@@ -88,6 +88,7 @@ public final class ClientInitialiser {
         try {
             connect();
             await();
+            System.out.println("await complete");
         } catch (IOException e) {
             ERR.println(e.getMessage());
             throw new IOException(e);

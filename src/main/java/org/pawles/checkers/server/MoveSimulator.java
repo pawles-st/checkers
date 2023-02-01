@@ -75,7 +75,7 @@ public class MoveSimulator {
      * @param boardSize - size of the board, on which the game is being played
      * @return - true when given piece can kill, false if not
      */
-    public static boolean tryToKill(final List<List<AbstractPiece>> coordinates, final int xPos, final int yPos, final int boardSize) {
+    public static KillData tryToKill(final List<List<AbstractPiece>> coordinates, final int xPos, final int yPos, final int boardSize) {
         int topTiles = boardSize - 1 - yPos;
         int botTiles = yPos;
         int rightTiles = boardSize - 1 - xPos;
@@ -95,12 +95,12 @@ public class MoveSimulator {
                 for (int j = 2; j <= directionTiles[i]; j++) {
                     if (simulate(up, right, xPos, yPos, j, coordinates) == MoveType.KILL) {
                         System.out.println("Kill in direction: " + up + "" + right + " tiles:" + j + " starting pos:" + xPos + "" + yPos);
-                        return true;
+                        return new KillData(true, up, right);
                     }
                 }
             }
         }
-        return false;
+        return new KillData(false);
     }
 
     /**
