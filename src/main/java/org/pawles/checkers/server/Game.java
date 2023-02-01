@@ -8,6 +8,7 @@ import org.pawles.checkers.utils.BrazilianBoardBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.*;
 import java.util.*;
 
 /**
@@ -23,6 +24,13 @@ public class Game implements Runnable {
     private final ClientView cView;
     private Boolean whiteTurn = true;
     private final int boardSize;
+
+    // database variables
+
+    private Connection connection;
+    private int gameId;
+
+    private int turnCount = 0;
 
     /**
      *
@@ -48,6 +56,7 @@ public class Game implements Runnable {
         try {
             setup();
             while (!gameLost()) {
+                ++turnCount;
                 if (whiteTurn) {
                     Turn(whitePlayer); // it's whitePlayer turn, and blackPlayer is opponent
                 } else {
@@ -135,6 +144,12 @@ public class Game implements Runnable {
                 }
             }
             if (!retryMove) {
+                try {
+                    Statement statement = connection.createStatement();
+                    statement.execute("INSERT INTO moves VALUE(" + gameId + ", " + turnCount + ", \"" + line + "\");");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 writer.println("correct"); // send info to client, that the move is correct and will be done
             }
         } while (start == whiteTurn);
@@ -145,9 +160,21 @@ public class Game implements Runnable {
      */
     private boolean gameLost() {
         if (whitePlayer.getPieces() == 0) {
+            try {
+                Statement statement = connection.createStatement();
+                statement.execute("UPDATE games SET winner = \"Black\" WHERE id = " + gameId + ";");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             System.out.println("Black player won!");
             return true;
         } else if (blackPlayer.getPieces() == 0) {
+            try {
+                Statement statement = connection.createStatement();
+                statement.execute("UPDATE games SET winner = \"White\" WHERE id = " + gameId + ";");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             System.out.println("White player won!");
             return true;
         }
@@ -257,7 +284,16 @@ public class Game implements Runnable {
 
         // setup db connection
 
-
+        try {
+            connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/checkers", "checkers_admin", "admin");
+            Statement statement = connection.createStatement();
+            statement.execute("INSERT INTO games (board_size) VALUE (" + boardSize + ");");
+            ResultSet resultSet = statement.executeQuery("SELECT MAX(id) AS game_id FROM games;");
+            resultSet.next();
+            gameId = resultSet.getInt("game_id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }
