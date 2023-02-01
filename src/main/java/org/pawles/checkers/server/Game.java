@@ -443,7 +443,16 @@ public class Game implements Runnable {
             System.out.println("First Player received white color");
         }
 
-
+        try {
+            connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/checkers", "checkers_admin", "admin");
+            Statement statement = connection.createStatement();
+            statement.execute("INSERT INTO games (board_size) VALUE (" + boardSize + ");");
+            ResultSet resultSet = statement.executeQuery("SELECT MAX(id) AS game_id FROM games;");
+            resultSet.next();
+            gameId = resultSet.getInt("game_id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }
