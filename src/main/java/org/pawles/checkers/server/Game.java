@@ -10,6 +10,7 @@ import org.pawles.checkers.utils.BrazilianBoardBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.*;
 import java.util.*;
 
 /**
@@ -26,6 +27,13 @@ public class Game implements Runnable {
     private Boolean whiteTurn = true;
     private final int boardSize;
     private Boolean multiplayer;
+
+    // database variables
+
+    private Connection connection;
+    private int gameId;
+
+    private int turnCount = 0;
 
     /**
      *
@@ -70,6 +78,7 @@ public class Game implements Runnable {
         try {
             setup();
             while (!gameLost()) {
+                ++turnCount;
                 if (!(blackPlayer instanceof Bot)) {
                     if (whiteTurn) {
                         Turn(whitePlayer); // it's whitePlayer turn, and blackPlayer is opponent
@@ -156,6 +165,13 @@ public class Game implements Runnable {
                         System.out.println("White has now: " + whitePlayer.getPieces() + " pieces");
                     }
                     if (MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY(), boardSize).isKillPossible()) {
+                        ++turnCount;
+                        try {
+                            Statement statement = connection.createStatement();
+                            statement.execute("INSERT INTO moves VALUE(" + gameId + ", " + turnCount + ", \"" + line + "\");");
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("Player can do another kill");
                         writerOpponent.println(line); // send the move to the second player
                     } else {
@@ -167,6 +183,12 @@ public class Game implements Runnable {
                 }
             }
             if (!retryMove) {
+                try {
+                    Statement statement = connection.createStatement();
+                    statement.execute("INSERT INTO moves VALUE(" + gameId + ", " + turnCount + ", \"" + line + "\");");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 writer.println("correct"); // send info to client, that the move is correct and will be done
             }
         } while (start == whiteTurn);
@@ -286,9 +308,21 @@ public class Game implements Runnable {
      */
     private boolean gameLost() {
         if (whitePlayer.getPieces() == 0) {
+            try {
+                Statement statement = connection.createStatement();
+                statement.execute("UPDATE games SET winner = \"Black\" WHERE id = " + gameId + ";");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             System.out.println("Black player won!");
             return true;
         } else if (blackPlayer.getPieces() == 0) {
+            try {
+                Statement statement = connection.createStatement();
+                statement.execute("UPDATE games SET winner = \"White\" WHERE id = " + gameId + ";");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             System.out.println("White player won!");
             return true;
         }
@@ -326,11 +360,6 @@ public class Game implements Runnable {
         List<List<AbstractPiece>> coordinates = board.getCoordinates();
 
         AbstractPiece playersPiece = coordinates.get(data.getStartY()).get(data.getStartX());
-
-        if(playersPiece == null) {
-            return MoveType.NONE;
-        }
-
         boolean isKing = playersPiece.isKing(playersPiece);
         boolean goingUp = data.getNewY() > data.getStartY();
         boolean goingRight = data.getNewX() > data.getStartX();
@@ -389,25 +418,17 @@ public class Game implements Runnable {
      * @throws IOException when player print writer can not be recognized
      */
     private void setup() throws IOException {
-        if(multiplayer) {
-            PrintWriter firstOutput;
-            firstOutput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
-            firstOutput.println(boardSize);
-            firstOutput.println("White");
-            System.out.println("First Player received white color");
+        PrintWriter firstOutput;
+        firstOutput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
+        firstOutput.println(boardSize);
+        firstOutput.println("White");
+        System.out.println("First Player received white color");
 
-            PrintWriter secondOutput;
-            secondOutput = new PrintWriter(blackPlayer.getSocket().getOutputStream(), true);
-            secondOutput.println(boardSize);
-            secondOutput.println("Black");
-            System.out.println("Second Player received black color");
-        } else {
-            PrintWriter firstOutput;
-            firstOutput = new PrintWriter(whitePlayer.getSocket().getOutputStream(), true);
-            firstOutput.println(boardSize);
-            firstOutput.println("White");
-            System.out.println("First Player received white color");
-        }
+        PrintWriter secondOutput;
+        secondOutput = new PrintWriter(blackPlayer.getSocket().getOutputStream(), true);
+        secondOutput.println(boardSize);
+        secondOutput.println("Black");
+        System.out.println("Second Player received black color");
 
         // setup db connection
 

@@ -5,8 +5,11 @@ import org.pawles.checkers.exceptions.WrongMessageException;
 import org.pawles.checkers.objects.Colour;
 import org.pawles.checkers.objects.Square;
 import org.pawles.checkers.objects.SquareInstancer;
+import org.pawles.checkers.server.MoveData;
 
 import java.io.PrintWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -38,6 +41,9 @@ public class GameCommunicator {
     /** size of the board */
     private final int boardSize;
 
+    private final boolean online;
+
+    private final ResultSet moves;
     public Colour getColour() { //NOPMD - suppressed CommentRequired - this is a simple getter
         return clientController.getColour();
     }
@@ -52,7 +58,10 @@ public class GameCommunicator {
      * @param socketIn input stream for server communication
      * @param socketOut output stream for server communication
      */
-    public GameCommunicator(final Colour colour, final Scanner socketIn, final PrintWriter socketOut, final int boardSize) {
+    public GameCommunicator(final Colour colour, final Scanner socketIn, final PrintWriter socketOut, final int boardSize, final boolean online, final ResultSet moves) {
+
+        this.online = online;
+        this.moves = moves;
 
         this.boardSize = boardSize;
 
@@ -76,32 +85,35 @@ public class GameCommunicator {
      */
     public boolean sendMove(final Square curr, final Square dest) {
 
-        // verify if the move is allowed
+        boolean verification = true;
 
-        boolean verification;
-        if (myTurn && clientController.verifyMove(curr, dest)) { // if player's turn and move is logically correct, send to server
+        if (online) {
 
-            // send move to server
+            // verify if the move is allowed
 
-            final String move = Integer.toString(curr.getX()) + curr.getY() + ":" + dest.getX() + dest.getY();
-            socketOut.println(move);
+            if (myTurn && clientController.verifyMove(curr, dest)) { // if player's turn and move is logically correct, send to server
 
-            // read response
+                // send move to server
 
-            final String message = socketIn.nextLine();
-            if (CORRECT_MESSAGE.equals(message)) { // if correct, apply move to the board and switch turns...
-                clientController.movePiece(curr, dest);
-                clientController.updateView();
-                clientController.updateViewFX();
-                myTurn = false;
-                verification = true;
-            } else if (INCORRECT_MESSAGE.equals(message)) { // ...otherwise move is incorrect
-                verification = false;
+                final String move = Integer.toString(curr.getX()) + curr.getY() + ":" + dest.getX() + dest.getY();
+                socketOut.println(move);
+
+                // read response
+
+                final String message = socketIn.nextLine();
+                if (CORRECT_MESSAGE.equals(message)) { // if correct, apply move to the board and switch turns...
+                    clientController.movePiece(curr, dest);
+                    clientController.updateView();
+                    clientController.updateViewFX();
+                    myTurn = false;
+                } else if (INCORRECT_MESSAGE.equals(message)) { // ...otherwise move is incorrect
+                    verification = false;
+                } else {
+                    throw new WrongMessageException("Unhandled message received: " + message);
+                }
             } else {
-                throw new WrongMessageException("Unhandled message received: " + message);
+                verification = false;
             }
-        } else {
-            verification = false;
         }
         return verification;
     }
@@ -155,5 +167,24 @@ public class GameCommunicator {
      */
     public void setViewFX(final ClientViewFX viewFX) {
         clientController.setViewFX(viewFX);
+    }
+
+    public void replayMove() {
+        if (!online) {
+            try {
+                boolean hasNext = moves.next();
+                if (hasNext) {
+                    final String move = moves.getString("move_value");
+                    MoveData moveData = new MoveData(move);
+                    final Square curr = SquareInstancer.getInstance(moveData.getStartX(), moveData.getStartY());
+                    final Square dest = SquareInstancer.getInstance(moveData.getNewX(), moveData.getNewY());
+                    clientController.movePiece(curr, dest);
+                    clientController.updateView();
+                    clientController.updateViewFX();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
