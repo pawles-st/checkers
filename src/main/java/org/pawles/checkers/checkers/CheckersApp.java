@@ -15,6 +15,7 @@ import org.pawles.checkers.utils.BoardDirector;
 import org.pawles.checkers.utils.BrazilianBoardBuilder;
 
 import java.io.IOException;
+import java.sql.*;
 import java.util.*;
 
 /**
@@ -30,6 +31,7 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
 
     /** communicator object for interacting with the server */
     private static GameCommunicator gameCom;
+    private static boolean online;
 
     /** game board */
     private transient Board board;
@@ -46,11 +48,13 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
     /** size of the board */
     private transient int boardSize;
 
+    private static int gameId;
+
     private Parent createContent() {
 
         // create pane and set defaults
         final Pane root = new Pane();
-        final ButtonFX button = new ButtonFX(gameCom, boardSize);
+        final ButtonFX button = new ButtonFX(gameCom, boardSize, online);
         root.setPrefSize(boardSize * TILE_SIZE, (boardSize+1) * TILE_SIZE);
         root.getChildren().addAll(tileGroup, pieceGroup, button); //NOPMD - suppressed LawOfDemeter
         // read starting board status
@@ -124,13 +128,34 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
         // set scene title and display it
         if(gameCom.getColour() == Colour.WHITE) {
             primaryStage.setTitle("Checkers - White");
-            gameCom.waitForMove();
+            if (online) {
+                gameCom.waitForMove();
+            }
         } else {
             primaryStage.setTitle("Checkers - Black");
-            gameCom.waitForMove();
+            if (online) {
+                gameCom.waitForMove();
+            }
         }
         primaryStage.setScene(scene);
+        System.out.println("showing");
         primaryStage.show();
+        if (!online) {
+            try {
+                Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/checkers", "checkers_admin", "admin");
+                Statement statement = connection.createStatement();
+                ResultSet resultSetMoves = statement.executeQuery("SELECT move_value FROM moves WHERE game_id = " + gameId + " ORDER BY move_nr ASC;");
+                //while (resultSetMoves.next()) {
+                    //final String move = resultSetMoves.getString("move_value");
+                    //MoveData moveData = new MoveData(move);
+                    //gameCom.sendMove(SquareInstancer.getInstance(moveData.getStartX(), moveData.getStartY()),
+                            //SquareInstancer.getInstance(moveData.getNewX(), moveData.getNewY()));
+                    Thread.sleep(1000);
+                //}
+            } catch (SQLException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -139,11 +164,29 @@ public class CheckersApp extends Application { //NOPMD - suppressed AtLeastOneCo
      * @throws IOException if couldn't establish a connection with the server
      */
     public static void main(final String[] args) throws IOException {
-        try {
-            gameCom = ClientInitialiser.init();
-        } catch (IOException e) {
-            throw new IOException("", e);
+        if (args.length == 0) { // player wants to play a game
+            try {
+                gameCom = ClientInitialiser.init();
+                online = true;
+            } catch (IOException e) {
+                throw new IOException("", e);
+            }
+            launch(); // call start() function
+        } else { // player wants to see a replay
+            gameId = Integer.parseInt(args[0]);
+            try {
+                Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/checkers", "checkers_admin", "admin");
+                Statement statement = connection.createStatement();
+                ResultSet resultSetBoard = statement.executeQuery("SELECT board_size FROM games WHERE id = " + gameId + ";");
+                resultSetBoard.next();
+                final int boardSize = resultSetBoard.getInt("board_size");
+                online = false;
+                ResultSet resultSetMoves = statement.executeQuery("SELECT move_value FROM moves WHERE game_id = " + gameId + " ORDER BY move_nr ASC;");
+                gameCom = new GameCommunicator(Colour.WHITE, null, null, boardSize, online, resultSetMoves);
+                launch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        launch(); // call start() function
     }
 }

@@ -134,6 +134,12 @@ public class Game implements Runnable {
                     }
                     if (MoveSimulator.tryToKill(coordinates, data.getNewX(), data.getNewY(), boardSize)) {
                         ++turnCount;
+                        try {
+                            Statement statement = connection.createStatement();
+                            statement.execute("INSERT INTO moves VALUE(" + gameId + ", " + turnCount + ", \"" + line + "\");");
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("Player can do another kill");
                         writerOpponent.println(line); // send the move to the second player
                     } else {

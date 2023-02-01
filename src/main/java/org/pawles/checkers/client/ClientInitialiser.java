@@ -82,7 +82,7 @@ public final class ClientInitialiser {
     }
 
     /**
-     * connects to the server and initiates tho client side
+     * connects to the server and initiates the client side
      */
     public static GameCommunicator init() throws IOException {
         try {
@@ -92,6 +92,6 @@ public final class ClientInitialiser {
             ERR.println(e.getMessage());
             throw new IOException(e);
         }
-        return new GameCommunicator(colour, socketIn, socketOut, boardSize);
+        return new GameCommunicator(colour, socketIn, socketOut, boardSize, true, null);
     }
 }
